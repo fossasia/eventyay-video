@@ -24,7 +24,7 @@ pandas==2.1.*
 pdf2image==1.17.*
 pdfrw==0.4
 pyjwt==2.8.*
-python-dateutil==2.8.*
+python-dateutil==2.9.*
 pytz
 redis==5.0.1
 reportlab==4.0.*
