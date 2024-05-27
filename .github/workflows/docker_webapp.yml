@@ -22,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./webapp
-          dockerfile: Dockerfile-dev
+          file: Dockerfile-dev
           push: true
           tags: eventyay/eventyay-video:development-webapp
           labels: manual
