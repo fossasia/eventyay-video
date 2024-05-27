@@ -1,4 +1,4 @@
-name: Docker-webapp-deploy
+name: Docker-server-deploy
 on:
   workflow_dispatch:
   push:
