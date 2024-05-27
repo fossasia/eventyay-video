@@ -15,8 +15,6 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash && \
             supervisor \
             poppler-utils \
             nodejs && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
     dpkg-reconfigure locales && \
 	locale-gen C.UTF-8 && \
 	/usr/sbin/update-locale LANG=C.UTF-8 && \
