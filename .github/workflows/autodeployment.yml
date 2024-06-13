@@ -33,6 +33,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Test SSH Connection
+        run: ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} 'echo "Connected to WSL"'
+
       - name: Deploy to server
       # Use action "appleboy/ssh-action" to deploy image to server by SSH
         uses: appleboy/ssh-action@v0.1.3
