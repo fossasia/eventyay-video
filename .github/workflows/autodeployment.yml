@@ -1,10 +1,10 @@
-# name: autodeployment
+name: autodeployment
 
-# on:
-#   push:
-#     branches: [ "development" ]
+on:
+  push:
+    branches: [ "development" ]
 
-# jobs:
+jobs:
 #   # Job 1: build
 #   push_to_registry:
 #     name: Push Docker image to Docker hub
