@@ -33,8 +33,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo $(ls)
-            cd ../eventyay-video
+            cd /root
             docker-compose down
             docker-compose pull
             docker-compose up -d
