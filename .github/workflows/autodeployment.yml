@@ -5,6 +5,7 @@ on:
     branches: [ "development" ]
 
 jobs:
+  # Job 1: build
   push_to_registry:
     name: Push Docker image to Docker hub
     runs-on: ubuntu-latest
@@ -25,3 +26,22 @@ jobs:
           push: true
           tags: nthienphu/eventyay-video:development
           labels: manual
+  # Job 2: Deploy
+  deploy:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to server
+      # Use action "appleboy/ssh-action" to deploy image to server by SSH
+        uses: appleboy/ssh-action@v0.1.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Pull image pushed to DockerHub
+            docker pull ${{ secrets.DOCKER_USERNAME }}/eventyay-video:development
+
+            # Run new container, image pulled above
+            docker run -d --name eventyay-video ${{ secrets.DOCKER_USERNAME }}/eventyay-video:development
