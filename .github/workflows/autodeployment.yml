@@ -28,7 +28,7 @@ jobs:
           labels: manual
   # Job 2: Deploy
   deploy:
-    needs: build_and_test
+    needs: push_to_registry
     runs-on: ubuntu-latest
 
     steps:
