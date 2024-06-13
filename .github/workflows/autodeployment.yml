@@ -40,15 +40,15 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # Test login status
-            pwd && ll
+          # script: |
+          #   # Test login status
+          #   pwd && ll
 
-            # Pull image pushed to DockerHub
-            echo "Here?"
-            docker pull ${{ secrets.DOCKER_USERNAME }}/eventyay-video:development
+          #   # Pull image pushed to DockerHub
+          #   echo "Here?"
+          #   docker pull ${{ secrets.DOCKER_USERNAME }}/eventyay-video:development
 
-            # Run new container, image pulled above
-            echo "Here1 ?"
-            docker run -d --name eventyay-video ${{ secrets.DOCKER_USERNAME }}/eventyay-video:development
-            echo "Here2 ?"
+          #   # Run new container, image pulled above
+          #   echo "Here1 ?"
+          #   docker run -d --name eventyay-video ${{ secrets.DOCKER_USERNAME }}/eventyay-video:development
+          #   echo "Here2 ?"
