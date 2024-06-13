@@ -18,14 +18,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          push: false
-          tags: ${{ secrets.DOCKER_USERNAME }}/eventyay-video:development
-          labels: manual
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: ${{ secrets.DOCKER_USERNAME }}/eventyay-video:development
+      #     labels: manual
   
       # Deploy to server by docker-compose file
       - name: Copy docker-compose file to server
