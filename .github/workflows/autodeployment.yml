@@ -29,7 +29,7 @@ jobs:
 
   # Job 2: Deploy
   deploy:
-    needs: push_to_registry
+    # needs: push_to_registry
     runs-on: ubuntu-latest
 
     steps:
