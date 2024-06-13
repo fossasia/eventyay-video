@@ -65,6 +65,8 @@ jobs:
     # needs: push_to_registry
     runs-on: ubuntu-latest
     steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         with:
