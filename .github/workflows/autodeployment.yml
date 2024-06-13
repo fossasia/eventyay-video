@@ -71,7 +71,5 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            docker-compose down
-            docker-compose pull
-            docker-compose up -d
+        run: |
+          docker-compose -f docker-compose.yml up -d
