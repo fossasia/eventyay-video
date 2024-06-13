@@ -1,14 +1,13 @@
 version: '3'
 services:
     server:
-        build:
-            context: ./server
-            dockerfile: Dockerfile-dev
+        app:
+            image: eventyay/eventyay-video:development-server
         ports:
             - "8375:8375"
-        volumes:
-            - ./server:/app:ro
-            - appdata:/data
+        # volumes:
+        #     - ./server:/app:ro
+        #     - appdata:/data
         environment:
             - VENUELESS_DB_TYPE=postgresql
             - VENUELESS_DB_NAME=venueless
@@ -24,54 +23,54 @@ services:
             - db
             - redis
             - redis1
-    celery:
-        build:
-            context: ./server
-            dockerfile: Dockerfile-dev
-        volumes:
-            - ./server:/app:ro
-            - appdata:/data
-        environment:
-            - VENUELESS_DB_TYPE=postgresql
-            - VENUELESS_DB_NAME=venueless
-            - VENUELESS_DB_USER=venueless
-            - VENUELESS_DB_PASS=venueless
-            - VENUELESS_DB_HOST=db
-            - VENUELESS_REDIS_URLS=redis://redis:6379/0,redis://redis1:6379/0
-            - VENUELESS_DATA_DIR=/data
-            - VENUELESS_MEDIA_URL=http://localhost:8375/media/
-        entrypoint: ["bash", "/app/docker-dev-entrypoint-celery.sh"]
-        depends_on:
-            - db
-            - redis
-            - redis1
-    webapp:
-        build:
-            context: ./webapp
-            dockerfile: Dockerfile-dev
-        ports:
-            - "8880:8880"
-        volumes:
-            - ./webapp:/app:ro
-        command: ["npm", "start", "--", "--host", "0.0.0.0"]
-    redis:
-        image: "redis:latest"
-    redis1:
-        image: "redis:latest"
-    db:
-        image: "postgres:15"
-        ports:
-            - "5438:5432"
-        volumes:
-            - postgres_data:/var/lib/postgresql/data/
-        environment:
-            - POSTGRES_INITDB_ARGS=--auth-host=md5
-            - POSTGRES_HOST_AUTH_METHOD=md5
-            - POSTGRES_USER=venueless
-            - POSTGRES_PASSWORD=venueless
-volumes:
-    postgres_data:
-    appdata:
+    # celery:
+    #     build:
+    #         context: ./server
+    #         dockerfile: Dockerfile-dev
+    #     volumes:
+    #         - ./server:/app:ro
+    #         - appdata:/data
+    #     environment:
+    #         - VENUELESS_DB_TYPE=postgresql
+    #         - VENUELESS_DB_NAME=venueless
+    #         - VENUELESS_DB_USER=venueless
+    #         - VENUELESS_DB_PASS=venueless
+    #         - VENUELESS_DB_HOST=db
+    #         - VENUELESS_REDIS_URLS=redis://redis:6379/0,redis://redis1:6379/0
+    #         - VENUELESS_DATA_DIR=/data
+    #         - VENUELESS_MEDIA_URL=http://localhost:8375/media/
+    #     entrypoint: ["bash", "/app/docker-dev-entrypoint-celery.sh"]
+    #     depends_on:
+    #         - db
+    #         - redis
+    #         - redis1
+    # webapp:
+    #     build:
+    #         context: ./webapp
+    #         dockerfile: Dockerfile-dev
+    #     ports:
+    #         - "8880:8880"
+    #     volumes:
+    #         - ./webapp:/app:ro
+    #     command: ["npm", "start", "--", "--host", "0.0.0.0"]
+    # redis:
+    #     image: "redis:latest"
+    # redis1:
+    #     image: "redis:latest"
+    # db:
+    #     image: "postgres:15"
+    #     ports:
+    #         - "5438:5432"
+    #     volumes:
+    #         - postgres_data:/var/lib/postgresql/data/
+    #     environment:
+    #         - POSTGRES_INITDB_ARGS=--auth-host=md5
+    #         - POSTGRES_HOST_AUTH_METHOD=md5
+    #         - POSTGRES_USER=venueless
+    #         - POSTGRES_PASSWORD=venueless
+# volumes:
+#     postgres_data:
+#     appdata:
 networks:
   default:
     ipam:
