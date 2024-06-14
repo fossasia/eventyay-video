@@ -37,6 +37,7 @@ jobs:
           source: "./docker-compose.yml"
           target: "/root"
 
+      # Access to server, pull code and deploy
       - name: Deploy to local server
         uses: appleboy/ssh-action@master
         with:
@@ -44,7 +45,9 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /root
+            cd /home/eventyay/eventyay-videos
+            git checkout development
+            git pull
             docker-compose down
             docker-compose pull
             docker-compose up -d
