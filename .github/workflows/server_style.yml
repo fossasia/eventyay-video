@@ -1,7 +1,7 @@
 name: Server style
 on:
   push:
-    branches: [ dev, stable, prod ]
+    branches: [ development, master ]
     paths:
       - 'server/**'
   pull_request:
