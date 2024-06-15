@@ -1,5 +1,6 @@
 name: Server style
 on:
+  workflow_dispatch:
   push:
     branches: [ development, master ]
     paths:
