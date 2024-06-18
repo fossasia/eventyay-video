@@ -152,11 +152,11 @@ Workflow File (`main.yml`)
 **Secrets Management**
 
 Ensure the following secrets are set in your GitHub repository settings:
-- `DOCKER_USERNAME`
-- `DOCKER_PASSWORD`
-- `SSH_PRIVATE_KEY`
-- `SERVER_HOST`
-- `SERVER_USER`
+* `DOCKER_USERNAME`
+* `DOCKER_PASSWORD`
+* `SSH_PRIVATE_KEY`
+* `SERVER_HOST`
+* `SERVER_USER`
 
 Usage
 --------
