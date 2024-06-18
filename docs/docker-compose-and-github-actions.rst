@@ -162,3 +162,18 @@ Usage
 --------
 1. **Trigger the Workflow**: The workflow triggers automatically on pushes to the `development` and `master` branches or can be manually triggered.
 2. **Monitor the Workflow**: Monitor the workflow execution in GitHub Actions to ensure the Docker images are built, pushed, and deployed correctly.
+
+Testing
+--------
+1. **Local Testing for docker-compose.yml**:
+   - To test the Docker Compose file locally, set the required environment variables (`TAG`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWD`) and run the `docker-compose up` command.
+   - Ensure that the services are up and running correctly and that the environment variables are correctly set.
+2. **GitHub Actions Workflow Testing**:
+   - Ensure the following secrets are set in your GitHub repository settings:
+     * `DOCKER_USERNAME`
+     * `DOCKER_PASSWORD`
+     * `SSH_PRIVATE_KEY`
+     * `SERVER_HOST`
+     * `SERVER_USER`
+    - Update the tags in the Docker Compose file and GitHub Actions workflow as needed.
+    - Make changes to the codebase, commit the changes to the `development` or `master` branch or any other branch that triggers the workflow (please make sure that branch is added to the workflow trigger), and observe the workflow execution in GitHub Actions.
