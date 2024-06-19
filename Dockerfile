@@ -50,7 +50,6 @@ COPY webapp/src/ /venueless/webapp/src/
 COPY webapp/public/ /venueless/webapp/public/
 
 RUN cd /venueless/webapp && \
-    npm install && \
     npm ci --legacy-peer-deps && \
     NODE_OPTIONS=--openssl-legacy-provider npm run build && \
 	mkdir -p data && \
