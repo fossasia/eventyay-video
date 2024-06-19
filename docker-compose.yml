@@ -25,7 +25,12 @@ services:
       - /data:/data
     entrypoint: ["/usr/local/bin/venueless"]
     command: ["all"]
-
+  webapp:
+    image: eventyay/eventyay-video:${TAG}-latest
+    ports:
+      - "8880:8880"
+   command: ["npm", "start", "--", "--host", "0.0.0.0"]
+   
   redis:
     image: redis:latest
     container_name: redis
