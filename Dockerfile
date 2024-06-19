@@ -49,13 +49,14 @@ COPY webapp/*.json /venueless/webapp/
 COPY webapp/src/ /venueless/webapp/src/
 COPY webapp/public/ /venueless/webapp/public/
 
+ENV PATH /venueless/webapp/node_modules/.bin:$PATH
 RUN cd /venueless/webapp && \
     npm ci --legacy-peer-deps && \
     NODE_OPTIONS=--openssl-legacy-provider npm run build && \
 	mkdir -p data && \
 	cd .. && \
     chown -R venueless:venueless /venueless /data
-
+ENV NODE_PATH=/venueless/webapp/node_modules
 
 COPY server /venueless/server
 WORKDIR /venueless/server
