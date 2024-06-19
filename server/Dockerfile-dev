@@ -1,9 +1,31 @@
 FROM python:3.11-bookworm
 
-COPY requirements.txt /requirements.txt
-RUN apt update && apt install -y poppler-utils && apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN pip3 install -U pip wheel setuptools && pip3 install -Ur requirements.txt
-ENV VENUELESS_COMMIT_SHA=devcontainer
+# Set the working directory in the container
 WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Ensure the entrypoint scripts are executable
+RUN chmod +x /app/docker-dev-entrypoint.sh
+RUN chmod +x /app/docker-dev-entrypoint-celery.sh
+
+# Install necessary packages and dependencies
+COPY requirements.txt /requirements.txt
+
+RUN apt update && \
+    apt install -y poppler-utils && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install -U pip wheel setuptools && \
+    pip3 install -Ur requirements.txt
+
+# Set environment variables
+ENV VENUELESS_COMMIT_SHA=devcontainer
+
+# Make port 8375 available to the world outside this container
 EXPOSE 8375
 
+# Specify the default command to run when the container starts
+CMD ["bash", "/app/docker-dev-entrypoint.sh"]
