@@ -56,6 +56,9 @@ RUN cd /venueless/webapp && \
 	cd .. && \
     chown -R venueless:venueless /venueless /data
 
+# Verify Node.js and npm installation
+RUN node -v && npm -v
+
 COPY server /venueless/server
 WORKDIR /venueless/server
 RUN python manage.py collectstatic
