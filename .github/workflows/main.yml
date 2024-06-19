@@ -4,6 +4,7 @@ on:
     branches:
       - development
       - master
+      - fixes-94
   workflow_dispatch:
 
 jobs:
@@ -30,7 +31,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: eventyay/eventyay-video:${{ env.TAG }}-latest
+          tags: odkhang/eventyay-video:${{ env.TAG }}-latest
   deploy:
     name: Deploy to server
     runs-on: ubuntu-latest
