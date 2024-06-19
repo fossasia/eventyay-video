@@ -27,9 +27,6 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash && \
     echo 'venueless ALL=(ALL) NOPASSWD:SETENV: /usr/bin/supervisord' >> /etc/sudoers && \
     mkdir /static
 
-# Verify Node.js and npm installation
-RUN node -v && npm -v
-
 ENV LC_ALL=C.UTF-8 \
     DJANGO_SETTINGS_MODULE=venueless.settings \
 	IPYTHONDIR=/data/.ipython
@@ -53,6 +50,7 @@ COPY webapp/src/ /venueless/webapp/src/
 COPY webapp/public/ /venueless/webapp/public/
 
 RUN cd /venueless/webapp && \
+    npm install && \
     npm ci --legacy-peer-deps && \
     NODE_OPTIONS=--openssl-legacy-provider npm run build && \
 	mkdir -p data && \
