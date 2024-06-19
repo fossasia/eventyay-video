@@ -39,7 +39,7 @@ jobs:
           context: ./server
           file: ./server/Dockerfile-dev
           push: true
-          tags: eventyay/eventyay-video:${{ env.TAG }}-server
+          tags: odkhang/eventyay-video:${{ env.TAG }}-server
 
       - name: Build and push webapp Docker image
         uses: docker/build-push-action@v2
@@ -47,7 +47,7 @@ jobs:
           context: ./webapp
           file: ./webapp/Dockerfile-dev
           push: true
-          tags: eventyay/eventyay-video:${{ env.TAG }}-webapp
+          tags: odkhang/eventyay-video:${{ env.TAG }}-webapp
   deploy:
     name: Deploy to server
     runs-on: ubuntu-latest
