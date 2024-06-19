@@ -29,8 +29,12 @@ services:
     image: eventyay/eventyay-video:${TAG}-latest
     ports:
       - "8880:8880"
-   command: ["npm", "start", "--", "--host", "0.0.0.0"]
-   
+    environment:
+      - NODE_OPTIONS=--openssl-legacy-provider
+    entrypoint: [""]
+    command: ["npm", "start", "--", "--host", "0.0.0.0"]
+    working_dir: /venueless/webapp
+
   redis:
     image: redis:latest
     container_name: redis
