@@ -27,6 +27,9 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash && \
     echo 'venueless ALL=(ALL) NOPASSWD:SETENV: /usr/bin/supervisord' >> /etc/sudoers && \
     mkdir /static
 
+# Verify Node.js and npm installation
+RUN node -v && npm -v
+
 ENV LC_ALL=C.UTF-8 \
     DJANGO_SETTINGS_MODULE=venueless.settings \
 	IPYTHONDIR=/data/.ipython
@@ -56,8 +59,6 @@ RUN cd /venueless/webapp && \
 	cd .. && \
     chown -R venueless:venueless /venueless /data
 
-# Verify Node.js and npm installation
-RUN node -v && npm -v
 
 COPY server /venueless/server
 WORKDIR /venueless/server
