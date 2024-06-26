@@ -5,6 +5,8 @@ from urllib.parse import urlparse
 
 from django.utils.crypto import get_random_string
 from kombu import Queue
+from redis.asyncio.retry import Retry
+from redis.backoff import ExponentialBackoff
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.environ.get("VENUELESS_DATA_DIR", os.path.join(BASE_DIR, "data"))
@@ -96,7 +98,7 @@ DATABASES = {
             "VENUELESS_DB_NAME", config.get("database", "name", fallback="venueless")
         ),
         "USER": os.getenv(
-            "VENUELESS_DB_USER", config.get("database", "user", fallback="venueless")
+            "VENUELESS_DB_USER", config.get("database", "user", fallback="")
         ),
         "PASSWORD": os.getenv(
             "VENUELESS_DB_PASS", config.get("database", "password", fallback="")
@@ -111,9 +113,14 @@ DATABASES = {
     }
 }
 
+redis_connection_kwargs = {
+    "retry": Retry(ExponentialBackoff(), 3),
+    "health_check_interval": 120,
+}
+
 if os.getenv("VENUELESS_REDIS_URLS", config.get("redis", "urls", fallback="")):
     REDIS_HOSTS = [
-        {"address": u}
+        {"address": u, **redis_connection_kwargs}
         for u in os.getenv(
             "VENUELESS_REDIS_URLS", config.get("redis", "urls", fallback="")
         ).split(",")
@@ -141,7 +148,7 @@ else:
             config.get("redis", "db", fallback="0"),
         )
     )
-    REDIS_HOSTS = [{"address": redis_url}]
+    REDIS_HOSTS = [{"address": redis_url, **redis_connection_kwargs}]
 
 
 REDIS_USE_PUBSUB = os.getenv(
