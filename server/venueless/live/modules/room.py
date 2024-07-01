@@ -14,7 +14,6 @@ from sentry_sdk import add_breadcrumb, configure_scope
 from venueless.core.models.room import (
     AnonymousInvite,
     RoomConfigSerializer,
-    approximate_view_number,
 )
 from venueless.core.permissions import Permission
 from venueless.core.services.poll import get_polls, get_voted_polls
@@ -67,6 +66,7 @@ class RoomModule(BaseModule):
     @command("enter")
     @room_action(permission_required=Permission.ROOM_VIEW)
     async def enter_room(self, body):
+        print("=========================> enter")
         await self.consumer.channel_layer.group_add(
             GROUP_ROOM.format(id=self.room.pk), self.consumer.channel_name
         )
@@ -106,6 +106,7 @@ class RoomModule(BaseModule):
             self.consumer.user,
             delete=not self.consumer.world.config.get("track_room_views", True),
         )
+        print("=========================> _update_view_count", actual_view_count)
         await self._update_view_count(self.room, actual_view_count)
 
         if self.consumer.user.show_publicly:
@@ -184,20 +185,18 @@ class RoomModule(BaseModule):
 
     async def _update_view_count(self, room, actual_view_count):
         async with aredis(f"room:approxcount:known:{room.pk}") as redis:
-            next_value = approximate_view_number(actual_view_count)
             prev_value = await redis.getset(
-                f"room:approxcount:known:{room.pk}", next_value
+                f"room:approxcount:known:{room.pk}", actual_view_count
             )
-            if prev_value:
-                prev_value = prev_value.decode()
-            if prev_value != next_value:
+            if prev_value != actual_view_count:
                 await redis.expire(f"room:approxcount:known:{room.pk}", 900)
+                # broadcast actual viewer count instead of approximate text
                 await self.consumer.channel_layer.group_send(
                     GROUP_WORLD.format(id=self.consumer.world.pk),
                     {
                         "type": "world.user_count_change",
                         "room": str(room.pk),
-                        "users": next_value,
+                        "users": actual_view_count,
                     },
                 )
 
