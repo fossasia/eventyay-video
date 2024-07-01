@@ -11,58 +11,71 @@ This Docker Compose file is configured to set up a multi-service application, in
 
 `docker-compose.yml`
 
-    version: '3.4'
+        version: '3.4'
 
-    services:
-      venueless:
-        image: eventyay/eventyay-video:${TAG}-latest
-        container_name: venueless
-        ports:
-          - "80:80"
-        environment:
-          - DJANGO_SETTINGS_MODULE=venueless.settings
-          - LC_ALL=C.UTF-8
-          - IPYTHONDIR=/data/.ipython
-          - VENUELESS_COMMIT_SHA=${COMMIT}
-          - VENUELESS_DB_TYPE=postgresql
-          - VENUELESS_DB_NAME=${POSTGRES_DB}
-          - VENUELESS_DB_USER=${POSTGRES_USER}
-          - VENUELESS_DB_PASS=${POSTGRES_PASSWD}
-          - VENUELESS_DB_HOST=eventyay-db
-          - VENUELESS_REDIS_URLS=redis://redis:6379/0,redis://redis1:6379/0
-          - VENUELESS_DATA_DIR=/data
-          - VENUELESS_MEDIA_URL=http://localhost:8375/media/
-          - VENUELESS_REDIS_USE_PUBSUB=true
+        services:
+          venueless:
+            image: eventyay/eventyay-video:${TAG}-latest
+            container_name: venueless
+            ports:
+              - "8375:80"
+            environment:
+              - DJANGO_SETTINGS_MODULE=venueless.settings
+              - LC_ALL=C.UTF-8
+              - IPYTHONDIR=/data/.ipython
+              - VENUELESS_COMMIT_SHA=${COMMIT}
+              - VENUELESS_DB_TYPE=postgresql
+              - VENUELESS_DB_NAME=${POSTGRES_DB}
+              - VENUELESS_DB_USER=${POSTGRES_USER}
+              - VENUELESS_DB_PASS=${POSTGRES_PASSWD}
+              - VENUELESS_DB_HOST=venueless-db
+              - VENUELESS_REDIS_URLS=redis://venueless-redis:6379/0,redis://venueless-redis1:6379/0
+              - VENUELESS_DATA_DIR=/data
+              - VENUELESS_MEDIA_URL=http://localhost:8375/media/
+              - VENUELESS_REDIS_USE_PUBSUB=true
+            depends_on:
+              - venueless-db
+              - venueless-redis
+              - venueless-redis1
+            volumes:
+              - /etc/venueless:/etc/venueless
+              - /data:/data
+            entrypoint: ["/usr/local/bin/venueless"]
+            command: ["all"]
+          venueless-webapp:
+            image: eventyay/eventyay-video:${TAG}-latest
+            container_name: venueless-webapp
+            ports:
+              - "8002:8880"
+            environment:
+              - NODE_OPTIONS=--openssl-legacy-provider
+            entrypoint: [""]
+            command: ["npm", "start", "--", "--host", "0.0.0.0"]
+            working_dir: /venueless/webapp
+
+          venueless-redis:
+            image: redis:latest
+            container_name: venueless-redis
+
+          venueless-redis1:
+            image: redis:latest
+            container_name: venueless-redis1
+
+          venueless-db:
+            image: postgres:15
+            container_name: venueless-db
+            volumes:
+              - postgres_data:/var/lib/postgresql/data/
+            environment:
+              - POSTGRES_INITDB_ARGS=--auth-host=md5
+              - POSTGRES_HOST_AUTH_METHOD=md5
+              - POSTGRES_DB=${POSTGRES_DB}
+              - POSTGRES_USER=${POSTGRES_USER}
+              - POSTGRES_PASSWORD=${POSTGRES_PASSWD}
+
         volumes:
-          - /etc/venueless:/etc/venueless
-          - /data:/data
-        entrypoint: ["/usr/local/bin/venueless"]
-        command: ["all"]
-
-      redis:
-        image: redis:latest
-        container_name: redis
-
-      redis1:
-        image: redis:latest
-        container_name: redis1
-
-      eventyay-db:
-        image: postgres:15
-        container_name: eventyay-db
-        ports:
-          - "5439:5432"
-        volumes:
-          - postgres_data:/var/lib/postgresql/data/
-        environment:
-          - POSTGRES_INITDB_ARGS=--auth-host=md5
-          - POSTGRES_HOST_AUTH_METHOD=md5
-          - POSTGRES_USER=${POSTGRES_USER}
-          - POSTGRES_PASSWORD=${POSTGRES_PASSWD}
-
-    volumes:
-      postgres_data:
-      appdata:
+          postgres_data:
+          appdata:
 
 Usage
 --------
@@ -77,61 +90,60 @@ This GitHub Actions workflow is configured to build and push Docker images to Do
 
 Workflow File (`main.yml`)
 
-    name: Main workflow
-    on:
-      push:
-        branches:
-          - development
-          - master
-      workflow_dispatch:
+            name: Main workflow
+            on:
+              push:
+                branches:
+                  - development
+                  - master
+              workflow_dispatch:
 
-    jobs:
-      push_to_registry:
-        name: Push Docker image to Docker Hub
-        runs-on: ubuntu-latest
-        steps:
-          - name: Check out the repo
-            uses: actions/checkout@v2
+            jobs:
+              push_to_registry:
+                name: Push Docker image to Docker Hub
+                runs-on: ubuntu-latest
+                steps:
+                  - name: Check out the repo
+                    uses: actions/checkout@v2
 
-          - name: Set up Docker tag
-            id: vars
-            run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
+                  - name: Set up Docker tag
+                    id: vars
+                    run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
-          - name: Log in to Docker Hub
-            uses: docker/login-action@v2
-            with:
-              username: ${{ secrets.DOCKER_USERNAME }}
-              password: ${{ secrets.DOCKER_PASSWORD }}
+                  - name: Log in to Docker Hub
+                    uses: docker/login-action@v2
+                    with:
+                      username: ${{ secrets.DOCKER_USERNAME }}
+                      password: ${{ secrets.DOCKER_PASSWORD }}
 
-          - name: Build and push Docker image
-            uses: docker/build-push-action@v2
-            with:
-              context: .
-              file: ./Dockerfile
-              push: true
-              tags: eventyay/eventyay-video:${{ env.TAG }}-latest
+                  - name: Build and push Docker image
+                    uses: docker/build-push-action@v2
+                    with:
+                      context: .
+                      file: ./Dockerfile
+                      push: true
+                      tags: eventyay/eventyay-video:${{ env.TAG }}-latest
+                      
+              deploy:
+                name: Deploy to server
+                runs-on: ubuntu-latest
+                needs: push_to_registry
+                steps:
+                - name: Check out the repo
+                  uses: actions/checkout@v2
+                - name: Set up Docker tag
+                  id: vars
+                  run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
+                - name: Deploy
+                  run: |
+                    mkdir -p ~/.ssh
+                    chmod 700 ~/.ssh
+                    eval "$(ssh-agent -s)"
+                    echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -
+                    ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+                    scp docker-compose.yml "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/eventyay/eventyay-videos"
+                    ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "cd /home/eventyay/eventyay-videos && sudo docker pull eventyay/eventyay-video:${{ env.TAG }}-latest && sudo docker-compose up -d"
 
-      deploy:
-        name: Deploy to server
-        runs-on: ubuntu-latest
-        needs: push_to_registry
-        steps:
-          - name: Check out the repo
-            uses: actions/checkout@v2
-
-          - name: Set up Docker tag
-            id: vars
-            run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
-
-          - name: Deploy
-            run: |
-              mkdir -p ~/.ssh
-              chmod 700 ~/.ssh
-              eval "$(ssh-agent -s)"
-              echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -
-              ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
-              scp docker-compose.yml "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/eventyay/eventyay-videos"
-              ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "cd /home/eventyay/eventyay-videos && sudo docker pull eventyay/eventyay-video:${TAG}-latest && sudo docker-compose up -d"
 
 **Steps Explanation**
 
