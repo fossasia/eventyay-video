@@ -66,7 +66,6 @@ class RoomModule(BaseModule):
     @command("enter")
     @room_action(permission_required=Permission.ROOM_VIEW)
     async def enter_room(self, body):
-        print("=========================> enter")
         await self.consumer.channel_layer.group_add(
             GROUP_ROOM.format(id=self.room.pk), self.consumer.channel_name
         )
@@ -106,7 +105,6 @@ class RoomModule(BaseModule):
             self.consumer.user,
             delete=not self.consumer.world.config.get("track_room_views", True),
         )
-        print("=========================> _update_view_count", actual_view_count)
         await self._update_view_count(self.room, actual_view_count)
 
         if self.consumer.user.show_publicly:
