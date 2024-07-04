@@ -42,7 +42,7 @@ export default {
 
 <style scoped>
 .c-audio-translation {
-    margin-bottom: 2em;
+    margin-bottom: 3em;
 }
 
 .c-audio-translation h4 {
