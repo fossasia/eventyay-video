@@ -14,6 +14,14 @@
 			bunt-icon-button(@click="deleteAlternativeStream(i)") delete-outline
 		bunt-button(@click="$set(modules['livestream.native'].config, 'alternatives', modules['livestream.native'].config.alternatives || []); modules['livestream.native'].config.alternatives.push({label: '', hls_url: ''})") Add alternative stream
 	bunt-input(v-else-if="modules['livestream.youtube']", name="ytid", v-model="modules['livestream.youtube'].config.ytid", label="YouTube Video ID", :validation="$v.modules['livestream.youtube'].config.ytid")
+	// Language and URL input for YouTube stream
+	.language-urls(v-if="modules['livestream.youtube']")
+		h4 Languages and YouTube URLs
+		.language-url-entry(v-for="(entry, index) in modules['livestream.youtube'].config.languageUrls" :key="index")
+			bunt-input(name="language" v-model="entry.language" label="Language")
+			bunt-input(name="url" v-model="entry.url" label="YouTube URL")
+			bunt-icon-button(@click="deleteLanguageUrl(index)") delete-outline
+		bunt-button(@click="addLanguageUrl") + Add Language and URL
 	bunt-input(v-else-if="modules['livestream.iframe']", name="iframe-player", v-model="modules['livestream.iframe'].config.url", label="Iframe player url", hint="iframe player should be autoplaying and support resizing to small sizes for background playing")
 	sidebar-addons(v-bind="$props")
 </template>
@@ -40,6 +48,8 @@ export default {
 		return {
 			STREAM_SOURCE_OPTIONS,
 			b_streamSource: null,
+			// Initial empty array for languages and URLs
+			b_languageUrls: []
 		}
 	},
 	validations: {
@@ -70,11 +80,27 @@ export default {
 			this.b_streamSource = 'hls'
 		} else if (this.modules['livestream.youtube']) {
 			this.b_streamSource = 'youtube'
+			// languageUrls is set in the created lifecycle hook
+			if (!this.modules['livestream.youtube'].config.languageUrls) {
+				this.$set(this.modules['livestream.youtube'].config, 'languageUrls', [])
+			}
 		} else if (this.modules['livestream.iframe']) {
 			this.b_streamSource = 'iframe'
 		}
 	},
 	methods: {
+		// Added methods addLanguageUrl and deleteLanguageUrl to manage dynamic fields for language and URL input
+		addLanguageUrl () {
+			if (!this.modules['livestream.youtube'].config.languageUrls) {
+        		this.$set(this.modules['livestream.youtube'].config, 'languageUrls', [])
+      		}
+      		this.modules['livestream.youtube'].config.languageUrls.push({ language: '', url: '' })
+		},
+		deleteLanguageUrl (index) {
+			if (this.modules['livestream.youtube'].config.languageUrls) {
+				this.modules['livestream.youtube'].config.languageUrls.splice(index, 1)
+			}
+		},
 		deleteAlternativeStream (index) {
 			this.modules['livestream.native'].config.alternatives.splice(index, 1)
 			if (this.modules['livestream.native'].config.alternatives.length === 0) {
