@@ -18,7 +18,7 @@
 	.language-urls(v-if="modules['livestream.youtube']")
 		h4 Languages and YouTube URLs
 		.language-url-entry(v-for="(entry, index) in modules['livestream.youtube'].config.languageUrls" :key="index")
-			bunt-input(name="language" v-model="entry.language" label="Language")
+			bunt-select(name="language", v-model="entry.language", :options="ISO_LANGUAGE_OPTIONS", label="Language")
 			bunt-input(name="url" v-model="entry.url" label="YouTube URL")
 			bunt-icon-button(@click="deleteLanguageUrl(index)") delete-outline
 		bunt-button(@click="addLanguageUrl") + Add Language and URL
@@ -31,6 +31,7 @@ import UploadUrlInput from 'components/UploadUrlInput'
 import mixin from './mixin'
 import SidebarAddons from './SidebarAddons'
 import {youtubeid} from 'lib/validators'
+import ISO6391 from 'iso-639-1';
 
 const STREAM_SOURCE_OPTIONS = [
 	{ id: 'hls', label: 'HLS', module: 'livestream.native' },
@@ -47,6 +48,7 @@ export default {
 	data () {
 		return {
 			STREAM_SOURCE_OPTIONS,
+			ISO_LANGUAGE_OPTIONS: this.getLanguageOptions(),
 			b_streamSource: null,
 			// Initial empty array for languages and URLs
 			b_languageUrls: []
@@ -106,6 +108,12 @@ export default {
 			if (this.modules['livestream.native'].config.alternatives.length === 0) {
 				this.modules['livestream.native'].config.alternatives = undefined
 			}
+		},
+		getLanguageOptions() {
+			return ISO6391.getAllCodes().map(code => ({
+				id: ISO6391.getName(code),
+				label: ISO6391.getName(code),
+			}));
 		}
 	}
 }
