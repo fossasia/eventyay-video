@@ -50,7 +50,7 @@ import AudioTranslationDropdown from 'components/AudioTranslationDropdown';
 
 export default {
 	name: 'Room',
-	components: { Chat, Exhibition, LandingPage, MarkdownPage, StaticPage, IframePage, ReactionsBar, ReactionsOverlay, UserListPage, Roulette, Polls, PosterHall, 
+	components: { Chat, Exhibition, LandingPage, MarkdownPage, StaticPage, IframePage, ReactionsBar, ReactionsOverlay, UserListPage, Roulette, Polls, PosterHall,
 		Questions, MediaSourcePlaceholder, AudioTranslationDropdown },
 	props: {
 		room: Object,
@@ -89,6 +89,8 @@ export default {
 		// Populate languages from the languages added by the admin
 		if (this.modules['livestream.youtube'] && this.modules['livestream.youtube'].config.languageUrls) {
 			this.languages = this.modules['livestream.youtube'].config.languageUrls;
+			this.languages.unshift({language: 'Default', url: `https://www.youtube.com/watch?v=${this.modules['livestream.youtube'].config.ytid}`})
+
 		}
 	},
 	methods: {
@@ -97,9 +99,7 @@ export default {
 			this.unreadTabs[tab] = true
 		},
 		handleLanguageChange(selectedLanguage) {
-			// Logic to handle the change in audio translation
-			console.log('Selected language:', selectedLanguage);
-			// Additional logic can be added here to update the streaming settings or perform other actions
+			this.$store.commit('updateYoutubeTransAudio', selectedLanguage)
 		}
 	}
 }

@@ -6,7 +6,7 @@ div.c-audio-translation
     v-model="selectedLanguage",
     :options="languageOptions",
     label="Audio Translation",
-    @change="handleLanguageChange"
+    @input="sendLanguageChange"
 )
 </template>
 <script>
@@ -33,8 +33,11 @@ export default {
     }
   },
   methods: {
-    handleLanguageChange() {
-      this.$emit('languageChanged', this.selectedLanguage);
+    sendLanguageChange() {
+      const selected = this.languages.find(item => item.language == this.selectedLanguage)
+      const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      const matchId = selected.url.match(regex);
+      this.$emit('languageChanged', matchId ? matchId[1] : null);
     }
   }
 };
