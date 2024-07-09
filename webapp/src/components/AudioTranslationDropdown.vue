@@ -12,14 +12,14 @@ div.c-audio-translation
 <script>
 export default {
   name: 'AudioTranslationDropdown',
-  props: {
-    languages: {
-      type: Array,
-      required: true
-    }
-  },
-  data() {
-    return {
+	props: {
+		languages: {
+			type: Array,
+			required: true
+		}
+	},
+	data() {
+		return {
       selectedLanguage: null, // Selected language for audio translation
       languageOptions: [] // Options for the dropdown
     };
@@ -56,4 +56,3 @@ export default {
     width: 100%;
 }
 </style>
-    
