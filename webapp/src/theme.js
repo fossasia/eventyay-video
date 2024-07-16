@@ -47,9 +47,9 @@ const CLR_DISABLED_TEXT = {LIGHT: Color('rgba(0, 0, 0, .38)'), DARK: Color('rgba
 const CLR_DIVIDERS = {LIGHT: Color('rgba(255, 255, 255, .63)'), DARK: Color('rgba(255, 255, 255, .63)')}
 
 const DEFAULT_COLORS = {
-	primary: '#673ab7',
-	sidebar: '#180044',
-	bbb_background: '#333333',
+	primary: '#2948dd',
+	sidebar: '#2948dd',
+	bbb_background: '#ffffff',
 }
 
 const DEFAULT_LOGO = {
@@ -115,4 +115,40 @@ export { themeVariables, colors, DEFAULT_COLORS, DEFAULT_LOGO, DEFAULT_IDENTICON
 
 export function computeForegroundColor (bgColor) {
 	return firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], bgColor)
+}
+
+export function computeForegroundSidebarColor (pmColor, sbColor, bbbBg) {
+	const configColors = {
+		primary: pmColor,
+		sidebar: sbColor,
+		bbb_background: bbbBg,
+	}
+	const sbColors = Object.keys(DEFAULT_COLORS).reduce((acc, key) => (acc[key] = Color((configColors ?? DEFAULT_COLORS)[key]), acc), {})
+	// modded colors
+	sbColors.primaryDarken15 = sbColors.primary.darken(0.15)
+	sbColors.primaryDarken20 = sbColors.primary.darken(0.20)
+	sbColors.primaryAlpha60 = sbColors.primary.alpha(0.6)
+	sbColors.primaryAlpha50 = sbColors.primary.alpha(0.5)
+	sbColors.primaryAlpha18 = sbColors.primary.alpha(0.18)
+
+	// button + inputs
+	sbColors.inputPrimaryBg = sbColors.primary
+	sbColors.inputPrimaryFg = firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], sbColors.primary)
+	sbColors.inputPrimaryBgDarken = sbColors.primary.darken(0.15)
+	// secondary inputs are transparent
+	sbColors.inputSecondaryFg = sbColors.primary
+	sbColors.inputSecondaryFgAlpha = sbColors.primary.alpha(0.08)
+	// sidebar
+	sbColors.sidebarTextPrimary = firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], sbColors.sidebar)
+	sbColors.sidebarTextSecondary = firstReadable([CLR_SECONDARY_TEXT.LIGHT, CLR_SECONDARY_TEXT_FALLBACK.LIGHT, CLR_SECONDARY_TEXT.DARK, CLR_SECONDARY_TEXT_FALLBACK.DARK], sbColors.sidebar)
+	sbColors.sidebarTextDisabled = firstReadable([CLR_DISABLED_TEXT.LIGHT, CLR_DISABLED_TEXT.DARK], sbColors.sidebar)
+	sbColors.sidebarActiveBg = firstReadable(['rgba(0, 0, 0, 0.08)', 'rgba(255, 255, 255, 0.4)'], sbColors.sidebar)
+	sbColors.sidebarActiveFg = firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], sbColors.sidebar)
+	sbColors.sidebarHoverBg = firstReadable(['rgba(0, 0, 0, 0.12)', 'rgba(255, 255, 255, 0.3)'], sbColors.sidebar)
+	sbColors.sidebarHoverFg = firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], sbColors.sidebar)
+
+
+	for (const [key, value] of Object.entries(sbColors)) {
+		themeVariables[`--clr-${kebabCase(key)}`] = value.string()
+	}
 }
