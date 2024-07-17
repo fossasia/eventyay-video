@@ -34,7 +34,7 @@ class UploadMixin:
 
     @cached_property
     def world(self):
-        world_domain = re.sub(r":\d+$", "", self.request.headers["Host"])
+        world_domain = re.sub(r":\d+$", "", self.request.get_host())
         return get_object_or_404(World, domain=world_domain)
 
     @cached_property

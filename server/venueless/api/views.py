@@ -94,8 +94,12 @@ class WorldThemeView(APIView):
         @param kwargs: world_id
         @return: theme data of a world
         """
-        world = get_object_or_404(World, id=kwargs["world_id"])
-        return Response(WorldSerializer(world).data['config']['theme'])
+        try:
+            world = get_object_or_404(World, id=kwargs["world_id"])
+            return Response(WorldSerializer(world).data['config']['theme'])
+        except KeyError:
+            return Response("error happened when trying to get theme data of world: " + kwargs["world_id"], status=500)
+
 
 
 def get_domain(path):

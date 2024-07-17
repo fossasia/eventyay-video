@@ -41,7 +41,7 @@ sh = SourceCache()
 
 class ManifestView(View):
     def get(self, request, *args, **kwargs):
-        world_domain = re.sub(r":\d+$", "", request.headers["Host"])
+        world_domain = re.sub(r":\d+$", "", request.get_host())
         world = get_object_or_404(World, domain=world_domain)
         # TODO: Allow to parametrize colors and logos
         source = {
@@ -84,7 +84,7 @@ class AppView(View):
     def get(self, request, *args, **kwargs):
         # Is this an anonymous invite to a room?
         short_host = self._has_separate_short_domain
-        world_domain = re.sub(r":\d+$", "", request.headers["Host"])
+        world_domain = re.sub(r":\d+$", "", request.get_host())
         if short_host and world_domain == short_host:
             # The sysadmin has set up a separate domain for short URLs
             if request.path == "/":
@@ -145,7 +145,7 @@ class AppView(View):
                             "base": reverse("api:root", kwargs={"world_id": world.id}),
                             "socket": "{}://{}/ws/world/{}/".format(
                                 settings.WEBSOCKET_PROTOCOL,
-                                request.headers["Host"],
+                                request.get_host(),
                                 world.pk,
                             ),
                             "upload": reverse("storage:upload"),
@@ -195,7 +195,7 @@ class HealthcheckView(View):
 @method_decorator(cache_page(1 if settings.DEBUG else 60), name="dispatch")
 class CustomCSSView(View):
     def get(self, request, *args, **kwargs):
-        world_domain = re.sub(r":\d+$", "", request.headers["Host"])
+        world_domain = re.sub(r":\d+$", "", request.get_host())
         world = get_object_or_404(World, domain=world_domain)
         source = world.config.get("theme", {}).get("css", "")
         return HttpResponse(source, content_type="text/css")
@@ -208,14 +208,14 @@ class BBBCSSView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        world_domain = re.sub(r":\d+$", "", self.request.headers["Host"])
+        world_domain = re.sub(r":\d+$", "", self.request.get_host())
         ctx["world"] = get_object_or_404(World, domain=world_domain)
         return ctx
 
 
 class ShortTokenView(View):
     def get(self, request, token):
-        world_domain = re.sub(r":\d+$", "", self.request.headers["Host"])
+        world_domain = re.sub(r":\d+$", "", self.request.get_host())
         world = get_object_or_404(World, domain=world_domain)
         try:
             st = ShortToken.objects.get(short_token=token, world=world)
@@ -233,7 +233,7 @@ class FeedbackView(View):
 
     @cached_property
     def world(self):
-        world_domain = re.sub(r":\d+$", "", self.request.headers["Host"])
+        world_domain = re.sub(r":\d+$", "", self.request.get_host())
         return get_object_or_404(World, domain=world_domain)
 
     def post(self, request, *args, **kwargs):
