@@ -40,15 +40,15 @@ const firstReadable = function (colors, background = '#FFF', threshold = 4.5) {
 	return best
 }
 
-const CLR_PRIMARY_TEXT = {LIGHT: Color('rgba(0, 0, 0, .87)'), DARK: Color('rgba(255, 255, 255, 1)')}
+const CLR_PRIMARY_TEXT = {LIGHT: Color('rgba(33, 133, 208, 1)'), DARK: Color('rgba(255, 255, 255, 1)')}
 const CLR_SECONDARY_TEXT = {LIGHT: Color('rgba(0, 0, 0, .54)'), DARK: Color('rgba(255, 255, 255, .7)')}
 const CLR_SECONDARY_TEXT_FALLBACK = {LIGHT: Color('rgba(0, 0, 0, .74)'), DARK: Color('rgba(255, 255, 255, .9)')}
 const CLR_DISABLED_TEXT = {LIGHT: Color('rgba(0, 0, 0, .38)'), DARK: Color('rgba(255, 255, 255, .5)')}
 const CLR_DIVIDERS = {LIGHT: Color('rgba(255, 255, 255, .63)'), DARK: Color('rgba(255, 255, 255, .63)')}
 
 const DEFAULT_COLORS = {
-	primary: '#2948dd',
-	sidebar: '#2948dd',
+	primary: '#2185d0',
+	sidebar: '#2185d0',
 	bbb_background: '#ffffff',
 }
 
@@ -117,28 +117,23 @@ export function computeForegroundColor (bgColor) {
 	return firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], bgColor)
 }
 
-export function computeForegroundSidebarColor (pmColor, sbColor, bbbBg) {
+export function computeForegroundSidebarColor(colors) {
 	const configColors = {
-		primary: pmColor,
-		sidebar: sbColor,
-		bbb_background: bbbBg,
+		primary: colors.primary,
+		sidebar: colors.sidebar,
+		bbb_background: colors.bbb_background,
 	}
 	const sbColors = Object.keys(DEFAULT_COLORS).reduce((acc, key) => (acc[key] = Color((configColors ?? DEFAULT_COLORS)[key]), acc), {})
-	// modded colors
 	sbColors.primaryDarken15 = sbColors.primary.darken(0.15)
 	sbColors.primaryDarken20 = sbColors.primary.darken(0.20)
 	sbColors.primaryAlpha60 = sbColors.primary.alpha(0.6)
 	sbColors.primaryAlpha50 = sbColors.primary.alpha(0.5)
 	sbColors.primaryAlpha18 = sbColors.primary.alpha(0.18)
-
-	// button + inputs
 	sbColors.inputPrimaryBg = sbColors.primary
 	sbColors.inputPrimaryFg = firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], sbColors.primary)
 	sbColors.inputPrimaryBgDarken = sbColors.primary.darken(0.15)
-	// secondary inputs are transparent
 	sbColors.inputSecondaryFg = sbColors.primary
 	sbColors.inputSecondaryFgAlpha = sbColors.primary.alpha(0.08)
-	// sidebar
 	sbColors.sidebarTextPrimary = firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], sbColors.sidebar)
 	sbColors.sidebarTextSecondary = firstReadable([CLR_SECONDARY_TEXT.LIGHT, CLR_SECONDARY_TEXT_FALLBACK.LIGHT, CLR_SECONDARY_TEXT.DARK, CLR_SECONDARY_TEXT_FALLBACK.DARK], sbColors.sidebar)
 	sbColors.sidebarTextDisabled = firstReadable([CLR_DISABLED_TEXT.LIGHT, CLR_DISABLED_TEXT.DARK], sbColors.sidebar)
@@ -151,4 +146,18 @@ export function computeForegroundSidebarColor (pmColor, sbColor, bbbBg) {
 	for (const [key, value] of Object.entries(sbColors)) {
 		themeVariables[`--clr-${kebabCase(key)}`] = value.string()
 	}
+}
+
+export async function getThemeConfig() {
+	const authHeader = localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}`
+			: (localStorage.getItem('clientId') ? `Client ${localStorage.getItem('clientId')}` : null)
+	const themeUrl = config.api.base + 'theme'
+	const response = await (await fetch(themeUrl, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: authHeader,
+		}
+	})).json()
+	return response
 }

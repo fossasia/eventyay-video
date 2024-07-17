@@ -88,7 +88,6 @@ import ChannelBrowser from 'components/ChannelBrowser'
 import CreateStagePrompt from 'components/CreateStagePrompt'
 import CreateChatPrompt from 'components/CreateChatPrompt'
 import CreateDmPrompt from 'components/CreateDmPrompt'
-import { computeForegroundSidebarColor } from 'theme'
 
 export default {
 	components: { Avatar, ChannelBrowser, CreateStagePrompt, CreateChatPrompt, CreateDmPrompt },
@@ -170,9 +169,6 @@ export default {
 			return this.rooms.some(room => room.modules.length === 1 && room.modules[0].type === 'poster.native')
 		},
 	},
-	beforeMount() {
-		this.getThemeData()
-	},
 	methods: {
 		getDMChannelName (channel) {
 			return channel.users.map(user => user.deleted ? this.$t('User:label:deleted') : user.profile.display_name).join(', ')
@@ -206,15 +202,6 @@ export default {
 		onPointercancel (event) {
 			this.lastPointer = null
 			this.pointerMovementX = 0
-		},
-		async getThemeData() {
-			const worldConfig = await api.call('world.config.get')
-			computeForegroundSidebarColor(worldConfig.theme.colors.primary, worldConfig.theme.colors.sidebar, worldConfig.theme.colors.bbb_background)
-			this.theme.colors = worldConfig.theme.colors
-			this.theme.logo.url = worldConfig.theme.logo.url
-			this.theme.logo.fitToWidth = worldConfig.theme.logo.fitToWidth
-			this.theme.streamOfflineImage = worldConfig.theme.streamOfflineImage
-			debugger
 		}
 	}
 }
