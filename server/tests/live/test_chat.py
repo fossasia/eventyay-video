@@ -1324,4 +1324,3 @@ async def test_force_join_after_login(world, chat_room):
             r = await c2.receive_json_from()
         assert r[0] == "chat.channels"
         assert channel_id in [c["id"] for c in r[1]["channels"]]
-        

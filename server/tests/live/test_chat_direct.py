@@ -792,6 +792,7 @@ async def test_send_if_silenced(world):
         assert "error" == response[0]
         assert "chat.denied" == response[2]["code"]
 
+
 @pytest.mark.asyncio
 @pytest.mark.django_db
 async def test_notification_contains_content_and_persists(world):

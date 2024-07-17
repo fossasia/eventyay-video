@@ -1073,4 +1073,3 @@ async def test_anonymous_invite(client, world, stream_room, bbb_room):
             "room:poll.vote",
             "room:poll.read",
         }
-        
