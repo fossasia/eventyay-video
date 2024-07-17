@@ -149,14 +149,11 @@ export function computeForegroundSidebarColor(colors) {
 }
 
 export async function getThemeConfig() {
-	const authHeader = localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}`
-			: (localStorage.getItem('clientId') ? `Client ${localStorage.getItem('clientId')}` : null)
 	const themeUrl = config.api.base + 'theme'
 	const response = await (await fetch(themeUrl, {
 		method: 'GET',
 		headers: {
-			'Content-Type': 'application/json',
-			Authorization: authHeader,
+			'Content-Type': 'application/json'
 		}
 	})).json()
 	return response
