@@ -1,3 +1,4 @@
+import logging
 from contextlib import suppress
 from urllib.parse import urlparse
 
@@ -22,6 +23,8 @@ from venueless.core.models import Channel, User
 from venueless.core.services.world import notify_schedule_change, notify_world_change
 
 from ..core.models import Room, World
+
+logger = logging.getLogger(__name__)
 
 
 class RoomViewSet(viewsets.ModelViewSet):
@@ -98,7 +101,8 @@ class WorldThemeView(APIView):
             world = get_object_or_404(World, id=kwargs["world_id"])
             return Response(WorldSerializer(world).data['config']['theme'])
         except KeyError:
-            return Response("error happened when trying to get theme data of world: " + kwargs["world_id"], status=500)
+            logger.error(f"error happened when trying to get theme data of world: " + kwargs["world_id"])
+            return Response("error happened when trying to get theme data of world: " + kwargs["world_id"], status=503)
 
 
 
