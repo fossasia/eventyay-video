@@ -89,8 +89,7 @@ export default {
 		// Populate languages from the languages added by the admin
 		if (this.modules['livestream.youtube'] && this.modules['livestream.youtube'].config.languageUrls) {
 			this.languages = this.modules['livestream.youtube'].config.languageUrls;
-			this.languages.unshift({language: 'Default', url: `https://www.youtube.com/watch?v=${this.modules['livestream.youtube'].config.ytid}`})
-
+			this.languages.unshift({language: 'Default', url: ``})
 		}
 	},
 	methods: {
@@ -98,8 +97,8 @@ export default {
 			if (tab === this.activeSidebarTab) return
 			this.unreadTabs[tab] = true
 		},
-		handleLanguageChange(selectedLanguage) {
-			this.$store.commit('updateYoutubeTransAudio', selectedLanguage)
+		handleLanguageChange(languageUrl) {
+			this.$root.$emit('languageChanged', languageUrl);
 		}
 	}
 }
