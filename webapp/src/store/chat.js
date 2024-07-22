@@ -359,11 +359,6 @@ export default {
 			// Increment notification count
 			Vue.set(state.notificationCounts, channel.id, (state.notificationCounts[channel.id] || 0) + 1)
 			if (eventId > state.readPointers[channelId] && channelId === state.channel) {
-				// In volatile channels, markChannelRead does not advance the readPointer and does not send mark_read, unless
-				// notificationCounts is non-zero.
-				// However, if we receive a notification for the channel that is currently open, we do need to trigger a
-				// *after* we increased notificationCounts to make sure that other connected clients know that the notification
-				// has been read.
 				dispatch('markChannelRead')
 			}
 			// TODO show desktop notification when window in focus but route is somewhere else?
