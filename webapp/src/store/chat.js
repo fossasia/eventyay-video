@@ -51,8 +51,8 @@ export default {
 		},
 		channelName (state, getters, rootState) {
 			return function (channel) {
-				if (this.isDirectMessageChannel(channel)) {
-					return this.directMessageChannelName(channel)
+				if (getters.isDirectMessageChannel(channel)) {
+					return getters.directMessageChannelName(channel)
 				} else {
 					return rootState.rooms.find(room => room.modules.some(m => m.channel_id === channel.id)).name
 				}
@@ -90,6 +90,7 @@ export default {
 			state.usersLookup = members.reduce((acc, member) => { acc[member.id] = member; return acc }, {})
 			state.timeline = []
 			state.warnings = []
+			state.fetchingMessages = null
 			state.beforeCursor = beforeCursor
 			state.config = config
 			if (getters.activeJoinedChannel) {
@@ -352,10 +353,19 @@ export default {
 		},
 		async 'api::chat.notification' ({state, rootState, getters, dispatch}, data) {
 			const channelId = data.event.channel
-			const channel = state.joinedChannels.find(c => c.id === channelId) || getters.automaticallyJoinedChannels.includes(channelId) ? {id: channelId} : null
+			const channel = state.joinedChannels.find(c => c.id === channelId) || (getters.automaticallyJoinedChannels.includes(channelId) ? {id: channelId} : null)
+			const eventId = data.event.event_id
 			if (!channel) return
 			// Increment notification count
 			Vue.set(state.notificationCounts, channel.id, (state.notificationCounts[channel.id] || 0) + 1)
+			if (eventId > state.readPointers[channelId] && channelId === state.channel) {
+				// In volatile channels, markChannelRead does not advance the readPointer and does not send mark_read, unless
+				// notificationCounts is non-zero.
+				// However, if we receive a notification for the channel that is currently open, we do need to trigger a
+				// *after* we increased notificationCounts to make sure that other connected clients know that the notification
+				// has been read.
+				dispatch('markChannelRead')
+			}
 			// TODO show desktop notification when window in focus but route is somewhere else?
 			let body = i18n.t('DirectMessage:notification-unread:text')
 			if (data.event.content.type === 'text') {
