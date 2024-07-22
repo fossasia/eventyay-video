@@ -34,10 +34,8 @@ export default {
   },
   methods: {
     sendLanguageChange() {
-      const selected = this.languages.find(item => item.language == this.selectedLanguage)
-      const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-      const matchId = selected.url.match(regex);
-      this.$emit('languageChanged', matchId ? matchId[1] : null);
+      const selected = this.languages.find(item => item.language == this.selectedLanguage);
+      this.$emit('languageChanged', selected.youtube_id || null);
     }
   }
 };
