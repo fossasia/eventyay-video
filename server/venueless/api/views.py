@@ -101,7 +101,7 @@ class WorldThemeView(APIView):
             world = get_object_or_404(World, id=kwargs["world_id"])
             return Response(WorldSerializer(world).data['config']['theme'])
         except KeyError:
-            logger.error(f"error happened when trying to get theme data of world: " + kwargs["world_id"])
+            logger.error("error happened when trying to get theme data of world: %s", kwargs["world_id"])
             return Response("error happened when trying to get theme data of world: " + kwargs["world_id"], status=503)
 
 
