@@ -22,4 +22,9 @@ export default {
 <style lang="stylus">
 .c-admin
 	padding: 0 16px
+
+#app:not(.override-sidebar-close)  .c-admin
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

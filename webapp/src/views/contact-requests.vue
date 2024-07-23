@@ -111,4 +111,9 @@ export default {
 		.contact-request:hover
 			.actions .placeholder
 				display: none
+
+#app:not(.override-sidebar-close)  .c-contact-requests
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

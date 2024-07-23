@@ -1,6 +1,7 @@
 <template lang="pug">
 transition(name="sidebar")
 	.c-rooms-sidebar(v-show="show && !snapBack", :style="style", role="navigation", @pointerdown="onPointerdown", @pointermove="onPointermove", @pointerup="onPointerup", @pointercancel="onPointercancel")
+		bunt-icon-button#btn-close-sidebar(@click="$emit('close')") menu
 		router-link.logo(to="/", v-if="$mq.above['m']", :class="{'fit-to-width': theme.logo.fitToWidth}")
 			img(:src="theme.logo.url", :alt="world.title")
 		bunt-icon-button#btn-close-sidebar(v-else, @click="$emit('close')") menu
@@ -501,6 +502,23 @@ export default {
 			line-height: 1
 #app:not(.override-sidebar-collapse) .c-rooms-sidebar
 	+below('l')
+		position: fixed
+		left: 0
+		top: 0
+		z-index: 901
+		width: var(--sidebar-width)
+		height: var(--vh100)
+		touch-action: pan-y
+		> .c-scrollbars .scroll-content
+			touch-action: pan-y
+		&.sidebar-enter-active, &.sidebar-leave-active
+			transition: transform .2s
+		&.sidebar-enter, &.sidebar-leave-to
+			transform: translateX(calc(-1 * var(--sidebar-width)))
+			line-height: 1
+
+#app:not(.override-sidebar-close) .c-rooms-sidebar
+	+above('l')
 		position: fixed
 		left: 0
 		top: 0

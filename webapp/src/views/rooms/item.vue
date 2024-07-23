@@ -195,4 +195,10 @@ export default {
 				flex: auto
 				width: 100vw
 				min-height: 0
+
+#app:not(.override-sidebar-close)  .c-room
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
+
 </style>

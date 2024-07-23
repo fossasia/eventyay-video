@@ -58,4 +58,9 @@ export default {
 			font-weight: 500
 			margin: 1px 16px 0 0
 			ellipsis()
+
+#app:not(.override-sidebar-close)  .c-admin-config
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

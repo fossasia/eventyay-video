@@ -102,4 +102,9 @@ export default {
 			font-weight: 500
 			font-size: 16px
 			margin: 0
+
+#app:not(.override-sidebar-close)  .c-schedule-speakers
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

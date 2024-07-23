@@ -273,4 +273,9 @@ export default {
 		flex-direction: column
 		.modules
 			justify-content: flex-end
+
+#app:not(.override-sidebar-close)  .c-room-manager
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

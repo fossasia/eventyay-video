@@ -129,4 +129,8 @@ export default {
 						border-radius: 4px 0 0 4px
 					&:last-child
 						border-radius: 0 4px 4px 0
+
+#app:not(.override-sidebar-close)  .c-room-header
+	+above('l')
+		grid-area: 1 / 1 / span 2 / span 2;
 </style>

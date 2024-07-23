@@ -101,4 +101,9 @@ export default {
 			align-items: center
 		.content
 			margin: 0 16px
+
+#app:not(.override-sidebar-close)  .c-schedule-speaker
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

@@ -564,4 +564,9 @@ export default {
 						resize: vertical
 						min-height: 64px
 						padding: 0 8px
+
+#app:not(.override-sidebar-close)  .c-manage-exhibitor
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

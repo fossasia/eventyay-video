@@ -152,4 +152,9 @@ export default {
 		.talk
 			max-width: 100%
 			margin: 16px
+
+#app:not(.override-sidebar-close)  .c-schedule-talk
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

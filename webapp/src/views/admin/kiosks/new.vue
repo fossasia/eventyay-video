@@ -74,4 +74,9 @@ export default {
 		flex: auto
 		display: flex
 		flex-direction: column
+
+#app:not(.override-sidebar-close)  .c-admin-kiosk-new
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

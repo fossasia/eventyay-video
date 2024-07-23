@@ -85,4 +85,10 @@ export default {
 		.name
 			flex: auto
 			ellipsis()
+
+
+#app:not(.override-sidebar-close)  .c-admin-rooms
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>
