@@ -35,7 +35,7 @@ export default {
 	methods: {
 		sendLanguageChange () {
 			const selected = this.languages.find(item => item.language === this.selectedLanguage)
-			this.$emit('languageChanged', selected.youtube_id || null);
+			this.$emit('languageChanged', selected.youtube_id || null)
 		}
 	}
 }
