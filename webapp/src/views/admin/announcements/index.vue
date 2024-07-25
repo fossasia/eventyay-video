@@ -131,4 +131,9 @@ export default {
 					&.archived::before
 						content: 'archived'
 						background-color: $clr-grey-600
+
+#app:not(.override-sidebar-close)  .c-admin-announcements
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

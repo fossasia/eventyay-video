@@ -166,4 +166,8 @@ export default {
 		#btn-upload
 			themed-button-primary()
 
+#app:not(.override-sidebar-close)  .c-admin-users
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

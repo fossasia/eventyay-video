@@ -77,4 +77,9 @@ export default {
 		.name, .room
 			flex: 1
 			ellipsis()
+
+#app:not(.override-sidebar-close)  .c-admin-kiosk
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

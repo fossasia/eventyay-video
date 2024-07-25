@@ -170,4 +170,9 @@ export default {
 	+below('s')
 		.inputs
 			width: auto
+
+#app:not(.override-sidebar-close)  .v-preferences
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

@@ -198,4 +198,9 @@ export default {
 			align-self: center
 		.delete-kiosk
 			button-style(color: $clr-danger)
+
+#app:not(.override-sidebar-close)  .c-admin-kiosk
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

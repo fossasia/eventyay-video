@@ -1,5 +1,5 @@
 <template lang="pug">
-#app(:class="{'has-background-room': backgroundRoom, 'override-sidebar-collapse': overrideSidebarCollapse}", :style="[themeVariables, browserhackStyle, mediaConstraintsStyle]", :key="`${userLocale}-${userTimezone}`")
+#app(:class="{'has-background-room': backgroundRoom, 'override-sidebar-collapse': overrideSidebarCollapse, 'override-sidebar-close': overrideSidebarClose}", :style="[themeVariables, browserhackStyle, mediaConstraintsStyle]", :key="`${userLocale}-${userTimezone}`")
 	.fatal-connection-error(v-if="fatalConnectionError")
 		template(v-if="fatalConnectionError.code === 'world.unknown_world'")
 			.mdi.mdi-help-circle
@@ -18,10 +18,10 @@
 			h1 {{ $t('App:fatal-connection-error:else:headline') }}
 		p.code error code: {{ fatalConnectionError.code }}
 	template(v-else-if="world")
-		app-bar(v-if="$mq.below['l']", @toggleSidebar="toggleSidebar")
+		app-bar(v-if="$mq.below['l'] || showSidebar == false", @toggleSidebar="toggleSidebar")
 		transition(name="backdrop")
 			.sidebar-backdrop(v-if="$mq.below['l'] && showSidebar && !overrideSidebarCollapse", @pointerup="showSidebar = false")
-		rooms-sidebar(:show="$mq.above['l'] || showSidebar || overrideSidebarCollapse", @close="showSidebar = false")
+		rooms-sidebar(:show="showSidebar || overrideSidebarCollapse", @close="showSidebar = false")
 		router-view(:key="!$route.path.startsWith('/admin') ? $route.fullPath : null", :role="roomHasMedia ? '' : 'main'")
 		//- defining keys like this keeps the playing dom element alive for uninterupted transitions
 		media-source(v-if="roomHasMedia && user.profile.greeted", ref="primaryMediaSource", :room="room", :key="room.id", role="main")
@@ -58,7 +58,7 @@ export default {
 		return {
 			themeVariables,
 			backgroundRoom: null,
-			showSidebar: false,
+			showSidebar: true,
 			windowHeight: null
 		}
 	},
@@ -91,6 +91,9 @@ export default {
 				this.$mq.above.m &&
 				this.$route.name === 'home' &&
 				!this.roomHasMedia
+		},
+		overrideSidebarClose () {
+			return this.$mq.above.l && !this.showSidebar
 		},
 		// safari cleverly includes the address bar cleverly in 100vh
 		mediaConstraintsStyle () {
@@ -125,7 +128,7 @@ export default {
 		room: 'roomChange',
 		call: 'callChange',
 		$route () {
-			this.showSidebar = false
+			this.showSidebar = this.showSidebar
 		},
 		stageStreamCollapsed: {
 			handler  () {
@@ -209,6 +212,10 @@ export default {
 			if (!this.backgroundRoom && !this.rooms.includes(this.backgroundRoom)) {
 				this.backgroundRoom = null
 			}
+		},
+		handleCloseSidebar () {
+			console.log(this.showSidebar + ' -> ' + !this.showSidebar)
+			this.showSidebar = !this.showSidebar
 		}
 	}
 }
@@ -317,4 +324,39 @@ export default {
 					font-size: 128px
 				h1
 					font-size: 24px
+	+above('l')
+		&.override-sidebar-close
+			grid-template-columns: auto
+			grid-template-rows: 48px 1fr
+			grid-template-areas: "app-bar" "main"
+			.sidebar-backdrop
+				position: fixed
+				top: 0
+				left: 0
+				height: var(--vh100)
+				width: 100vw
+				z-index: 900
+				background-color: $clr-secondary-text-light
+				&.backdrop-enter-active, &.backdrop-leave-active
+					transition: opacity .2s
+				&.backdrop-enter, &.backdrop-leave-to
+					opacity: 0
+			.fatal-connection-error
+				.mdi
+					font-size: 128px
+				h1
+					font-size: 24px
+			#media-source-iframes
+				iframe
+					top: 104px
+					left: 0px
+			.c-media-source
+				.is-offline
+					top: 104px
+					left: 0px
+		&:not(.override-sidebar-close)
+			grid-template-columns: var(--sidebar-width) auto
+			grid-template-areas: "app-bar app-bar" "rooms-sidebar main"
+			
+
 </style>

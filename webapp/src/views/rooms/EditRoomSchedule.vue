@@ -147,4 +147,9 @@ export default {
 			bottom: 16px
 			right: 16px
 			themed-button-primary()
+
+#app:not(.override-sidebar-close)  .c-edit-room-schedule
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

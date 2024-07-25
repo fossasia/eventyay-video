@@ -195,4 +195,9 @@ export default {
 		themed-button-primary()
 		align-self: flex-start
 		padding: 0 32px
+
+#app:not(.override-sidebar-close)  .c-announcement
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>

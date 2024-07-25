@@ -75,4 +75,9 @@ export default {
 		.exhibitor:hover
 			.actions .placeholder
 				display none
+
+#app:not(.override-sidebar-close)  .c-exhibitors
+	+above('l')
+		grid-area: app-bar;
+		margin-left: var(--sidebar-width);
 </style>
