@@ -7,8 +7,8 @@
 			ul.splide__list
 				li.splide__slide(v-for="sponsor of sponsors")
 					img.sponsor(:src="sponsor.logo", :alt="sponsor.name", @load="onSponsorImageLoad(sponsor.id)")
-	.content-wrapper
-		.main-content
+	.content-container
+		.content
 			rich-text-content(v-if="hasMainContent", :content="module.config.main_content")
 			template(v-if="featuredSessions && featuredSessions.length")
 				.header
@@ -53,11 +53,11 @@ import api from 'lib/api'
 import moment from 'lib/timetravelMoment'
 import Identicon from 'components/Identicon'
 import MarkdownContent from 'components/MarkdownContent'
-import RichTextContent from 'components/RichTextContent'
 import scheduleProvidesMixin from 'components/mixins/schedule-provides'
+import RichTextContent from 'components/RichTextContent'
 
 export default {
-	components: { Identicon, MarkdownContent, RichTextContent, Session },
+	components: { Identicon, MarkdownContent, Session, RichTextContent },
 	mixins: [scheduleProvidesMixin],
 	props: {
 		module: Object
@@ -92,7 +92,7 @@ export default {
 			return this.schedule?.speakers.slice().sort((a, b) => a.name.split(' ').at(-1).localeCompare(b.name.split(' ').at(-1)))
 		},
 		hasMainContent () {
-			return this.module.config.main_content?.ops?.length > 0 && this.module.config.main_content.ops.some(op => op.insert.trim() !== '')
+			return this.module.config.main_content?.ops?.some(op => op.insert.trim() !== '')
 		},
 	},
 	async mounted () {
@@ -152,7 +152,7 @@ export default {
 			height: 100%
 			max-width: 100%
 			object-fit: contain
-	.content-wrapper
+	.content-container
 		display: flex
 		justify-content: center
 		gap: 32px
@@ -162,7 +162,7 @@ export default {
 			min-width: 0
 			display: flex
 			flex-direction: column
-	.main-content
+	.content
 		display: flex
 		flex-direction: column
 		max-width: 960px
@@ -242,7 +242,7 @@ export default {
 			justify-content: center
 
 	+below('m')
-		.content-wrapper
+		.content-container
 			flex-direction: column
 			align-items: center
 			padding: 0 8px
