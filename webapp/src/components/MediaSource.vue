@@ -114,7 +114,10 @@ export default {
 						break
 					}
 					case 'livestream.youtube': {
-						iframeUrl = this.getYoutubeUrl(this.module.config.ytid, this.autoplay, mute)
+						iframeUrl = this.getYoutubeUrl(this.module.config.ytid, this.autoplay, mute, this.module.config.hideControls,
+							this.module.config.noRelated, this.module.config.autoStart, this.module.config.showinfo, this.module.config.disableKb,
+							this.module.config.loop, this.module.config.modestBranding, this.module.config.enablePrivacyEnhancedMode
+						)
 						break
 					}
 				}
@@ -168,24 +171,27 @@ export default {
 			// Set the language iframe URL when language changes
 			this.languageIframeUrl = this.getLanguageIframeUrl(languageUrl)
 		},
-		getYoutubeUrl (ytid, autoplay, mute) {
+		getYoutubeUrl(ytid, autoplay, mute, hideControls, noRelated, autoStart, showinfo, disableKb, loop, modestBranding, enablePrivacyEnhancedMode) {
 			// Construct the autoplay parameter based on the input
-			const autoplayParam = autoplay ? 'autoplay=1&' : ''
-			// Construct the mute parameter based on the input
+			const autoplayParam = autoplay ? 'autoplay=1&' : '';
 			const muteParam = mute ? 'mute=1' : 'mute=0';
-			const domain = this.getYouTubeDomain();
+			const hideControlsParam = hideControls ? 'controls=0' : 'controls=1';
+			const noRelatedParam = noRelated ? 'rel=0' : 'rel=1';
+			const autoStartParam = autoStart ? 'start=1' : 'start=0';
+			const showinfoParam = showinfo ? 'showinfo=0' : 'showinfo=1';
+			const disableKbParam = disableKb ? 'disablekb=1' : 'disablekb=0';
+			const loopParam = loop ? 'loop=1' : 'loop=0';
+			const modestBrandingParam = modestBranding ? 'modestbranding=1' : 'modestbranding=0';
+			const domain = enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com';
 			// Return the complete YouTube URL with the provided video ID, autoplay, and mute parameters
-			return `https://${domain}/embed/${ytid}?${autoplayParam}?enablejsapi=1&modestbranding=1&loop=1&controls=0&disablekb=1&rel=0&showinfo=0&playlist=${ytid}&${muteParam}`;
+			return `https://${domain}/embed/${ytid}?${autoplayParam}?${modestBrandingParam}&${loop}${autoStartParam}&${hideControlsParam}&${disableKb}&${noRelatedParam}&${showinfoParam}&playlist=${ytid}&${muteParam}`;
 		},
 		// Added method to get the language iframe URL
-		getLanguageIframeUrl (languageUrl) {
+		getLanguageIframeUrl(languageUrl, enablePrivacyEnhancedMode) {
 			// Checks if the languageUrl is not provided the retun null
 			if (!languageUrl) return null;
-			const domain = this.getYouTubeDomain();
+			const domain = enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com';
 			return `https://${domain}/embed/${languageUrl}?enablejsapi=1&autoplay=1&modestbranding=1&loop=1&controls=0&disablekb=1&rel=0&showinfo=0&playlist=${languageUrl}`;
-		},
-		getYouTubeDomain() {
-			return this.$parent.$parent.enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com';
 		}
 	}
 }
