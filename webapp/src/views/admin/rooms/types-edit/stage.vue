@@ -22,6 +22,9 @@
 			bunt-input(name="youtube_id" v-model="entry.youtube_id" label="YouTube Video ID")
 			bunt-icon-button(@click="deleteLanguageUrl(index)") delete-outline
 		bunt-button(@click="addLanguageUrl") + Add Language and Youtube ID
+		// Switch button for no-cookies domain
+		.bunt-switch-container
+			bunt-switch(name="no-cookies", v-model="noCookies", label="Enable No-Cookies")
 	bunt-input(v-else-if="modules['livestream.iframe']", name="iframe-player", v-model="modules['livestream.iframe'].config.url", label="Iframe player url", hint="iframe player should be autoplaying and support resizing to small sizes for background playing")
 	sidebar-addons(v-bind="$props")
 </template>
@@ -51,7 +54,8 @@ export default {
 			ISO_LANGUAGE_OPTIONS: this.getLanguageOptions(),
 			b_streamSource: null,
 			// Initial empty array for languages and URLs
-			b_languageUrls: []
+			b_languageUrls: [],
+			noCookies: false
 		}
 	},
 	validations: {
@@ -119,4 +123,6 @@ export default {
 }
 </script>
 <style lang="stylus">
+.bunt-switch-container
+	margin-top: 16px
 </style>
