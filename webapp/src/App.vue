@@ -1,5 +1,5 @@
 <template lang="pug">
-#app(:class="{'has-background-room': backgroundRoom, 'override-sidebar-collapse': overrideSidebarCollapse}", :style="[themeVariables, browserhackStyle, mediaConstraintsStyle]", :key="`${userLocale}-${userTimezone}`")
+#app(ref="app", :class="{'has-background-room': backgroundRoom, 'override-sidebar-collapse': overrideSidebarCollapse}", :style="[themeVariables, browserhackStyle, mediaConstraintsStyle]", :key="`${userLocale}-${userTimezone}`")
 	.fatal-connection-error(v-if="fatalConnectionError")
 		template(v-if="fatalConnectionError.code === 'world.unknown_world'")
 			.mdi.mdi-help-circle
@@ -18,11 +18,13 @@
 			h1 {{ $t('App:fatal-connection-error:else:headline') }}
 		p.code error code: {{ fatalConnectionError.code }}
 	template(v-else-if="world")
-		app-bar(v-if="$mq.below['l']", @toggleSidebar="toggleSidebar")
-		transition(name="backdrop")
-			.sidebar-backdrop(v-if="$mq.below['l'] && showSidebar && !overrideSidebarCollapse", @pointerup="showSidebar = false")
-		rooms-sidebar(:show="$mq.above['l'] || showSidebar || overrideSidebarCollapse", @close="showSidebar = false")
-		router-view(:key="!$route.path.startsWith('/admin') ? $route.fullPath : null", :role="roomHasMedia ? '' : 'main'")
+		//- app-bar(v-if="$mq.below['l']", @toggleSidebar="toggleSidebar")
+		//- transition(name="backdrop")
+		//- 	.sidebar-backdrop(v-if="$mq.below['l'] && showSidebar && !overrideSidebarCollapse", @pointerup="showSidebar = false")
+		bunt-icon-button#btn-close-sidebar(ref="closeSidebarButton", @click="toggleSidebar")
+			template {{ showSidebar ? 'close' : 'menu' }}
+		rooms-sidebar(ref="roomsSidebar", @toggleSidebar="toggleSidebar")
+		router-view(ref="routerView", class="router-view" :key="!$route.path.startsWith('/admin') ? $route.fullPath : null", :role="roomHasMedia ? '' : 'main'")
 		//- defining keys like this keeps the playing dom element alive for uninterupted transitions
 		media-source(v-if="roomHasMedia && user.profile.greeted", ref="primaryMediaSource", :room="room", :key="room.id", role="main")
 		media-source(v-if="call", ref="channelCallSource", :call="call", :background="call.channel !== $route.params.channelId", :key="call.id", @close="$store.dispatch('chat/leaveCall')")
@@ -105,9 +107,11 @@ export default {
 				'--has-stagetools': hasStageTools ? '1' : '0'
 			}
 			if (this.mediaSourcePlaceholderRect) {
+				const routerViewLeft = window.getComputedStyle(this.$refs.routerView.$el).marginLeft;
 				Object.assign(style, {
 					'--mediasource-placeholder-height': this.mediaSourcePlaceholderRect.height + 'px',
-					'--mediasource-placeholder-width': this.mediaSourcePlaceholderRect.width + 'px'
+					'--mediasource-placeholder-width': this.mediaSourcePlaceholderRect.width  + 'px',
+					'--offset-sidebar': (280 - parseFloat(routerViewLeft)) + 'px' 
 				})
 			}
 			return style
@@ -125,7 +129,9 @@ export default {
 		room: 'roomChange',
 		call: 'callChange',
 		$route () {
-			this.showSidebar = false
+			if(this.$mq.below.l) {
+				this.toggleSidebar()
+			}
 		},
 		stageStreamCollapsed: {
 			handler  () {
@@ -151,7 +157,17 @@ export default {
 			this.$store.dispatch('notifications/clearDesktopNotifications')
 		},
 		toggleSidebar () {
-			this.showSidebar = !this.showSidebar
+			if(this.$refs.roomsSidebar && this.$refs.roomsSidebar.$el) {
+				this.$refs.roomsSidebar.$el.style.width = !!this.$refs.roomsSidebar.$el.offsetWidth ? '0px' : '280px';
+			}
+			if(this.$refs.closeSidebarButton && this.$refs.closeSidebarButton.$el) {
+				const buttonLeft = this.$refs.closeSidebarButton.$el.offsetLeft;
+				this.$refs.closeSidebarButton.$el.style.left = !!buttonLeft ? '0px' : '250px';
+			}
+			if(this.$refs.routerView && this.$refs.routerView.$el) {
+				const routerViewLeft = window.getComputedStyle(this.$refs.routerView.$el).marginLeft;
+                this.$refs.routerView.$el.style.marginLeft = routerViewLeft !== '0px' ? '0px' : '280px';
+			}
 		},
 		clearTokenAndReload () {
 			localStorage.removeItem('token')
@@ -215,18 +231,11 @@ export default {
 </script>
 <style lang="stylus">
 #app
-	display: grid
-	grid-template-columns: var(--sidebar-width) auto
-	grid-template-rows: auto
-	grid-template-areas: "rooms-sidebar main"
+	.router-view
+		margin-left: 280px
+		transition: 0.5s
 	--sidebar-width: 280px
 	--pretalx-clr-primary: var(--clr-primary)
-	.c-app-bar
-		grid-area: app-bar
-	.c-rooms-sidebar
-		grid-area: rooms-sidebar
-	.c-room-header
-		grid-area: main
 	> .bunt-progress-circular
 		position: fixed
 		top: 50%
@@ -291,15 +300,41 @@ export default {
 		width: 0
 		height: 0
 
+	.c-rooms-sidebar
+		height: 100%
+		width: 280px
+		position: fixed
+		z-index: 98
+		top: 0
+		left: 0
+		overflow-x: hidden
+		transition: 0.5s
+	#btn-close-sidebar
+		position: absolute
+		top: 0px
+		left: 250px
+		z-index: 99
+		transition: 0.5s
 	+below('l')
-		&.override-sidebar-collapse
-			grid-template-rows: 48px 1fr
-			grid-template-areas: "app-bar app-bar" "rooms-sidebar main"
+		.router-view
+			margin-left: 0px
+			transition: 0.5s
+		.c-rooms-sidebar
+			height: 100%
+			width: 0px
+			position: fixed
+			z-index: 98
+			top: 0
+			left: 0
+			overflow-x: hidden
+			transition: 0.5s
+		#btn-close-sidebar
+			position: absolute
+			top: 0px
+			left: 0px
+			z-index: 99
+			transition: 0.5s
 		&:not(.override-sidebar-collapse)
-			grid-template-columns: auto
-			grid-template-rows: 48px 1fr
-			grid-template-areas: "app-bar" "main"
-
 			.sidebar-backdrop
 				position: fixed
 				top: 0

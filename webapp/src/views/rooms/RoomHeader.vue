@@ -81,6 +81,7 @@ export default {
 	background-color: $clr-white
 	min-height: 0
 	min-width: 0
+	height: 100%
 	> .ui-page-header
 		justify-content: space-between
 		.room-info

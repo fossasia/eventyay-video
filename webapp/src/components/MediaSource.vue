@@ -236,16 +236,16 @@ export default {
 	&.size-tiny, &.background
 		bottom: calc(var(--vh100) - 48px - 3px)
 		right: 4px + 36px + 4px
-		+below('l')
-			bottom: calc(var(--vh100) - 48px - 48px - 3px)
+		// +below('l')
+		// 	bottom: calc(var(--vh100) - 48px - 48px - 3px)
 	&:not(.size-tiny):not(.background)
 		bottom: calc(var(--vh100) - 56px - var(--mediasource-placeholder-height))
-		right: calc(100vw - var(--sidebar-width) - var(--mediasource-placeholder-width))
+		right: calc(100vw - var(--sidebar-width) + var(--offset-sidebar) - var(--mediasource-placeholder-width))
 		width: var(--mediasource-placeholder-width)
 		height: var(--mediasource-placeholder-height)
-		+below('l')
-			bottom: calc(var(--vh100) - 48px - 56px - var(--mediasource-placeholder-height))
-			right: calc(100vw - var(--mediasource-placeholder-width))
+		// +below('l')
+		// 	bottom: calc(var(--vh100) - 48px - 56px - var(--mediasource-placeholder-height))
+		// 	right: calc(100vw - var(--mediasource-placeholder-width))
 iframe.iframe-media-source
 	transition: all .3s ease
 	border: none
