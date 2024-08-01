@@ -24,7 +24,7 @@
 		bunt-button(@click="addLanguageUrl") + Add Language and Youtube ID
 		// Switch button for no-cookies domain
 		.bunt-switch-container
-			bunt-switch(name="no-cookies", v-model="noCookies", label="Enable No-Cookies")
+			bunt-switch(name="enable-privacy-enhanced-mode", v-model="enablePrivacyEnhancedMode", label="Enable No-Cookies")
 	bunt-input(v-else-if="modules['livestream.iframe']", name="iframe-player", v-model="modules['livestream.iframe'].config.url", label="Iframe player url", hint="iframe player should be autoplaying and support resizing to small sizes for background playing")
 	sidebar-addons(v-bind="$props")
 </template>
@@ -55,7 +55,7 @@ export default {
 			b_streamSource: null,
 			// Initial empty array for languages and URLs
 			b_languageUrls: [],
-			noCookies: false
+			enablePrivacyEnhancedMode: false
 		}
 	},
 	validations: {
