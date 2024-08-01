@@ -242,9 +242,6 @@ export default {
 			margin: 0
 			img
 				height: auto
-	#btn-close-sidebar
-		margin: 8px
-		icon-button-style(color: var(--clr-sidebar-text-primary), style: clear)
 	> .c-scrollbars
 		flex: auto
 		.scroll-content

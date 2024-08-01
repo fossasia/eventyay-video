@@ -18,11 +18,10 @@
 			h1 {{ $t('App:fatal-connection-error:else:headline') }}
 		p.code error code: {{ fatalConnectionError.code }}
 	template(v-else-if="world")
-		//- app-bar(v-if="$mq.below['l']", @toggleSidebar="toggleSidebar")
+		app-bar(ref="appBar", v-if="$mq.below['l']")
 		//- transition(name="backdrop")
 		//- 	.sidebar-backdrop(v-if="$mq.below['l'] && showSidebar && !overrideSidebarCollapse", @pointerup="showSidebar = false")
-		bunt-icon-button#btn-close-sidebar(ref="closeSidebarButton", @click="toggleSidebar")
-			template {{ showSidebar ? 'close' : 'menu' }}
+		bunt-icon-button#btn-close-sidebar(ref="closeSidebarButton", @click="toggleSidebar") menu
 		rooms-sidebar(ref="roomsSidebar", @toggleSidebar="toggleSidebar")
 		router-view(ref="routerView", class="router-view" :key="!$route.path.startsWith('/admin') ? $route.fullPath : null", :role="roomHasMedia ? '' : 'main'")
 		//- defining keys like this keeps the playing dom element alive for uninterupted transitions
@@ -162,11 +161,15 @@ export default {
 			}
 			if(this.$refs.closeSidebarButton && this.$refs.closeSidebarButton.$el) {
 				const buttonLeft = this.$refs.closeSidebarButton.$el.offsetLeft;
-				this.$refs.closeSidebarButton.$el.style.left = !!buttonLeft ? '0px' : '250px';
+				this.$refs.closeSidebarButton.$el.style.left = !!buttonLeft ? '0px' : '280px';
 			}
 			if(this.$refs.routerView && this.$refs.routerView.$el) {
 				const routerViewLeft = window.getComputedStyle(this.$refs.routerView.$el).marginLeft;
                 this.$refs.routerView.$el.style.marginLeft = routerViewLeft !== '0px' ? '0px' : '280px';
+			}
+			if(this.$refs.appBar && this.$refs.appBar.$el) {
+				const appBarLeft = window.getComputedStyle(this.$refs.appBar.$el).marginLeft;
+                this.$refs.appBar.$el.style.marginLeft = appBarLeft !== '0px' ? '0px' : '280px';
 			}
 		},
 		clearTokenAndReload () {
@@ -232,6 +235,9 @@ export default {
 <style lang="stylus">
 #app
 	.router-view
+		margin-left: 280px
+		transition: 0.5s
+	.c-app-bar
 		margin-left: 280px
 		transition: 0.5s
 	--sidebar-width: 280px
@@ -310,13 +316,19 @@ export default {
 		overflow-x: hidden
 		transition: 0.5s
 	#btn-close-sidebar
+		background-color: #C0C0C0
+		border-radius: 5px
 		position: absolute
 		top: 0px
-		left: 250px
+		left: 280px
 		z-index: 99
 		transition: 0.5s
+		opacity: 0.5
 	+below('l')
 		.router-view
+			margin-left: 0px
+			transition: 0.5s
+		.c-app-bar
 			margin-left: 0px
 			transition: 0.5s
 		.c-rooms-sidebar
