@@ -62,10 +62,7 @@ export default {
 			}, { immediate: true })
 		}
 	},
-	mounted () {
-		this.$nextTick(() => {
-		})
-	},
+	mounted () {},
 	methods: {
 		generateSessionLinkUrl (sessionData) {
 			return `/schedule/talks/${sessionData.session.id}`
