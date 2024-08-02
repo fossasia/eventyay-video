@@ -46,7 +46,7 @@
 			h1 {{ $t('Tracks')}}
 			template(v-for="track in schedule.tracks")
 				div.item(v-if="track")
-					bunt-checkbox(v-model="tracksFilter[track.id]",name="track_room_views") {{track.name.de}}
+					bunt-checkbox(v-model="tracksFilter[track.id]",name="track_room_views") {{track.name}}
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'
