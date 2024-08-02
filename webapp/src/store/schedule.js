@@ -52,9 +52,9 @@ export default {
 			const sessions = []
 			const favArr = getters.favs || []
 			for (const session of state.schedule.talks) {
-				if (state.filter?.type === 1 && !favArr?.includes(session.code?.toString())) {
+				if (state.filter?.type === 'fav' && !favArr?.includes(session.code?.toString())) {
 					continue
-				} else if (state.filter?.type === 2) {
+				} else if (state.filter?.type === 'track') {
 					const { tracks } = state.filter
 					if (tracks?.length && !tracks.includes(String(session.track))) {
 						continue

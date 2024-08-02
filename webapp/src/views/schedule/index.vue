@@ -7,11 +7,11 @@
 		div.filter-actions
 			bunt-button.bunt-ripple-ink(@click="open=true",
 				icon="filter-outline"
-				:class="{active: filter.type == 2}" ) {{ $t('Filter') }}
+				:class="{active: filter.type === 'track'}" ) {{ $t('Filter') }}
 			bunt-button.bunt-ripple-ink(v-if="favs",
 				icon="star"
 				@click="toggleFavFilter"
-				:class="{active: filter.type == 1}") {{favs.length}}
+				:class="{active: filter.type === 'fav'}") {{favs.length}}
 		bunt-tabs.days(v-if="days && days.length > 1", :active-tab="currentDay.toISOString()", ref="tabs", v-scrollbar.x="")
 			bunt-tab(v-for="day in days", :id="day.toISOString()", :header="moment(day).format('dddd DD. MMMM')", @selected="changeDay(day)")
 		.scroll-parent(ref="scrollParent", v-scrollbar.x.y="")
@@ -77,7 +77,7 @@ export default {
 			handler: function (newValue) {
 				if (!this.open) return
 				const arr = Object.keys(newValue).filter(key => newValue[key])
-				this.$store.dispatch('schedule/filter', {type: 2, tracks: arr})
+				this.$store.dispatch('schedule/filter', {type: 'track', tracks: arr})
 			},
 			deep: true
 		}
@@ -95,10 +95,10 @@ export default {
 		},
 		toggleFavFilter () {
 			this.tracksFilter = {}
-			if (this.filter.type === 1) {
+			if (this.filter.type === 'fav') {
 				this.$store.dispatch('schedule/filter', {})
 			} else {
-				this.$store.dispatch('schedule/filter', {type: 1})
+				this.$store.dispatch('schedule/filter', {type: 'fav'})
 			}
 		}
 	}
