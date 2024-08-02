@@ -34,6 +34,11 @@ export default {
 			speaker: null
 		}
 	},
+	provide () {
+		return {
+			generateSessionLinkUrl: this.generateSessionLinkUrl
+		}
+	},
 	computed: {
 		...mapState('schedule', ['schedule']),
 		...mapGetters('schedule', ['sessionsLookup', 'favs']),
@@ -61,7 +66,11 @@ export default {
 		this.$nextTick(() => {
 		})
 	},
-	methods: {}
+	methods: {
+		generateSessionLinkUrl (sessionData) {
+			return `/schedule/talks/${sessionData.session.id}`
+		}
+	}
 }
 </script>
 <style lang="stylus">
