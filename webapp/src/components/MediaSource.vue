@@ -172,26 +172,40 @@ export default {
 			this.languageIframeUrl = this.getLanguageIframeUrl(languageUrl)
 		},
 		getYoutubeUrl(ytid, autoplay, mute, hideControls, noRelated, autoStart, showinfo, disableKb, loop, modestBranding, enablePrivacyEnhancedMode) {
-			// Construct the autoplay parameter based on the input
-			const autoplayParam = autoplay ? 'autoplay=1&' : '';
-			const muteParam = mute ? 'mute=1' : 'mute=0';
-			const hideControlsParam = hideControls ? 'controls=0' : 'controls=1';
-			const noRelatedParam = noRelated ? 'rel=0' : 'rel=1';
-			const autoStartParam = autoStart ? 'start=1' : 'start=0';
-			const showinfoParam = showinfo ? 'showinfo=0' : 'showinfo=1';
-			const disableKbParam = disableKb ? 'disablekb=1' : 'disablekb=0';
-			const loopParam = loop ? 'loop=1' : 'loop=0';
-			const modestBrandingParam = modestBranding ? 'modestbranding=1' : 'modestbranding=0';
+			const params = new URLSearchParams({
+				autoplay: autoplay ? '1' : '0',
+				mute: mute ? '1' : '0',
+				controls: hideControls ? '0' : '1',
+				rel: noRelated ? '0' : '1',
+				start: autoStart ? '1' : '0',
+				showinfo: showinfo ? '0' : '1',
+				disablekb: disableKb ? '1' : '0',
+				loop: loop ? '1' : '0',
+				modestbranding: modestBranding ? '1' : '0',
+				playlist: ytid,
+			});
+
 			const domain = enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com';
-			// Return the complete YouTube URL with the provided video ID, autoplay, and mute parameters
-			return `https://${domain}/embed/${ytid}?${autoplayParam}?${modestBrandingParam}&${loop}${autoStartParam}&${hideControlsParam}&${disableKb}&${noRelatedParam}&${showinfoParam}&playlist=${ytid}&${muteParam}`;
+			return `https://${domain}/embed/${ytid}?${params}`;
 		},
 		// Added method to get the language iframe URL
 		getLanguageIframeUrl(languageUrl, enablePrivacyEnhancedMode) {
 			// Checks if the languageUrl is not provided the retun null
 			if (!languageUrl) return null;
+			const params = new URLSearchParams({
+				enablejsapi: '1',
+				autoplay: '1',
+				modestbranding: '1',
+				loop: '1',
+				controls: '0',
+				disablekb: '1',
+				rel: '0',
+				showinfo: '0',
+				playlist: languageUrl,
+			});
+
 			const domain = enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com';
-			return `https://${domain}/embed/${languageUrl}?enablejsapi=1&autoplay=1&modestbranding=1&loop=1&controls=0&disablekb=1&rel=0&showinfo=0&playlist=${languageUrl}`;
+			return `https://${domain}/embed/${languageUrl}?${params}`;
 		}
 	}
 }
