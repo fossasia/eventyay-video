@@ -210,6 +210,9 @@ $thumb-width-hovered = 12px
 	box-sizing: border-box
 	min-height: 0
 	flex: auto
+	height: 89vh
+	+below('l')
+		height: 82vh
 	.scroll-content
 		display: flex
 		flex-direction: column
@@ -263,4 +266,16 @@ $thumb-width-hovered = 12px
 			.scrollbar-thumb
 				width: $thumb-width-hovered
 				opacity: .8
+.c-chat
+	.main-chat
+		+below('l')
+			.timeline
+				flex: unset
+			.c-scrollbars
+				height: 80vh
+		+below('xs')
+			.timeline
+				flex: unset
+			.c-scrollbars
+				height: 42vh
 </style>

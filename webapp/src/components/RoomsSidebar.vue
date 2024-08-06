@@ -1,9 +1,9 @@
 <template lang="pug">
 transition(name="sidebar")
-	.c-rooms-sidebar(v-show="show && !snapBack", :style="style", role="navigation", @pointerdown="onPointerdown", @pointermove="onPointermove", @pointerup="onPointerup", @pointercancel="onPointercancel")
-		router-link.logo(to="/", v-if="$mq.above['m']", :class="{'fit-to-width': theme.logo.fitToWidth}")
+	.c-rooms-sidebar(:style="style", role="navigation", @pointerdown="onPointerdown", @pointermove="onPointermove", @pointerup="onPointerup", @pointercancel="onPointercancel")
+		router-link.logo(to="/", :class="{'fit-to-width': theme.logo.fitToWidth}")
 			img(:src="theme.logo.url", :alt="world.title")
-		bunt-icon-button#btn-close-sidebar(v-else, @click="$emit('close')") menu
+		//- bunt-icon-button#btn-close-sidebar(v-else, @click="$emit('close')") menu
 		scrollbars(y)
 			.global-links(role="group", aria-label="pages")
 				router-link.room(v-if="roomsByType.page.includes(rooms[0])", :to="{name: 'home'}", v-html="$emojify(rooms[0].name)")
@@ -243,9 +243,6 @@ export default {
 			margin: 0
 			img
 				height: auto
-	#btn-close-sidebar
-		margin: 8px
-		icon-button-style(color: var(--clr-sidebar-text-primary), style: clear)
 	> .c-scrollbars
 		flex: auto
 		.scroll-content
@@ -507,19 +504,19 @@ export default {
 		.mdi
 			font-size: 24px
 			line-height: 1
-#app:not(.override-sidebar-collapse) .c-rooms-sidebar
-	+below('l')
-		position: fixed
-		left: 0
-		top: 0
-		z-index: 901
-		width: var(--sidebar-width)
-		height: var(--vh100)
-		touch-action: pan-y
-		> .c-scrollbars .scroll-content
-			touch-action: pan-y
-		&.sidebar-enter-active, &.sidebar-leave-active
-			transition: transform .2s
-		&.sidebar-enter, &.sidebar-leave-to
-			transform: translateX(calc(-1 * var(--sidebar-width)))
+// #app:not(.override-sidebar-collapse) .c-rooms-sidebar
+// 	+below('l')
+// 		position: fixed
+// 		left: 0
+// 		top: 0
+// 		z-index: 901
+// 		width: var(--sidebar-width)
+// 		height: var(--vh100)
+// 		touch-action: pan-y
+// 		> .c-scrollbars .scroll-content
+// 			touch-action: pan-y
+// 		&.sidebar-enter-active, &.sidebar-leave-active
+// 			transition: transform .2s
+// 		&.sidebar-enter, &.sidebar-leave-to
+// 			transform: translateX(calc(-1 * var(--sidebar-width)))
 </style>

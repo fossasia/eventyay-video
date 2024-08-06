@@ -114,6 +114,7 @@ export default {
 	flex: auto
 	display: flex
 	min-height: 0
+	height: 100%
 	.stage
 		display: flex
 		flex-direction: column

@@ -143,6 +143,7 @@ export default {
 	.c-grid-schedule .grid > .room
 		top: 0
 	.scroll-parent
+		height: 100vh
 		.bunt-scrollbar-rail-wrapper-x, .bunt-scrollbar-rail-wrapper-y
 			z-index: 30
 	.c-filter-prompt

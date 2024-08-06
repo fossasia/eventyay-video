@@ -23,8 +23,12 @@ export default {
 		onResize ([{contentRect}]) {
 			this.$store.commit('reportMediaSourcePlaceholderRect', contentRect)
 		}
+
 	}
 }
 </script>
 <style lang="stylus">
+.c-media-source-placeholder
+	width: 100%
+	height: 100%
 </style>
