@@ -243,8 +243,8 @@ export default {
 		right: calc(100vw - var(--sidebar-width) + var(--offset-sidebar) - var(--mediasource-placeholder-width))
 		width: var(--mediasource-placeholder-width)
 		height: var(--mediasource-placeholder-height)
-		// +below('l')
-		// 	bottom: calc(var(--vh100) - 48px - 56px - var(--mediasource-placeholder-height))
+		+below('l')
+			bottom: calc(var(--vh100) - 48px - 56px - var(--mediasource-placeholder-height))
 		// 	right: calc(100vw - var(--mediasource-placeholder-width))
 iframe.iframe-media-source
 	transition: all .3s ease

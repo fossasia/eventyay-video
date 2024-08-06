@@ -51,7 +51,7 @@ export default {
 	.bunt-icon-button
 		icon-button-style(color: var(--clr-sidebar-text-primary), style: clear)
 	.logo
-		margin-left: 8px
+		margin: auto
 		font-size: 24px
 		height: 40px
 		&.anonymous

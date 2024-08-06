@@ -151,6 +151,10 @@ export default {
 	methods: {
 		onResize () {
 			this.windowHeight = window.innerHeight
+			this.$refs.roomsSidebar.$el.style.width = ''
+			// this.$refs.closeSidebarButton.$el.style.left = ''
+			this.$refs.routerView.$el.style.marginLeft = ''
+			this.$refs.appBar.$el.style.marginLeft = ''
 		},
 		onFocus () {
 			this.$store.dispatch('notifications/clearDesktopNotifications')
@@ -159,10 +163,10 @@ export default {
 			if(this.$refs.roomsSidebar && this.$refs.roomsSidebar.$el) {
 				this.$refs.roomsSidebar.$el.style.width = !!this.$refs.roomsSidebar.$el.offsetWidth ? '0px' : '280px';
 			}
-			if(this.$refs.closeSidebarButton && this.$refs.closeSidebarButton.$el) {
-				const buttonLeft = this.$refs.closeSidebarButton.$el.offsetLeft;
-				this.$refs.closeSidebarButton.$el.style.left = !!buttonLeft ? '0px' : '280px';
-			}
+			// if(this.$refs.closeSidebarButton && this.$refs.closeSidebarButton.$el) {
+			// 	const buttonLeft = this.$refs.closeSidebarButton.$el.offsetLeft;
+			// 	this.$refs.closeSidebarButton.$el.style.left = !!buttonLeft ? '0px' : '280px';
+			// }
 			if(this.$refs.routerView && this.$refs.routerView.$el) {
 				const routerViewLeft = window.getComputedStyle(this.$refs.routerView.$el).marginLeft;
                 this.$refs.routerView.$el.style.marginLeft = routerViewLeft !== '0px' ? '0px' : '280px';
@@ -316,14 +320,9 @@ export default {
 		overflow-x: hidden
 		transition: 0.5s
 	#btn-close-sidebar
-		background-color: #C0C0C0
-		border-radius: 5px
 		position: absolute
-		top: 0px
-		left: 280px
+		top: 10px
 		z-index: 99
-		transition: 0.5s
-		opacity: 0.5
 	+below('l')
 		.router-view
 			margin-left: 0px
@@ -342,7 +341,7 @@ export default {
 			transition: 0.5s
 		#btn-close-sidebar
 			position: absolute
-			top: 0px
+			top: 10px
 			left: 0px
 			z-index: 99
 			transition: 0.5s
