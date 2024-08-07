@@ -52,6 +52,7 @@ export default {
 		border-radius: 24px
 		padding: 4px
 		transition: transform .3s ease
+		z-index: 9000
 	.bunt-icon-button
 		icon-button-style()
 		height: 30px !important
@@ -71,7 +72,7 @@ export default {
 		.bunt-icon-button
 			pointer-events: none
 	&.expanded
-		width: 230px
+		width: 205px
 		.actions
 			transform: translateX(calc(64px - 21% - 16px));
 </style>

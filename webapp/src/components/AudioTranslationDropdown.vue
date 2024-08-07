@@ -43,6 +43,7 @@ export default {
 <style scoped>
 .c-audio-translation {
 	height: 65px;
+	padding-top: 3px;
 }
 
 .bunt-select {
