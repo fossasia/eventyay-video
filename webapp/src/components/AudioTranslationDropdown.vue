@@ -1,6 +1,5 @@
 <template lang="pug">
 div.c-audio-translation
-		h4 Audio Translation
 		bunt-select(
 		name="audio-translation",
 		v-model="selectedLanguage",
@@ -43,11 +42,7 @@ export default {
 
 <style scoped>
 .c-audio-translation {
-		margin-bottom: 3em;
-}
-
-.c-audio-translation h4 {
-		margin-bottom: 0.5em;
+	height: 65px;
 }
 
 .bunt-select {

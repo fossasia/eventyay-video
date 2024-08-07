@@ -39,7 +39,7 @@ export default {
 <style lang="stylus">
 .c-reactions-bar
 	position: relative
-	width: 64px
+	margin-left: 10px
 	height: 56px
 	.actions
 		position: absolute
@@ -61,12 +61,15 @@ export default {
 		width: @height
 		display: inline-block
 	&:not(.expanded)
+		width: 50px
+		margin-left: 10px
 		.actions:hover
 			cursor: pointer
 			background-color: $clr-grey-100
 		.bunt-icon-button
 			pointer-events: none
 	&.expanded
+		width: 230px
 		.actions
-			transform: translateX(calc(64px - 100% - 16px))
+			transform: translateX(calc(64px - 21% - 16px));
 </style>
