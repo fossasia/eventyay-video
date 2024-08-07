@@ -44,6 +44,14 @@ export default {
 .c-audio-translation {
 	height: 65px;
 	padding-top: 3px;
+	margin-right: 5px;
+}
+
+@media (max-width: 992px) {
+  .c-audio-translation {
+    width: 50%;
+    margin-right: 5px;
+  }
 }
 
 .bunt-select {

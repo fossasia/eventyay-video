@@ -41,6 +41,8 @@ export default {
 	position: relative
 	margin-left: 10px
 	height: 56px
+	+above('m')
+		right: 160px
 	.actions
 		position: absolute
 		bottom: 5px
@@ -55,8 +57,8 @@ export default {
 		z-index: 9000
 	.bunt-icon-button
 		icon-button-style()
-		height: 30px !important
-		width: 30px !important
+		height: 27px !important
+		width: 27px !important
 		&:not(:first-child)
 			margin-left: 8px
 	.emoji
@@ -65,14 +67,16 @@ export default {
 		display: inline-block
 	&:not(.expanded)
 		width: 40px
-		margin-left: 10px
+		+below('m')
+			left: -150px
 		.actions:hover
 			cursor: pointer
 			background-color: $clr-grey-100
 		.bunt-icon-button
 			pointer-events: none
 	&.expanded
-		width: 205px
 		.actions
-			transform: translateX(calc(64px - 21% - 16px));
+			transform: translateX(calc(50px - 21% - 15px));
+			+above('m')
+				transform: translateX(calc(50px - 21% - 50px));
 </style>
