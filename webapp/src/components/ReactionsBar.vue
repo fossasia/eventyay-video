@@ -54,14 +54,16 @@ export default {
 		transition: transform .3s ease
 	.bunt-icon-button
 		icon-button-style()
+		height: 30px !important
+		width: 30px !important
 		&:not(:first-child)
 			margin-left: 8px
 	.emoji
-		height: 28px
+		height: 30px
 		width: @height
 		display: inline-block
 	&:not(.expanded)
-		width: 50px
+		width: 40px
 		margin-left: 10px
 		.actions:hover
 			cursor: pointer
