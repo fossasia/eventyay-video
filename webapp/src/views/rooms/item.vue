@@ -6,7 +6,7 @@
 		.stage-tool-blocker(v-if="activeStageTool !== null", @click="activeStageTool = null")
 		.stage-tools(v-if="modules['livestream.native'] || modules['livestream.youtube'] || modules['livestream.iframe'] || modules['call.janus']")
 			// Added dropdown menu for audio translations near the reactions bar
-			reactions-bar(:expanded="$mq.above['m'] ? true : activeStageTool === 'reaction'", @expand="activeStageTool = 'reaction'")
+			reactions-bar(:expanded="true", @expand="activeStageTool = 'reaction'")
 			AudioTranslationDropdown(v-if="languages.length > 1", :languages="languages", @languageChanged="handleLanguageChange")
 	media-source-placeholder(v-else-if="modules['call.bigbluebutton'] || modules['call.zoom']")
 	roulette(v-else-if="modules['networking.roulette'] && $features.enabled('roulette')", :module="modules['networking.roulette']", :room="room")
