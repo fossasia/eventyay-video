@@ -62,7 +62,7 @@ export default {
 		&:not(:first-child)
 			margin-left: 8px
 	.emoji
-		height: 30px
+		height: 26px
 		width: @height
 		display: inline-block
 	&:not(.expanded)
