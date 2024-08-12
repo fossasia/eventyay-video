@@ -36,7 +36,7 @@ a.c-linear-schedule-session(:class="{faved}", :style="style", :href="link", @cli
 <script>
 import moment from 'moment-timezone'
 import MarkdownIt from 'markdown-it'
-import { getLocalizedString, getPrettyDuration } from 'utils'
+import { getLocalizedString, getPrettyDuration } from 'views/schedule/utils'
 
 const markdownIt = MarkdownIt({
 	linkify: true,
