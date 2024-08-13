@@ -46,7 +46,7 @@ export default {
 			if (this.speaker.submissions) {
 				return this.speaker.submissions
 					.map(submission => this.sessionsLookup[submission])
-					.filter(session => session !== undefined);
+					.filter(session => session !== undefined)
 			}
 			return this.$store.getters['schedule/sessions'].filter(session => session.speakers.includes(this.speaker))
 		}

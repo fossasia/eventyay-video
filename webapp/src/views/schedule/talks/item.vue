@@ -76,9 +76,9 @@ export default {
 			const base = (new URL(this.pretalxApiBaseUrl)).origin
 			return new URL(resource, base)
 		},
-		getRoomIdByName(roomName) {
-			const room = this.rooms.find(r => r.name === roomName);
-			return room ? room.id : null;
+		getRoomIdByName (roomName) {
+			const room = this.rooms.find(r => r.name === roomName)
+			return room ? room.id : null
 		}
 	}
 }

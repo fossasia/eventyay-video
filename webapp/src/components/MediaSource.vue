@@ -171,7 +171,7 @@ export default {
 			// Set the language iframe URL when language changes
 			this.languageIframeUrl = this.getLanguageIframeUrl(languageUrl)
 		},
-		getYoutubeUrl(ytid, autoplay, mute, hideControls, noRelated, showinfo, disableKb, loop, modestBranding, enablePrivacyEnhancedMode) {
+		getYoutubeUrl (ytid, autoplay, mute, hideControls, noRelated, showinfo, disableKb, loop, modestBranding, enablePrivacyEnhancedMode) {
 			const params = new URLSearchParams({
 				autoplay: autoplay ? '1' : '0',
 				mute: mute ? '1' : '0',
@@ -182,15 +182,15 @@ export default {
 				loop: loop ? '1' : '0',
 				modestbranding: modestBranding ? '1' : '0',
 				playlist: ytid,
-			});
+			})
 
-			const domain = enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com';
-			return `https://${domain}/embed/${ytid}?${params}`;
+			const domain = enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com'
+			return `https://${domain}/embed/${ytid}?${params}`
 		},
 		// Added method to get the language iframe URL
-		getLanguageIframeUrl(languageUrl, enablePrivacyEnhancedMode) {
+		getLanguageIframeUrl (languageUrl, enablePrivacyEnhancedMode) {
 			// Checks if the languageUrl is not provided the retun null
-			if (!languageUrl) return null;
+			if (!languageUrl) return null
 			const params = new URLSearchParams({
 				enablejsapi: '1',
 				autoplay: '1',
@@ -201,10 +201,10 @@ export default {
 				rel: '0',
 				showinfo: '0',
 				playlist: languageUrl,
-			});
+			})
 
-			const domain = enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com';
-			return `https://${domain}/embed/${languageUrl}?${params}`;
+			const domain = enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com'
+			return `https://${domain}/embed/${languageUrl}?${params}`
 		}
 	}
 }

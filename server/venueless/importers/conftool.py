@@ -418,7 +418,7 @@ def create_posters_from_conftool(
                 continue
 
             nonce += 1
-            download_url, preview_url = mirror_conftool_file(
+            downloadUrl, preview_url = mirror_conftool_file(
                 world,
                 paper.xpath(f"download_final_link_{fileindex}")[0].text,
                 password,
@@ -430,7 +430,7 @@ def create_posters_from_conftool(
                 display_text=paper.xpath(f"original_filename_final_{fileindex}")[0].text
                 or f"Link {fileindex}",
                 defaults={
-                    "url": download_url,
+                    "url": downloadUrl,
                 },
             )
 

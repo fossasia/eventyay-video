@@ -17,7 +17,7 @@ module.exports = {
 			'.eventyay.com',
 			'video-dev.eventyay.com',
 			'video.eventyay.com'
-		  ],
+		],
 	},
 	pwa: {
 		name: 'eventyay',

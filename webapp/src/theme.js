@@ -117,13 +117,16 @@ export function computeForegroundColor (bgColor) {
 	return firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], bgColor)
 }
 
-export function computeForegroundSidebarColor(colors) {
+export function computeForegroundSidebarColor (colors) {
 	const configColors = {
 		primary: colors.primary,
 		sidebar: colors.sidebar,
 		bbb_background: colors.bbb_background,
 	}
-	const sbColors = Object.keys(DEFAULT_COLORS).reduce((acc, key) => (acc[key] = Color((configColors ?? DEFAULT_COLORS)[key]), acc), {})
+	const sbColors = Object.keys(DEFAULT_COLORS).reduce((acc, key) => {
+		acc[key] = Color((configColors ?? DEFAULT_COLORS)[key])
+		return acc
+	}, {})
 	sbColors.primaryDarken15 = sbColors.primary.darken(0.15)
 	sbColors.primaryDarken20 = sbColors.primary.darken(0.20)
 	sbColors.primaryAlpha60 = sbColors.primary.alpha(0.6)
@@ -142,13 +145,12 @@ export function computeForegroundSidebarColor(colors) {
 	sbColors.sidebarHoverBg = firstReadable(['rgba(0, 0, 0, 0.12)', 'rgba(255, 255, 255, 0.3)'], sbColors.sidebar)
 	sbColors.sidebarHoverFg = firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], sbColors.sidebar)
 
-
 	for (const [key, value] of Object.entries(sbColors)) {
 		themeVariables[`--clr-${kebabCase(key)}`] = value.string()
 	}
 }
 
-export async function getThemeConfig() {
+export async function getThemeConfig () {
 	const themeUrl = config.api.base + 'theme'
 	const response = await (await fetch(themeUrl, {
 		method: 'GET',

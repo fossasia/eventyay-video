@@ -19,7 +19,7 @@
 					:options="exportType"
 					label="Add to Calendar"
 					@input="makeExport")
-				
+
 		bunt-tabs.days(v-if="days && days.length > 1", :active-tab="currentDay.toISOString()", ref="tabs", v-scrollbar.x="")
 			bunt-tab(v-for="day in days", :id="day.toISOString()", :header="moment(day).format('dddd DD. MMMM')", @selected="changeDay(day)")
 		.scroll-parent(ref="scrollParent", v-scrollbar.x.y="")
@@ -70,36 +70,36 @@ import CustomDropdown from 'views/schedule/export-select'
 
 const exportTypeSet = [
 	{
-		"id": "ics",
-		"label": "Session ICal"
+		id: 'ics',
+		label: 'Session ICal'
 	},
 	{
-		"id": "json",
-		"label": "Session JSON"
+		id: 'json',
+		label: 'Session JSON'
 	},
 	{
-		"id": "xcal",
-		"label": "Session XCal"
+		id: 'xcal',
+		label: 'Session XCal'
 	},
 	{
-		"id": "xml",
-		"label": "Session XML"
+		id: 'xml',
+		label: 'Session XML'
 	},
 	{
-		"id": "myics",
-		"label": "My ⭐ Sessions ICal"
+		id: 'myics',
+		label: 'My ⭐ Sessions ICal'
 	},
 	{
-		"id": "myjson",
-		"label": "My ⭐ Sessions JSON"
+		id: 'myjson',
+		label: 'My ⭐ Sessions JSON'
 	},
 	{
-		"id": "myxcal",
-		"label": "My ⭐ Sessions XCal"
+		id: 'myxcal',
+		label: 'My ⭐ Sessions XCal'
 	},
 	{
-		"id": "myxml",
-		"label": "My ⭐ Sessions XML"
+		id: 'myxml',
+		label: 'My ⭐ Sessions XML'
 	},
 ]
 
@@ -147,16 +147,16 @@ export default {
 			// TODO smooth scroll, seems to not work with chrome {behavior: 'smooth', block: 'center', inline: 'center'}
 			tabEl?.$el.scrollIntoView()
 		},
-		getTrackName(track) {
-			const language_track = localStorage.userLanguage;
+		getTrackName (track) {
+			const languageTrack = localStorage.userLanguage
 			if (typeof track.name === 'object' && track.name !== null) {
-				if (language_track && track.name[language_track]) {
-					return track.name[language_track];
+				if (languageTrack && track.name[languageTrack]) {
+					return track.name[languageTrack]
 				} else {
-					return track.name.en || track.name;
+					return track.name.en || track.name
 				}
 			} else {
-				return track.name;
+				return track.name
 			}
 		},
 		toggleFavFilter () {
@@ -167,30 +167,30 @@ export default {
 				this.$store.dispatch('schedule/filter', {type: 'fav'})
 			}
 		},
-		async makeExport() {
+		async makeExport () {
 			try {
-				this.isExporting = true;
+				this.isExporting = true
 				const url = config.api.base + 'export-talk?export_type=' + this.selectedExporter.id
 				const authHeader = api._config.token ? `Bearer ${api._config.token}` : (api._config.clientId ? `Client ${api._config.clientId}` : null)
 				const result = await fetch(url, {
-							method: 'GET',
-							headers: {
-								Accept: 'application/json',
-								Authorization: authHeader,
-							}
-						}).then(response => response.json())
-				var a = document.createElement("a");
-				document.body.appendChild(a);
-				const blob = new Blob([result], {type: "octet/stream"}),
-				download_url = window.URL.createObjectURL(blob);
-				a.href = download_url;
-				a.download = "schedule-" + this.selectedExporter.id + '.' + this.selectedExporter.id.replace('my','');
-				a.click();
-				window.URL.revokeObjectURL(download_url);
+					method: 'GET',
+					headers: {
+						Accept: 'application/json',
+						Authorization: authHeader,
+					}
+				}).then(response => response.json())
+				var a = document.createElement('a')
+				document.body.appendChild(a)
+				const blob = new Blob([result], {type: 'octet/stream'})
+				const downloadUrl = window.URL.createObjectURL(blob)
+				a.href = downloadUrl
+				a.download = 'schedule-' + this.selectedExporter.id + '.' + this.selectedExporter.id.replace('my', '')
+				a.click()
+				window.URL.revokeObjectURL(downloadUrl)
 				a.remove()
-				this.isExporting = false;
+				this.isExporting = false
 			} catch (error) {
-				this.isExporting = false;
+				this.isExporting = false
 				this.error = error
 				console.log(error)
 			}

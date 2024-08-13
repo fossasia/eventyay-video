@@ -118,24 +118,24 @@ export default {
 		}
 	},
 	methods: {
-		getContrastColor(bgColor) {
+		getContrastColor (bgColor) {
 			if (!bgColor) {
-				return '';
+				return ''
 			}
 
 			// Remove the hash if it's there
-			bgColor = bgColor.replace('#', '');
+			bgColor = bgColor.replace('#', '')
 
 			// Convert the color to RGB
-			var r = parseInt(bgColor.slice(0, 2), 16);
-			var g = parseInt(bgColor.slice(2, 4), 16);
-			var b = parseInt(bgColor.slice(4, 6), 16);
+			var r = parseInt(bgColor.slice(0, 2), 16)
+			var g = parseInt(bgColor.slice(2, 4), 16)
+			var b = parseInt(bgColor.slice(4, 6), 16)
 
 			// Calculate the brightness of the color
-			var brightness = (r * 299 + g * 587 + b * 114) / 1000;
+			var brightness = (r * 299 + g * 587 + b * 114) / 1000
 
 			// If the brightness is over 128, return black. Otherwise, return white
-			return brightness > 128 ? 'black' : 'white';
+			return brightness > 128 ? 'black' : 'white'
 		}
 	}
 }

@@ -16,7 +16,7 @@
                     :options="exportType"
                     label="Add to Calendar"
                     @input="makeExport")
-                
+
         bunt-tabs.days(v-if="days && days.length > 1", :active-tab="currentDay.toISOString()", ref="tabs", v-scrollbar.x="")
             bunt-tab(v-for="day in days", :id="day.toISOString()", :header="moment(day).format('dddd DD. MMMM')", @selected="changeDay(day)")
         .scroll-parent(ref="scrollParent", v-scrollbar.x.y="")
@@ -53,133 +53,133 @@ import config from 'config'
 import CustomDropdown from 'views/schedule/export-select'
 
 const exportTypeSet = [
-    {
-        "id": "ics",
-        "label": "Session ICal"
-    },
-    {
-        "id": "json",
-        "label": "Session JSON"
-    },
-    {
-        "id": "xcal",
-        "label": "Session XCal"
-    },
-    {
-        "id": "xml",
-        "label": "Session XML"
-    },
-    {
-        "id": "myics",
-        "label": "My ⭐ Sessions ICal"
-    },
-    {
-        "id": "myjson",
-        "label": "My ⭐ Sessions JSON"
-    },
-    {
-        "id": "myxcal",
-        "label": "My ⭐ Sessions XCal"
-    },
-    {
-        "id": "myxml",
-        "label": "My ⭐ Sessions XML"
-    },
+	{
+		id: 'ics',
+		label: 'Session ICal'
+	},
+	{
+		id: 'json',
+		label: 'Session JSON'
+	},
+	{
+		id: 'xcal',
+		label: 'Session XCal'
+	},
+	{
+		id: 'xml',
+		label: 'Session XML'
+	},
+	{
+		id: 'myics',
+		label: 'My ⭐ Sessions ICal'
+	},
+	{
+		id: 'myjson',
+		label: 'My ⭐ Sessions JSON'
+	},
+	{
+		id: 'myxcal',
+		label: 'My ⭐ Sessions XCal'
+	},
+	{
+		id: 'myxml',
+		label: 'My ⭐ Sessions XML'
+	},
 ]
 
 export default {
-    components: { LinearSchedule, TimezoneChanger, Prompt, CustomDropdown },
-    mixins: [scheduleProvidesMixin],
-    data () {
-        return {
-            tracksFilter: {},
-            open: false,
-            moment,
-            currentDay: moment().startOf('day'),
-            selectedExporter: null,
-            exportOptions: [],
-            isExporting: false,
-            error: null
-        }
-    },
-    computed: {
-        ...mapState(['now']),
-        ...mapState('schedule', ['schedule', 'errorLoading', 'filter']),
-        ...mapGetters('schedule', ['days', 'rooms', 'sessions', 'favs']),
-        exportType () {
-            return exportTypeSet
-        }
-    },
-    watch: {
-        tracksFilter: {
-            handler: function (newValue) {
-                if (!this.open) return
-                const arr = Object.keys(newValue).filter(key => newValue[key])
-                this.$store.dispatch('schedule/filter', {type: 'track', tracks: arr})
-            },
-            deep: true
-        }
-    },
-    methods: {
-        changeDay (day) {
-            if (day.isSame(this.currentDay)) return
-            this.currentDay = day
-        },
-        changeDayByScroll (day) {
-            this.currentDay = day
-            const tabEl = this.$refs.tabs.$refs.tabElements.find(el => el.id === day.toISOString())
-            // TODO smooth scroll, seems to not work with chrome {behavior: 'smooth', block: 'center', inline: 'center'}
-            tabEl?.$el.scrollIntoView()
-        },
-        getTrackName(track) {
-            const language_track = localStorage.userLanguage;
-            if (typeof track.name === 'object' && track.name !== null) {
-                if (language_track && track.name[language_track]) {
-                    return track.name[language_track];
-                } else {
-                    return track.name.en || track.name;
-                }
-            } else {
-                return track.name;
-            }
-        },
-        toggleFavFilter () {
-            this.tracksFilter = {}
-            if (this.filter.type === 'fav') {
-                this.$store.dispatch('schedule/filter', {})
-            } else {
-                this.$store.dispatch('schedule/filter', {type: 'fav'})
-            }
-        },
-        async makeExport() {
-            try {
-                this.isExporting = true;
-                const url = config.api.base + 'export-talk?export_type=' + this.selectedExporter.id
-                const authHeader = api._config.token ? `Bearer ${api._config.token}` : (api._config.clientId ? `Client ${api._config.clientId}` : null)
-                const result = await fetch(url, {
-                            method: 'GET',
-                            headers: {
-                                Accept: 'application/json',
-                                Authorization: authHeader,
-                            }
-                        }).then(response => response.json())
-                var a = document.createElement("a");
-                document.body.appendChild(a);
-                const blob = new Blob([result], {type: "octet/stream"}),
-                download_url = window.URL.createObjectURL(blob);
-                a.href = download_url;
-                a.download = "schedule-" + this.selectedExporter.id + '.' + this.selectedExporter.id.replace('my','');
-                a.click();
-                window.URL.revokeObjectURL(download_url);
-                a.remove()
-                this.isExporting = false;
-            } catch (error) {
-                this.isExporting = false;
-                this.error = error
-                console.log(error)
-            }
-        }
-    }
+	components: { LinearSchedule, TimezoneChanger, Prompt, CustomDropdown },
+	mixins: [scheduleProvidesMixin],
+	data () {
+		return {
+			tracksFilter: {},
+			open: false,
+			moment,
+			currentDay: moment().startOf('day'),
+			selectedExporter: null,
+			exportOptions: [],
+			isExporting: false,
+			error: null
+		}
+	},
+	computed: {
+		...mapState(['now']),
+		...mapState('schedule', ['schedule', 'errorLoading', 'filter']),
+		...mapGetters('schedule', ['days', 'rooms', 'sessions', 'favs']),
+		exportType () {
+			return exportTypeSet
+		}
+	},
+	watch: {
+		tracksFilter: {
+			handler: function (newValue) {
+				if (!this.open) return
+				const arr = Object.keys(newValue).filter(key => newValue[key])
+				this.$store.dispatch('schedule/filter', {type: 'track', tracks: arr})
+			},
+			deep: true
+		}
+	},
+	methods: {
+		changeDay (day) {
+			if (day.isSame(this.currentDay)) return
+			this.currentDay = day
+		},
+		changeDayByScroll (day) {
+			this.currentDay = day
+			const tabEl = this.$refs.tabs.$refs.tabElements.find(el => el.id === day.toISOString())
+			// TODO smooth scroll, seems to not work with chrome {behavior: 'smooth', block: 'center', inline: 'center'}
+			tabEl?.$el.scrollIntoView()
+		},
+		getTrackName (track) {
+			const languageTrack = localStorage.userLanguage
+			if (typeof track.name === 'object' && track.name !== null) {
+				if (languageTrack && track.name[languageTrack]) {
+					return track.name[languageTrack]
+				} else {
+					return track.name.en || track.name
+				}
+			} else {
+				return track.name
+			}
+		},
+		toggleFavFilter () {
+			this.tracksFilter = {}
+			if (this.filter.type === 'fav') {
+				this.$store.dispatch('schedule/filter', {})
+			} else {
+				this.$store.dispatch('schedule/filter', {type: 'fav'})
+			}
+		},
+		async makeExport () {
+			try {
+				this.isExporting = true
+				const url = config.api.base + 'export-talk?export_type=' + this.selectedExporter.id
+				const authHeader = api._config.token ? `Bearer ${api._config.token}` : (api._config.clientId ? `Client ${api._config.clientId}` : null)
+				const result = await fetch(url, {
+					method: 'GET',
+					headers: {
+						Accept: 'application/json',
+						Authorization: authHeader,
+					}
+				}).then(response => response.json())
+				var a = document.createElement('a')
+				document.body.appendChild(a)
+				const blob = new Blob([result], {type: 'octet/stream'})
+				const downloadUrl = window.URL.createObjectURL(blob)
+				a.href = downloadUrl
+				a.download = 'schedule-' + this.selectedExporter.id + '.' + this.selectedExporter.id.replace('my', '')
+				a.click()
+				window.URL.revokeObjectURL(downloadUrl)
+				a.remove()
+				this.isExporting = false
+			} catch (error) {
+				this.isExporting = false
+				this.error = error
+				console.log(error)
+			}
+		}
+	}
 }
 </script>
 <style lang="stylus">
@@ -254,4 +254,3 @@ export default {
             margin-right: 10px
 
 </style>
-    

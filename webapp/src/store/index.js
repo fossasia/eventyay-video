@@ -85,7 +85,7 @@ export default new Vuex.Store({
 		updateNow (state) {
 			state.now = moment()
 		},
-		updateYoutubeTransAudio(state, youtubeTransUrl){
+		updateYoutubeTransAudio (state, youtubeTransUrl) {
 			state.youtubeTransUrl = youtubeTransUrl
 		}
 	},
