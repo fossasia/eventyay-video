@@ -407,7 +407,8 @@ class RoomModule(BaseModule):
             key in ["title", "session", "computeSession"] for key in data.keys()
         ):
             raise ConsumerException(
-                code="room.unknown_schedule_data", message="Unknown schedule data"
+                code="room.unknown_schedule_data",
+                message="Unknown schedule data",
             )
 
         await self.consumer.send_success({})
@@ -421,7 +422,11 @@ class RoomModule(BaseModule):
         )
         await self.consumer.channel_layer.group_send(
             GROUP_ROOM.format(id=self.room.pk),
-            {"type": "room.schedule", "schedule_data": data, "room": str(self.room.pk)},
+            {
+                "type": "room.schedule",
+                "schedule_data": data,
+                "room": str(self.room.pk),
+            },
         )
 
     @event("schedule")
@@ -435,7 +440,10 @@ class RoomModule(BaseModule):
         await self.consumer.send_json(
             [
                 body["type"],
-                {"room": config["id"], "schedule_data": config.get("schedule_data")},
+                {
+                    "room": config["id"],
+                    "schedule_data": config.get("schedule_data"),
+                },
             ]
         )
 

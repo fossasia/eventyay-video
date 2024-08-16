@@ -27,7 +27,8 @@ class QuestionModule(BaseModule):
 
     @command("ask")
     @room_action(
-        permission_required=Permission.ROOM_QUESTION_ASK, module_required="question"
+        permission_required=Permission.ROOM_QUESTION_ASK,
+        module_required="question",
     )
     async def ask_question(self, body):
         if not self.module_config.get("active", False):
@@ -121,7 +122,8 @@ class QuestionModule(BaseModule):
 
     @command("vote")
     @room_action(
-        permission_required=Permission.ROOM_QUESTION_VOTE, module_required="question"
+        permission_required=Permission.ROOM_QUESTION_VOTE,
+        module_required="question",
     )
     async def vote(self, body):
         if not self.module_config.get("active", False):

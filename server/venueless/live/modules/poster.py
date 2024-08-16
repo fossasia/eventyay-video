@@ -2,7 +2,11 @@ import logging
 
 from venueless.core.permissions import Permission
 from venueless.core.services.poster import PosterService
-from venueless.live.decorators import command, require_world_permission, room_action
+from venueless.live.decorators import (
+    command,
+    require_world_permission,
+    room_action,
+)
 from venueless.live.modules.base import BaseModule
 
 logger = logging.getLogger(__name__)
@@ -18,7 +22,8 @@ class PosterModule(BaseModule):
     @command("list.all")
     async def list_all(self, body):
         if not await self.consumer.world.has_permission_async(
-            user=self.consumer.user, permission=Permission.WORLD_ROOMS_CREATE_POSTER
+            user=self.consumer.user,
+            permission=Permission.WORLD_ROOMS_CREATE_POSTER,
         ):
             posters = await self.service.get_all_posters(
                 presenter_includes_user=self.consumer.user, list_format=True
@@ -43,7 +48,8 @@ class PosterModule(BaseModule):
             presenters = await self.service.get_presenters(poster_id=body["id"])
 
         if await self.consumer.world.has_permission_async(
-            user=self.consumer.user, permission=Permission.WORLD_ROOMS_CREATE_POSTER
+            user=self.consumer.user,
+            permission=Permission.WORLD_ROOMS_CREATE_POSTER,
         ):
             exclude_fields = set()
         elif self.consumer.user.id in presenters:

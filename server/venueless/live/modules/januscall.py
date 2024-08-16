@@ -19,7 +19,11 @@ from venueless.core.services.janus import (
 from venueless.core.services.roulette import is_member_of_roulette_call
 from venueless.core.services.user import get_public_user
 from venueless.core.utils.redis import aredis
-from venueless.live.decorators import command, require_world_permission, room_action
+from venueless.live.decorators import (
+    command,
+    require_world_permission,
+    room_action,
+)
 from venueless.live.exceptions import ConsumerException
 from venueless.live.modules.base import BaseModule
 

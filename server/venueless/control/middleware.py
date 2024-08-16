@@ -1,8 +1,12 @@
 from django.contrib.auth.middleware import (
     AuthenticationMiddleware as DjAuthenticationMiddleware,
 )
-from django.contrib.messages.middleware import MessageMiddleware as DjMessageMiddleware
-from django.contrib.sessions.middleware import SessionMiddleware as DjSessionMiddleware
+from django.contrib.messages.middleware import (
+    MessageMiddleware as DjMessageMiddleware,
+)
+from django.contrib.sessions.middleware import (
+    SessionMiddleware as DjSessionMiddleware,
+)
 
 
 class ControlMiddleware:

@@ -13,7 +13,14 @@ from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 
 from venueless.celery_app import app
-from venueless.core.models import Channel, ExhibitorView, PollVote, Room, RoomView, User
+from venueless.core.models import (
+    Channel,
+    ExhibitorView,
+    PollVote,
+    Room,
+    RoomView,
+    User,
+)
 from venueless.core.models.world import WorldView
 from venueless.core.tasks import WorldTask
 from venueless.graphs.report import ReportGenerator
@@ -228,7 +235,9 @@ def generate_room_views(world, input=None):
                 adds = defaultdict(set)
                 for v in views:
                     bucket = v["start"].replace(
-                        second=0, microsecond=0, minute=v["start"].minute // 5 * 5
+                        second=0,
+                        microsecond=0,
+                        minute=v["start"].minute // 5 * 5,
                     )
                     while bucket < end and (not v["end"] or bucket < v["end"]):
                         adds[bucket].add(v["user"])
@@ -607,7 +616,10 @@ def generate_attendee_session_list(world, input=None):
             sum_views = min(
                 sum(
                     (
-                        min(v.end or min(now(), v.start + timedelta(hours=3)), talk_end)
+                        min(
+                            v.end or min(now(), v.start + timedelta(hours=3)),
+                            talk_end,
+                        )
                         - max(v.start, talk_start)
                         for v in u.room_views_for_talk
                     ),

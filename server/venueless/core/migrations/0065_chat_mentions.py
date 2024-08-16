@@ -22,7 +22,8 @@ class Migration(migrations.Migration):
             model_name="room",
             name="module_config",
             field=models.JSONField(
-                default=venueless.core.models.room.empty_module_config, null=True
+                default=venueless.core.models.room.empty_module_config,
+                null=True,
             ),
         ),
         migrations.AlterField(
@@ -34,7 +35,9 @@ class Migration(migrations.Migration):
             model_name="room",
             name="trait_grants",
             field=models.JSONField(
-                blank=True, default=venueless.core.models.room.default_grants, null=True
+                blank=True,
+                default=venueless.core.models.room.default_grants,
+                null=True,
             ),
         ),
         migrations.AlterField(
@@ -56,7 +59,8 @@ class Migration(migrations.Migration):
             model_name="world",
             name="feature_flags",
             field=models.JSONField(
-                blank=True, default=venueless.core.models.world.default_feature_flags
+                blank=True,
+                default=venueless.core.models.world.default_feature_flags,
             ),
         ),
         migrations.AlterField(

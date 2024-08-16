@@ -202,7 +202,7 @@ export default {
 				this.onVolumechange()
 			}
 			if (Hls.isSupported()) {
-				const hlsConfig = Object.assign({}, HLS_DEFAULT_CONFIG, config.videoPlayer?.['hls.js'], {
+				const hlsConfig = Object.assign({}, HLS_DEFAULT_CONFIG, config.video_player?.['hls.js'], {
 					autoStartLoad: this.playing
 				})
 				const player = new Hls(hlsConfig)

@@ -387,7 +387,8 @@ class BBBService:
                             # Work around an upstream bug
                             if "///" in url_video:
                                 url_video = url_video.replace(
-                                    "///", f"//{urlparse(recordings_url).hostname}/"
+                                    "///",
+                                    f"//{urlparse(recordings_url).hostname}/",
                                 )
                         if (
                             not url_presentation

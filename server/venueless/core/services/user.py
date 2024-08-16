@@ -110,7 +110,10 @@ def get_public_users(
                 else {}
             ),
             **(
-                {"moderation_state": u["moderation_state"], "token_id": u["token_id"]}
+                {
+                    "moderation_state": u["moderation_state"],
+                    "token_id": u["token_id"],
+                }
                 if include_admin_info
                 else {}
             ),
@@ -227,7 +230,9 @@ def create_user(
     if anonymous_invite:
         user.world_grants.create(world_id=world_id, role="__anonymous_world")
         user.room_grants.create(
-            world_id=world_id, room_id=anonymous_invite.room_id, role="__anonymous_room"
+            world_id=world_id,
+            room_id=anonymous_invite.room_id,
+            role="__anonymous_room",
         )
     return user
 
@@ -249,7 +254,11 @@ def update_user(
                 world_id=world_id,
                 user=user,
                 type="auth.user.traits.changed",
-                data={"object": str(user.pk), "old": user.traits, "new": traits},
+                data={
+                    "object": str(user.pk),
+                    "old": user.traits,
+                    "new": traits,
+                },
             )
             user.traits = traits
         user.save(update_fields=["traits"])
@@ -317,20 +326,25 @@ def update_user(
 
 def update_fav_talks(user_token_id, talks, world_id):
     try:
-        talk_list = talks.get('schedule').get('favs')
+        talk_list = talks.get("schedule").get("favs")
         world = get_object_or_404(World, id=world_id)
         jwt_config = world.config.get("JWT_secrets")
         if not jwt_config:
             return
-        talk_token = get_user_video_token(user_token_id,jwt_config[0])
+        talk_token = get_user_video_token(user_token_id, jwt_config[0])
 
         talk_config = world.config.get("pretalx")
         if not talk_config:
             return
-        talk_url = talk_config.get('domain') + "/api/events/" + talk_config.get('event') + "/favourite-talk/"
+        talk_url = (
+            talk_config.get("domain")
+            + "/api/events/"
+            + talk_config.get("event")
+            + "/favourite-talk/"
+        )
         header = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {talk_token}"
+            "Authorization": f"Bearer {talk_token}",
         }
         requests.post(talk_url, data=json.dumps(talk_list), headers=header)
     except World.DoesNotExist or Exception:
@@ -341,14 +355,15 @@ def get_user_video_token(user_code, video_settings):
     iat = dt.datetime.utcnow()
     exp = iat + dt.timedelta(days=30)
     payload = {
-        "iss": video_settings.get('issuer'),
-        "aud": video_settings.get('audience'),
+        "iss": video_settings.get("issuer"),
+        "aud": video_settings.get("audience"),
         "exp": exp,
         "iat": iat,
         "uid": user_code,
     }
-    token = jwt.encode(payload, video_settings.get('secret'), algorithm="HS256")
+    token = jwt.encode(payload, video_settings.get("secret"), algorithm="HS256")
     return token
+
 
 def start_view(user: User, delete=False):
     # The majority of WorldView that go "abandoned" (i.e. ``end`` is never set) are likely caused by server
