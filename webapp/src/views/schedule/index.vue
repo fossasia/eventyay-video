@@ -106,7 +106,7 @@ const exportTypeSet = [
 export default {
 	components: { LinearSchedule, GridSchedule, TimezoneChanger, Prompt, CustomDropdown },
 	mixins: [scheduleProvidesMixin],
-	data () {
+	data() {
 		return {
 			tracksFilter: {},
 			open: false,
@@ -122,13 +122,13 @@ export default {
 		...mapState(['now']),
 		...mapState('schedule', ['schedule', 'errorLoading', 'filter']),
 		...mapGetters('schedule', ['days', 'rooms', 'sessions', 'favs']),
-		exportType () {
+		exportType() {
 			return exportTypeSet
 		}
 	},
 	watch: {
 		tracksFilter: {
-			handler: function (newValue) {
+			handler: function(newValue) {
 				if (!this.open) return
 				const arr = Object.keys(newValue).filter(key => newValue[key])
 				this.$store.dispatch('schedule/filter', {type: 'track', tracks: arr})
@@ -137,17 +137,17 @@ export default {
 		}
 	},
 	methods: {
-		changeDay (day) {
+		changeDay(day) {
 			if (day.isSame(this.currentDay)) return
 			this.currentDay = day
 		},
-		changeDayByScroll (day) {
+		changeDayByScroll(day) {
 			this.currentDay = day
 			const tabEl = this.$refs.tabs.$refs.tabElements.find(el => el.id === day.toISOString())
 			// TODO smooth scroll, seems to not work with chrome {behavior: 'smooth', block: 'center', inline: 'center'}
 			tabEl?.$el.scrollIntoView()
 		},
-		getTrackName (track) {
+		getTrackName(track) {
 			const languageTrack = localStorage.userLanguage
 			if (typeof track.name === 'object' && track.name !== null) {
 				if (languageTrack && track.name[languageTrack]) {
@@ -159,7 +159,7 @@ export default {
 				return track.name
 			}
 		},
-		toggleFavFilter () {
+		toggleFavFilter() {
 			this.tracksFilter = {}
 			if (this.filter.type === 'fav') {
 				this.$store.dispatch('schedule/filter', {})
@@ -167,7 +167,7 @@ export default {
 				this.$store.dispatch('schedule/filter', {type: 'fav'})
 			}
 		},
-		async makeExport () {
+		async makeExport() {
 			try {
 				this.isExporting = true
 				const url = config.api.base + 'export-talk?export_type=' + this.selectedExporter.id

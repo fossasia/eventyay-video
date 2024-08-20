@@ -70,7 +70,7 @@ export default {
 		room: Object,
 		modules: Object
 	},
-	data () {
+	data() {
 		return {
 			activeSidebarTab: null, // chat, questions, polls
 			unreadTabs: {
@@ -83,17 +83,17 @@ export default {
 		}
 	},
 	computed: {
-		unreadTabsClasses () {
+		unreadTabsClasses() {
 			return Object.entries(this.unreadTabs).filter(([tab, value]) => value).map(([tab]) => `tab-${tab}-unread`)
 		}
 	},
 	watch: {
-		activeSidebarTab (tab) {
+		activeSidebarTab(tab) {
 			this.unreadTabs[tab] = false
 		},
 		room: 'initializeLanguages'
 	},
-	created () {
+	created() {
 		if (this.modules['chat.native']) {
 			this.activeSidebarTab = 'chat'
 		} else if (this.modules.question) {
@@ -104,14 +104,14 @@ export default {
 		this.initializeLanguages()
 	},
 	methods: {
-		changedTabContent (tab) {
+		changedTabContent(tab) {
 			if (tab === this.activeSidebarTab) return
 			this.unreadTabs[tab] = true
 		},
-		handleLanguageChange (languageUrl) {
+		handleLanguageChange(languageUrl) {
 			this.$root.$emit('languageChanged', languageUrl)
 		},
-		initializeLanguages () {
+		initializeLanguages() {
 			this.languages = []
 			if (this.modules['livestream.youtube'] && this.modules['livestream.youtube'].config.languageUrls) {
 				this.languages = this.modules['livestream.youtube'].config.languageUrls

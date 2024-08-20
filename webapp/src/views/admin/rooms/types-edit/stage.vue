@@ -54,7 +54,7 @@ if (features.enabled('iframe-player')) {
 export default {
 	components: { UploadUrlInput, SidebarAddons },
 	mixins: [mixin],
-	data () {
+	data() {
 		return {
 			STREAM_SOURCE_OPTIONS,
 			ISO_LANGUAGE_OPTIONS: this.getLanguageOptions(),
@@ -76,20 +76,20 @@ export default {
 	},
 	computed: {
 		streamSource: {
-			get () {
+			get() {
 				return this.b_streamSource
 			},
-			set (value) {
+			set(value) {
 				this.b_streamSource = value
 				STREAM_SOURCE_OPTIONS.map(option => option.module).forEach(module => this.removeModule(module))
 				this.addModule(STREAM_SOURCE_OPTIONS.find(option => option.id === value).module)
 			}
 		},
 		enablePrivacyEnhancedMode: {
-			get () {
+			get() {
 				return !!this.modules['livestream.youtube'].config.enablePrivacyEnhancedMode
 			},
-			set (value) {
+			set(value) {
 				if (value) {
 					this.$set(this.modules['livestream.youtube'].config, 'enablePrivacyEnhancedMode', true)
 				} else {
@@ -98,10 +98,10 @@ export default {
 			}
 		},
 		loop: {
-			get () {
+			get() {
 				return !!this.modules['livestream.youtube'].config.loop
 			},
-			set (value) {
+			set(value) {
 				if (value) {
 					this.$set(this.modules['livestream.youtube'].config, 'loop', true)
 				} else {
@@ -110,10 +110,10 @@ export default {
 			}
 		},
 		modestBranding: {
-			get () {
+			get() {
 				return !!this.modules['livestream.youtube'].config.modestBranding
 			},
-			set (value) {
+			set(value) {
 				if (value) {
 					this.$set(this.modules['livestream.youtube'].config, 'modestBranding', true)
 				} else {
@@ -122,10 +122,10 @@ export default {
 			}
 		},
 		hideControls: {
-			get () {
+			get() {
 				return !!this.modules['livestream.youtube'].config.hideControls
 			},
-			set (value) {
+			set(value) {
 				if (value) {
 					this.$set(this.modules['livestream.youtube'].config, 'hideControls', true)
 				} else {
@@ -134,10 +134,10 @@ export default {
 			}
 		},
 		noRelated: {
-			get () {
+			get() {
 				return !!this.modules['livestream.youtube'].config.noRelated
 			},
-			set (value) {
+			set(value) {
 				if (value) {
 					this.$set(this.modules['livestream.youtube'].config, 'noRelated', true)
 				} else {
@@ -146,10 +146,10 @@ export default {
 			}
 		},
 		disableKb: {
-			get () {
+			get() {
 				return !!this.modules['livestream.youtube'].config.disableKb
 			},
-			set (value) {
+			set(value) {
 				if (value) {
 					this.$set(this.modules['livestream.youtube'].config, 'disableKb', true)
 				} else {
@@ -158,10 +158,10 @@ export default {
 			}
 		},
 		showInfo: {
-			get () {
+			get() {
 				return !!this.modules['livestream.youtube'].config.showInfo
 			},
-			set (value) {
+			set(value) {
 				if (value) {
 					this.$set(this.modules['livestream.youtube'].config, 'showInfo', true)
 				} else {
@@ -170,7 +170,7 @@ export default {
 			}
 		}
 	},
-	created () {
+	created() {
 		if (this.modules['livestream.native']) {
 			this.b_streamSource = 'hls'
 		} else if (this.modules['livestream.youtube']) {
@@ -185,24 +185,24 @@ export default {
 	},
 	methods: {
 		// Added methods addLanguageUrl and deleteLanguageUrl to manage dynamic fields for language and URL input
-		addLanguageUrl () {
+		addLanguageUrl() {
 			if (!this.modules['livestream.youtube'].config.languageUrls) {
 				this.$set(this.modules['livestream.youtube'].config, 'languageUrls', [])
 			}
 			this.modules['livestream.youtube'].config.languageUrls.push({ language: '', youtube_id: '' })
 		},
-		deleteLanguageUrl (index) {
+		deleteLanguageUrl(index) {
 			if (this.modules['livestream.youtube'].config.languageUrls) {
 				this.modules['livestream.youtube'].config.languageUrls.splice(index, 1)
 			}
 		},
-		deleteAlternativeStream (index) {
+		deleteAlternativeStream(index) {
 			this.modules['livestream.native'].config.alternatives.splice(index, 1)
 			if (this.modules['livestream.native'].config.alternatives.length === 0) {
 				this.modules['livestream.native'].config.alternatives = undefined
 			}
 		},
-		getLanguageOptions () {
+		getLanguageOptions() {
 			return ISO6391.getAllCodes().map(code => ({
 				id: ISO6391.getName(code),
 				label: ISO6391.getName(code),

@@ -54,7 +54,7 @@ export default {
 			required: true
 		}
 	},
-	data () {
+	data() {
 		return {
 			isOpen: false,
 			selectedOption: null,
@@ -62,30 +62,30 @@ export default {
 			qrCodes: {}
 		}
 	},
-	mounted () {
+	mounted() {
 		document.addEventListener('click', this.outsideClick)
 	},
-	beforeDestroy () {
+	beforeDestroy() {
 		document.removeEventListener('click', this.outsideClick)
 	},
-	created () {
+	created() {
 		this.options.forEach(option => {
 			this.generateQRCode(option)
 		})
 	},
 	methods: {
-		selectOption (option) {
+		selectOption(option) {
 			this.selectedOption = option.label
 			this.isOpen = false
 			this.$emit('input', option)
 		},
-		outsideClick (event) {
+		outsideClick(event) {
 			const dropdown = this.$refs.dropdown
 			if (!dropdown.contains(event.target)) {
 				this.isOpen = false
 			}
 		},
-		generateQRCode (option) {
+		generateQRCode(option) {
 			if (!['ics', 'xml', 'myics', 'myxml'].includes(option.id)) {
 				return
 			}
@@ -94,14 +94,14 @@ export default {
 				if (!err) this.qrCodes[option.id] = url
 			})
 		},
-		setHoveredOption (option) {
+		setHoveredOption(option) {
 			if (['ics', 'xml', 'myics', 'myxml'].includes(option.id)) {
 				this.hoveredOption = option
 			} else {
 				this.hoveredOption = null
 			}
 		},
-		clearHoveredOption (option) {
+		clearHoveredOption(option) {
 			if (this.hoveredOption === option) {
 				this.hoveredOption = null
 			}

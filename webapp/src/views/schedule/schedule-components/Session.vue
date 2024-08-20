@@ -68,32 +68,32 @@ export default {
 		eventUrl: { default: null },
 		linkTarget: { default: '_self' },
 		generateSessionLinkUrl: {
-			default () {
+			default() {
 				return ({eventUrl, session}) => `${eventUrl}talk/${session.id}/`
 			}
 		},
 		onSessionLinkClick: {
-			default () {
+			default() {
 				return () => {}
 			}
 		}
 	},
-	data () {
+	data() {
 		return {
 			getPrettyDuration,
 			getLocalizedString
 		}
 	},
 	computed: {
-		link () {
+		link() {
 			return this.generateSessionLinkUrl({eventUrl: this.eventUrl, session: this.session})
 		},
-		style () {
+		style() {
 			return {
 				'--track-color': this.session.track?.color || 'var(--pretalx-clr-primary)'
 			}
 		},
-		startTime () {
+		startTime() {
 			// check if 12h or 24h locale
 			if (this.hasAmPm) {
 				return {
@@ -106,10 +106,10 @@ export default {
 				}
 			}
 		},
-		isLive () {
+		isLive() {
 			return moment(this.session.start).isBefore(this.now) && moment(this.session.end).isAfter(this.now)
 		},
-		abstract () {
+		abstract() {
 			try {
 				return markdownIt.renderInline(this.session.abstract)
 			} catch (error) {
@@ -118,7 +118,7 @@ export default {
 		}
 	},
 	methods: {
-		getContrastColor (bgColor) {
+		getContrastColor(bgColor) {
 			if (!bgColor) {
 				return ''
 			}

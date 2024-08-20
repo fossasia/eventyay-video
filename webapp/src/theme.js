@@ -6,7 +6,7 @@ import config from 'config'
 
 import { normal as normalBlend } from 'color-blend'
 
-const blend = function (background, foreground) {
+const blend = function(background, foreground) {
 	const { r, g, b, a } = normalBlend({
 		r: background.red(),
 		g: background.green(),
@@ -23,7 +23,7 @@ const blend = function (background, foreground) {
 
 // returns first color with enough (>=4.5) contrast or failing that, the color with the highest contrast
 // on background, alpha gets blended
-const firstReadable = function (colors, background = '#FFF', threshold = 4.5) {
+const firstReadable = function(colors, background = '#FFF', threshold = 4.5) {
 	background = Color(background)
 	let best
 	let bestContrast = 0
@@ -113,11 +113,11 @@ for (const [key, value] of Object.entries(colors)) {
 export default themeConfig
 export { themeVariables, colors, DEFAULT_COLORS, DEFAULT_LOGO, DEFAULT_IDENTICONS }
 
-export function computeForegroundColor (bgColor) {
+export function computeForegroundColor(bgColor) {
 	return firstReadable([CLR_PRIMARY_TEXT.LIGHT, CLR_PRIMARY_TEXT.DARK], bgColor)
 }
 
-export function computeForegroundSidebarColor (colors) {
+export function computeForegroundSidebarColor(colors) {
 	const configColors = {
 		primary: colors.primary,
 		sidebar: colors.sidebar,
@@ -150,7 +150,7 @@ export function computeForegroundSidebarColor (colors) {
 	}
 }
 
-export async function getThemeConfig () {
+export async function getThemeConfig() {
 	const themeUrl = config.api.base + 'theme'
 	const response = await (await fetch(themeUrl, {
 		method: 'GET',

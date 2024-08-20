@@ -15,7 +15,7 @@ const mainMoment = require('moment')
 mainMoment.locale(config.date_locale || 'en-ie') // use ireland for 24h clock
 if (config.timetravelTo) {
 	const timetravelTimestamp = moment(config.timetravelTo).valueOf()
-	moment.now = function () { return timetravelTimestamp }
+	moment.now = function() { return timetravelTimestamp }
 	console.warn('timetraveling to', moment()._d)
 }
 

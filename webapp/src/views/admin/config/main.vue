@@ -58,7 +58,7 @@ const momentLocaleSet = [
 
 export default {
 	mixins: [ValidationErrorsMixin],
-	data () {
+	data() {
 		return {
 			config: null,
 			hlsConfig: '',
@@ -68,10 +68,10 @@ export default {
 		}
 	},
 	computed: {
-		locales () {
+		locales() {
 			return locales
 		},
-		momentLocales () {
+		momentLocales() {
 			return momentLocaleSet
 		}
 	},
@@ -95,7 +95,7 @@ export default {
 			isJson: isJson()
 		}
 	},
-	async created () {
+	async created() {
 		// We don't use the global world object since it e.g. currently does not contain locale and timezone
 		// TODO: Force reloading if world.updated is received from the server
 		try {
@@ -107,7 +107,7 @@ export default {
 		}
 	},
 	methods: {
-		async save () {
+		async save() {
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 			// TODO validate connection limit is a number

@@ -105,7 +105,7 @@ module.exports = {
 			})
 		],
 	},
-	chainWebpack (config) {
+	chainWebpack(config) {
 		config.entryPoints.clear()
 		config.entry('preloader').add('./src/preloader.js')
 		if (config.plugins.has('optimize-css')) {

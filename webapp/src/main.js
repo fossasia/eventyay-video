@@ -26,7 +26,7 @@ import features from 'features'
 import config from 'config'
 import theme, {computeForegroundSidebarColor, getThemeConfig} from 'theme'
 
-async function init ({token, inviteToken}) {
+async function init({token, inviteToken}) {
 	Vue.config.productionTip = false
 	Vue.use(Buntpapier)
 	Vue.use(Vuelidate)
@@ -92,7 +92,7 @@ async function init ({token, inviteToken}) {
 	setInterval(() => store.dispatch('notifications/pollExternals'), 1000)
 	window.__venueless__release = RELEASE
 
-	window.addEventListener('beforeinstallprompt', function (event) {
+	window.addEventListener('beforeinstallprompt', function(event) {
 		console.log('install prompt', event)
 	})
 }
@@ -116,7 +116,7 @@ navigator.serviceWorker?.getRegistrations().then((registrations) => {
 	}
 })
 
-async function setThemeConfig () {
+async function setThemeConfig() {
 	const themeData = await getThemeConfig()
 	theme.logo = themeData.logo
 	theme.identicons = themeData.identicons
