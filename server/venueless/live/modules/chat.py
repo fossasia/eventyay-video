@@ -5,11 +5,15 @@ from contextlib import suppress
 
 import asgiref
 import emoji
-
-from sentry_sdk import configure_scope
 from channels.db import database_sync_to_async
+from sentry_sdk import configure_scope
+
 from venueless.core.permissions import Permission
-from venueless.core.services.chat import ChatService, get_channel
+from venueless.core.services.chat import (
+    ChatService,
+    extract_mentioned_user_ids,
+    get_channel,
+)
 from venueless.core.services.user import get_public_users
 from venueless.core.utils.redis import aredis
 from venueless.live.channels import GROUP_CHAT, GROUP_USER
@@ -22,9 +26,6 @@ from venueless.live.decorators import (
 from venueless.live.exceptions import ConsumerException
 from venueless.live.modules.base import BaseModule
 from venueless.storage.tasks import retrieve_preview_information
-from venueless.core.services.chat import (
-    extract_mentioned_user_ids,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -134,15 +135,17 @@ class ChatModule(BaseModule):
             "unread_pointer": await self.service.get_highest_nonmember_id_in_channel(
                 self.channel_id
             ),
-            "members": await self.service.get_channel_users(
-                self.channel,
-                include_admin_info=await self.consumer.world.has_permission_async(
-                    user=self.consumer.user,
-                    permission=Permission.WORLD_USERS_MANAGE,
-                ),
-            )
-            if not volatile
-            else [],
+            "members": (
+                await self.service.get_channel_users(
+                    self.channel,
+                    include_admin_info=await self.consumer.world.has_permission_async(
+                        user=self.consumer.user,
+                        permission=Permission.WORLD_USERS_MANAGE,
+                    ),
+                )
+                if not volatile
+                else []
+            ),
         }
 
     async def _unsubscribe(self, clean_volatile_membership=True):

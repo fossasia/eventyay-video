@@ -11,10 +11,7 @@ from django.core.exceptions import ValidationError
 from django.utils.timezone import now
 from sentry_sdk import add_breadcrumb, configure_scope
 
-from venueless.core.models.room import (
-    AnonymousInvite,
-    RoomConfigSerializer,
-)
+from venueless.core.models.room import AnonymousInvite, RoomConfigSerializer
 from venueless.core.permissions import Permission
 from venueless.core.services.poll import get_polls, get_voted_polls
 from venueless.core.services.reactions import store_reaction

@@ -13,14 +13,7 @@ from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 
 from venueless.celery_app import app
-from venueless.core.models import (
-    Channel,
-    ExhibitorView,
-    PollVote,
-    Room,
-    RoomView,
-    User,
-)
+from venueless.core.models import Channel, ExhibitorView, PollVote, Room, RoomView, User
 from venueless.core.models.world import WorldView
 from venueless.core.tasks import WorldTask
 from venueless.graphs.report import ReportGenerator
@@ -318,9 +311,11 @@ def generate_session_views(world, input=None):
             ws.append(
                 [
                     pretalx_uni18n(talk["title"]),
-                    room_cache[talk["room"]].name
-                    if talk["room"] in room_cache
-                    else "?",
+                    (
+                        room_cache[talk["room"]].name
+                        if talk["room"] in room_cache
+                        else "?"
+                    ),
                     talk_start.astimezone(tz).date(),
                     talk_start.astimezone(tz).time(),
                     talk_end.astimezone(tz).date(),

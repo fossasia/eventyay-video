@@ -2,16 +2,14 @@ import json
 import logging
 from contextlib import suppress
 from urllib.parse import urlparse
-# import jwt
-import requests
 
+import requests
 from asgiref.sync import async_to_sync
 from django.core import exceptions
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
-# from django.views import View
 from rest_framework import viewsets
 from rest_framework.authentication import get_authorization_header
 from rest_framework.decorators import api_view, permission_classes
@@ -26,10 +24,7 @@ from venueless.api.auth import (
 )
 from venueless.api.serializers import RoomSerializer, WorldSerializer
 from venueless.core.models import Channel, User
-from venueless.core.services.world import (
-    notify_schedule_change,
-    notify_world_change,
-)
+from venueless.core.services.world import notify_schedule_change, notify_world_change
 
 from ..core.models import Room, World
 

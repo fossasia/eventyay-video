@@ -120,17 +120,19 @@ class User(VersionedModel):
             "profile": self.profile,
             "pretalx_id": self.pretalx_id,
             "deleted": self.deleted,
-            "badges": sorted(
-                list(
-                    {
-                        badge
-                        for trait, badge in trait_badges_map.items()
-                        if trait in self.traits
-                    }
+            "badges": (
+                sorted(
+                    list(
+                        {
+                            badge
+                            for trait, badge in trait_badges_map.items()
+                            if trait in self.traits
+                        }
+                    )
                 )
-            )
-            if trait_badges_map
-            else [],
+                if trait_badges_map
+                else []
+            ),
         }
         d["inactive"] = self.last_login is None or self.last_login < now() - timedelta(
             hours=36

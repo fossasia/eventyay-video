@@ -40,9 +40,11 @@ class QuestionModule(BaseModule):
             content=body.get("content"),
             sender=self.consumer.user,
             room=self.room,
-            state=Question.States.MOD_QUEUE
-            if requires_moderation
-            else Question.States.VISIBLE,
+            state=(
+                Question.States.MOD_QUEUE
+                if requires_moderation
+                else Question.States.VISIBLE
+            ),
         )
 
         await self.consumer.send_success({"question": question})

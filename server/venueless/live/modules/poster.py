@@ -2,11 +2,7 @@ import logging
 
 from venueless.core.permissions import Permission
 from venueless.core.services.poster import PosterService
-from venueless.live.decorators import (
-    command,
-    require_world_permission,
-    room_action,
-)
+from venueless.live.decorators import command, require_world_permission, room_action
 from venueless.live.modules.base import BaseModule
 
 logger = logging.getLogger(__name__)

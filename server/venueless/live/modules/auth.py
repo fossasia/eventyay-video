@@ -561,9 +561,9 @@ class AuthModule(BaseModule):
                 token_id=uid,
                 world=self.consumer.world,
                 show_publicly=False,
-                profile=body["profile"]
-                if isinstance(body.get("profile"), dict)
-                else {},
+                profile=(
+                    body["profile"] if isinstance(body.get("profile"), dict) else {}
+                ),
                 traits=[],
             )
             user.world_grants.create(world=self.consumer.world, role="__kiosk")

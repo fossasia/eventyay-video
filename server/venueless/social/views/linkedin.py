@@ -122,9 +122,11 @@ def return_view(request):
         user,
         "linkedin",
         name=d["localizedFirstName"] + " " + d["localizedLastName"],
-        url=("https://www.linkedin.com/in/" + d["vanityName"])
-        if "vanityName" in d
-        else None,
+        url=(
+            ("https://www.linkedin.com/in/" + d["vanityName"])
+            if "vanityName" in d
+            else None
+        ),
         **kwargs,
     )
 

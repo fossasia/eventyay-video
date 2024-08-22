@@ -1,12 +1,12 @@
-import json
-import jwt
-import operator
 import datetime as dt
-import requests
+import json
+import operator
 from collections import namedtuple
 from datetime import timedelta
 from functools import reduce
 
+import jwt
+import requests
 from channels.db import database_sync_to_async
 from channels.layers import get_channel_layer
 from django.core.paginator import InvalidPage, Paginator
@@ -19,7 +19,7 @@ from ...live.channels import GROUP_USER
 from ..models import AuditLog
 from ..models.auth import User
 from ..models.room import AnonymousInvite
-from ..models.world import WorldView, World
+from ..models.world import World, WorldView
 from ..permissions import Permission
 
 
@@ -93,17 +93,19 @@ def get_public_users(
             inactive=(
                 u["last_login"] is None or u["last_login"] < now() - timedelta(hours=36)
             ),
-            badges=sorted(
-                list(
-                    {
-                        badge
-                        for trait, badge in trait_badges_map.items()
-                        if trait in u["traits"]
-                    }
+            badges=(
+                sorted(
+                    list(
+                        {
+                            badge
+                            for trait, badge in trait_badges_map.items()
+                            if trait in u["traits"]
+                        }
+                    )
                 )
-            )
-            if trait_badges_map
-            else [],
+                if trait_badges_map
+                else []
+            ),
             **(
                 {"client_state": u["client_state"]}
                 if include_admin_info and u["type"] == User.UserType.KIOSK
@@ -652,17 +654,19 @@ def list_users(
                         pretalx_id=u["pretalx_id"],
                         inactive=u["last_login"] is None
                         or u["last_login"] < now() - timedelta(hours=36),
-                        badges=sorted(
-                            list(
-                                {
-                                    badge
-                                    for trait, badge in trait_badges_map.items()
-                                    if trait in u["traits"]
-                                }
+                        badges=(
+                            sorted(
+                                list(
+                                    {
+                                        badge
+                                        for trait, badge in trait_badges_map.items()
+                                        if trait in u["traits"]
+                                    }
+                                )
                             )
-                        )
-                        if trait_badges_map
-                        else [],
+                            if trait_badges_map
+                            else []
+                        ),
                         **(
                             dict(
                                 moderation_state=u["moderation_state"],

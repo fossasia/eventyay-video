@@ -39,12 +39,7 @@ from reportlab.platypus import (
 from venueless.core.models import Channel, ChatEvent, Room, User
 from venueless.core.models.exhibitor import ContactRequest, ExhibitorView
 from venueless.core.models.room import RoomView
-from venueless.graphs.utils import (
-    PdfImage,
-    get_schedule,
-    median_value,
-    pretalx_uni18n,
-)
+from venueless.graphs.utils import PdfImage, get_schedule, median_value, pretalx_uni18n
 from venueless.graphs.views import build_room_view_fig
 from venueless.storage.models import StoredFile
 
