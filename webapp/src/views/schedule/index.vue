@@ -145,10 +145,9 @@ export default {
 		exportType() {
 			return exportTypeSet
 		},
-		filteredTracks () {
+		filteredTracks() {
 			let results = null
-			let self = this
-			this.onlyFavs = false
+			const self = this
 			Object.keys(this.filter).forEach(key => {
 				const refKey = this.filter[key].refKey
 				const selectedIds = this.filter[key].data.filter(t => t.selected).map(t => t.value)
@@ -157,26 +156,26 @@ export default {
 					if (results && results.length) {
 						founds = self.schedule.talks.filter(t => selectedIds.includes(t[refKey]) && results && results.includes(t.id))?.map(i => i.id) || []
 					} else {
-						founds = self.schedule.talks.filter(t => {return selectedIds.includes(t[refKey])})?.map(i => i.id) || []
+						founds = self.schedule.talks.filter(t => { return selectedIds.includes(t[refKey]) })?.map(i => i.id) || []
 					}
 					results = founds
 				}
 			})
 			return results
 		},
-		tracksLookup () {
+		tracksLookup() {
 			if (!this.schedule) return {}
 			return this.schedule.tracks.reduce((acc, t) => { acc[t.id] = t; return acc }, {})
 		},
-		roomsLookup () {
+		roomsLookup() {
 			if (!this.schedule) return {}
 			return this.schedule.rooms.reduce((acc, room) => { acc[room.id] = room; return acc }, {})
 		},
-		speakersLookup () {
+		speakersLookup() {
 			if (!this.schedule) return {}
 			return this.schedule.speakers.reduce((acc, s) => { acc[s.code] = s; return acc }, {})
 		},
-		sessions () {
+		sessions() {
 			const sessions = []
 			const filter = this.filteredTracks
 			for (const session of this.schedule.talks.filter(s => s.start)) {
@@ -203,19 +202,20 @@ export default {
 		rooms() {
 			return _.uniqBy(this.sessions, 'room.id').map(s => s.room)
 		},
-        filter() {
+		filter() {
 			const filter = this.defaultFilter
-            filter.tracks.data = this.schedule.tracks.map(t => { t.value = t.id; t.label = t.name; return t })
-            filter.rooms.data = this.schedule.rooms.map(t => { t.value = t.id; t.label = t.name; return t })
+			filter.tracks.data = this.schedule.tracks.map(t => { t.value = t.id; t.label = t.name; return t })
+			filter.rooms.data = this.schedule.rooms.map(t => { t.value = t.id; t.label = t.name; return t })
 			filter.types.data = this.schedule.session_type.map(t => { t.value = t.session_type; t.label = t.session_type; return t })
 			return filter
-        }
+		}
 	},
 	watch: {
 		tracksFilter: {
-			handler: function (newValue) {
+			handler: function(newValue) {
 				const arr = Object.keys(newValue).filter(key => newValue[key])
 				this.$store.dispatch('schedule/filter', {type: 'track', tracks: arr})
+				this.resetOnlyFavs()
 			},
 			deep: true
 		}
@@ -240,7 +240,7 @@ export default {
 					return track.name.en || track.name
 				}
 			} else if (track.session_type && track.session_type !== null) {
-				return track.session_type;
+				return track.session_type
 			} else {
 				return track.name
 			}
@@ -281,11 +281,11 @@ export default {
 				console.log(error)
 			}
 		},
-		resetAllFiltered () {
+		resetAllFiltered() {
 			this.resetFiltered()
 			this.onlyFavs = false
 		},
-		resetFiltered () {
+		resetFiltered() {
 			Object.keys(this.filter).forEach(key => {
 				this.filter[key].data.forEach(t => {
 					if (t.selected) {
@@ -293,6 +293,9 @@ export default {
 					}
 				})
 			})
+		},
+		resetOnlyFavs() {
+			this.onlyFavs = false
 		}
 	}
 }
@@ -304,7 +307,7 @@ export default {
 		.app-drop-down
 			width: 90px
 			margin-bottom: 8px
-	.c-schedule 
+	.c-schedule
 		.bunt-ripple-ink
 			margin: 12px 0 20px 15px !important;
 		.export.dropdown

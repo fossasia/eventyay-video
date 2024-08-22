@@ -47,11 +47,11 @@ export default {
 			if (!state.schedule) return {}
 			return state.schedule.speakers.reduce((acc, s) => { acc[s.code] = s; return acc }, {})
 		},
-		sessionTypeLookup (state) {
+		sessionTypeLookup(state) {
 			if (!state.schedule) return {}
 			return state.schedule.session_type.reduce((acc, s) => { acc[s.code] = s; return acc }, {})
 		},
-		sessions (state, getters, rootState) {
+		sessions(state, getters, rootState) {
 			if (!state.schedule) return
 			const sessions = []
 			const favArr = getters.favs || []
@@ -123,7 +123,7 @@ export default {
 			}
 			return rooms
 		},
-		schedule (state) {
+		schedule(state) {
 			return state.schedule
 		}
 	},
@@ -136,12 +136,12 @@ export default {
 			try {
 				state.schedule = await (await fetch(getters.pretalxScheduleUrl)).json()
 				state.schedule.session_type = state.schedule.talks.reduce((acc, current) => {
-					const isDuplicate = acc.some(item => item.session_type === current.session_type);
+					const isDuplicate = acc.some(item => item.session_type === current.session_type)
 					if (!isDuplicate) {
-					  acc.push(current);
+						acc.push(current)
 					}
-					return acc;
-				  }, []);
+					return acc
+				}, [])
 			} catch (error) {
 				state.errorLoading = error
 			}
