@@ -5,10 +5,9 @@
 		reactions-overlay(v-if="modules['livestream.native'] || modules['livestream.youtube'] || modules['livestream.iframe'] || modules['call.janus']")
 		.stage-tool-blocker(v-if="activeStageTool !== null", @click="activeStageTool = null")
 		.stage-tools(v-if="modules['livestream.native'] || modules['livestream.youtube'] || modules['livestream.iframe'] || modules['call.janus']")
-			reactions-bar(:expanded="true", @expand="activeStageTool = 'reaction'")
-			//- reactions-bar(:expanded="activeStageTool === 'reaction'", @expand="activeStageTool = 'reaction'")
 			// Added dropdown menu for audio translations near the reactions bar
-			AudioTranslationDropdown(:languages="languages", @languageChanged="handleLanguageChange")
+			reactions-bar(:expanded="true", @expand="activeStageTool = 'reaction'")
+			AudioTranslationDropdown(v-if="languages.length > 1", :languages="languages", @languageChanged="handleLanguageChange")
 	media-source-placeholder(v-else-if="modules['call.bigbluebutton'] || modules['call.zoom']")
 	roulette(v-else-if="modules['networking.roulette'] && $features.enabled('roulette')", :module="modules['networking.roulette']", :room="room")
 	landing-page(v-else-if="modules['page.landing']", :module="modules['page.landing']")
@@ -46,17 +45,32 @@ import Polls from 'components/Polls'
 import PosterHall from 'components/PosterHall'
 import Questions from 'components/Questions'
 import MediaSourcePlaceholder from 'components/MediaSourcePlaceholder'
-import AudioTranslationDropdown from 'components/AudioTranslationDropdown';
+import AudioTranslationDropdown from 'components/AudioTranslationDropdown'
 
 export default {
 	name: 'Room',
-	components: { Chat, Exhibition, LandingPage, MarkdownPage, StaticPage, IframePage, ReactionsBar, ReactionsOverlay, UserListPage, Roulette, Polls, PosterHall,
-		Questions, MediaSourcePlaceholder, AudioTranslationDropdown },
+	components: {
+		Chat,
+		Exhibition,
+		LandingPage,
+		MarkdownPage,
+		StaticPage,
+		IframePage,
+		ReactionsBar,
+		ReactionsOverlay,
+		UserListPage,
+		Roulette,
+		Polls,
+		PosterHall,
+		Questions,
+		MediaSourcePlaceholder,
+		AudioTranslationDropdown
+	},
 	props: {
 		room: Object,
 		modules: Object
 	},
-	data () {
+	data() {
 		return {
 			activeSidebarTab: null, // chat, questions, polls
 			unreadTabs: {
@@ -69,17 +83,17 @@ export default {
 		}
 	},
 	computed: {
-		unreadTabsClasses () {
+		unreadTabsClasses() {
 			return Object.entries(this.unreadTabs).filter(([tab, value]) => value).map(([tab]) => `tab-${tab}-unread`)
 		}
 	},
 	watch: {
-		activeSidebarTab (tab) {
+		activeSidebarTab(tab) {
 			this.unreadTabs[tab] = false
 		},
 		room: 'initializeLanguages'
 	},
-	created () {
+	created() {
 		if (this.modules['chat.native']) {
 			this.activeSidebarTab = 'chat'
 		} else if (this.modules.question) {
@@ -87,23 +101,23 @@ export default {
 		} else if (this.modules.poll) {
 			this.activeSidebarTab = 'polls'
 		}
-		this.initializeLanguages();
+		this.initializeLanguages()
 	},
 	methods: {
-		changedTabContent (tab) {
+		changedTabContent(tab) {
 			if (tab === this.activeSidebarTab) return
 			this.unreadTabs[tab] = true
 		},
 		handleLanguageChange(languageUrl) {
-			this.$root.$emit('languageChanged', languageUrl);
+			this.$root.$emit('languageChanged', languageUrl)
 		},
-		initializeLanguages(){
-			this.languages = [];
+		initializeLanguages() {
+			this.languages = []
 			if (this.modules['livestream.youtube'] && this.modules['livestream.youtube'].config.languageUrls) {
-				this.languages = this.modules['livestream.youtube'].config.languageUrls;
+				this.languages = this.modules['livestream.youtube'].config.languageUrls
 			}
-			if (!this.languages.find(lang => lang.language === 'Default')) {
-				this.languages.unshift({language: 'Default', url: ``});
+			if (!this.languages.find(lang => lang.language === 'Original')) {
+				this.languages.unshift({language: 'Original', url: ''})
 			}
 		}
 	}
@@ -173,6 +187,8 @@ export default {
 				height: 2px
 				width: calc(100% - 16px)
 				background-color: var(--clr-primary)
+		+below('m')
+			justify-content: space-between
 	.stage-tool-blocker
 		position: fixed
 		top: 0

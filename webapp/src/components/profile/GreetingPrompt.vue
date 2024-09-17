@@ -29,6 +29,10 @@ prompt.c-profile-greeting-prompt(:allowCancel="false")
 			h1 {{ $t('profile/GreetingPrompt:step-avatar:heading') }}
 			p {{ $t('profile/GreetingPrompt:step-avatar:text') }}
 			change-avatar(ref="step", v-model="profile.avatar", :profile="profile", @blockSave="blockSave = $event")
+		.step-display-language(v-else-if="activeStep === 'displayLanguage'")
+			h2 {{ $t('preferences/index:interface-language:header') }}
+			p {{ $t('preferences/index:interface-language:description') }}
+			bunt-select#select-interface-language(name="interface-language", v-model="interfaceLanguage", :options="languages", option-value="code", option-label="nativeLabel")
 		.step-additional-fields(v-else-if="activeStep === 'additionalFields'")
 			h1 {{ $t('profile/GreetingPrompt:step-fields:heading') }}
 			p {{ $t('profile/GreetingPrompt:step-fields:text') }}
@@ -42,6 +46,8 @@ prompt.c-profile-greeting-prompt(:allowCancel="false")
 import { mapState } from 'vuex'
 import { required } from 'buntpapier/src/vuelidate/validators'
 import api from 'lib/api'
+import config from 'config'
+import { locales } from 'locales'
 import Prompt from 'components/Prompt'
 import ChangeAvatar from './ChangeAvatar'
 import ChangeAdditionalFields from './ChangeAdditionalFields'
@@ -49,7 +55,7 @@ import ConnectGravatar from './ConnectGravatar'
 
 export default {
 	components: { Prompt, ChangeAvatar, ChangeAdditionalFields, ConnectGravatar },
-	data () {
+	data() {
 		return {
 			activeStep: null,
 			showConnectGravatar: false,
@@ -57,9 +63,10 @@ export default {
 			processingStep: false,
 			blockSave: false,
 			saving: false,
+			interfaceLanguage: this.$i18n.resolvedLanguage,
 		}
 	},
-	validations () {
+	validations() {
 		if (this.activeStep !== 'displayName') return {}
 		return {
 			profile: {
@@ -71,23 +78,28 @@ export default {
 	},
 	computed: {
 		...mapState(['user', 'world']),
-		steps () {
+		steps() {
 			const steps = [
 				'displayName',
+				'displayLanguage',
 				'avatar'
 			]
 			if (this.world?.social_logins?.length) steps.unshift('connectSocial')
 			if (this.world?.profile_fields?.length) steps.push('additionalFields')
 			return steps
 		},
-		previousStep () {
+		previousStep() {
 			return this.steps[this.steps.indexOf(this.activeStep) - 1]
 		},
-		nextStep () {
+		nextStep() {
 			return this.steps[this.steps.indexOf(this.activeStep) + 1]
+		},
+		languages() {
+			if (!config.locales?.length) return null
+			return locales.filter(locale => config.locales.includes(locale.code))
 		}
 	},
-	async created () {
+	async created() {
 		this.activeStep = this.steps[0]
 		this.profile = Object.assign({
 			greeted: true,
@@ -101,7 +113,7 @@ export default {
 		if (this.activeStep === 'connectSocial' && this.profile.avatar.url) this.activeStep = this.nextStep
 	},
 	methods: {
-		async toNextStep () {
+		async toNextStep() {
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 			if (this.$refs.step?.update) {
@@ -111,19 +123,19 @@ export default {
 			}
 			this.activeStep = this.nextStep
 		},
-		async connectSocial (network) {
+		async connectSocial(network) {
 			const { url } = await api.call('user.social.connect', {
 				network,
 				return_url: window.location.href
 			})
 			window.location = url
 		},
-		setGravatar (gravatar) {
+		setGravatar(gravatar) {
 			Object.assign(this.profile, gravatar)
 			this.showConnectGravatar = false
 			this.activeStep = this.nextStep
 		},
-		async update () {
+		async update() {
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 			this.saving = true
@@ -132,6 +144,8 @@ export default {
 			}
 			this.profile.greeted = true // override even if explicitly set to false by server
 			await this.$store.dispatch('updateUser', {profile: this.profile})
+			localStorage.userLanguage = this.interfaceLanguage
+			await this.$store.dispatch('updateUserLocale', this.interfaceLanguage)
 			// TODO error handling
 			this.$emit('close')
 		}
@@ -154,7 +168,7 @@ export default {
 			margin: 0 0 8px 0
 			width: 360px
 			white-space: pre-wrap
-		.step-connect-social, .step-display-name, .step-avatar, .step-additional-fields
+		.step-connect-social, .step-display-name, .step-avatar, .step-display-language, .step-additional-fields
 			display: flex
 			flex-direction: column
 			align-items: center

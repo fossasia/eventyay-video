@@ -8,6 +8,8 @@ transition(name="sidebar")
 			.global-links(role="group", aria-label="pages")
 				router-link.room(v-if="roomsByType.page.includes(rooms[0])", :to="{name: 'home'}", v-html="$emojify(rooms[0].name)")
 				router-link.room(:to="{name: 'schedule'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ $t('RoomsSidebar:schedule:label') }}
+				router-link.room(:to="{name: 'schedule:sessions'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ $t('RoomsSidebar:session:label') }}
+				router-link.room(:to="{name: 'schedule:speakers'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ $t('RoomsSidebar:speaker:label') }}
 				router-link.room(v-for="page of roomsByType.page", v-if="page !== rooms[0]", :to="{name: 'room', params: {roomId: page.id}}", v-html="$emojify(page.name)")
 			.group-title#stages-title(v-if="roomsByType.stage.length || hasPermission('world:rooms.create.stage')")
 				span {{ $t('RoomsSidebar:stages-headline:text') }}
@@ -28,8 +30,9 @@ transition(name="sidebar")
 						.name(v-html="$emojify(stage.room.name)")
 						.buffer
 						template(v-if="stage.room.users")
-							i.mdi.mdi-account-group.icon-viewer
-							.name(v-html="stage.room.users")
+							.room-attendee
+								i.mdi.mdi-account-group.icon-viewer
+								.name(v-html="stage.room.users")
 						.notifications(v-if="stage.notifications") {{ stage.notifications }}
 			.group-title#chats-title(v-if="roomsByType.videoChat.length || roomsByType.textChat.length || hasPermission('world:rooms.create.chat') || hasPermission('world:rooms.create.bbb')")
 				span {{ $t('RoomsSidebar:channels-headline:text') }}
@@ -99,7 +102,7 @@ export default {
 	props: {
 		show: Boolean
 	},
-	data () {
+	data() {
 		return {
 			theme,
 			lastPointer: null,
@@ -118,13 +121,13 @@ export default {
 		...mapGetters(['hasPermission']),
 		...mapGetters('chat', ['hasUnreadMessages', 'notificationCount']),
 		...mapGetters('schedule', ['sessions', 'currentSessionPerRoom']),
-		style () {
+		style() {
 			if (this.pointerMovementX === 0) return
 			return {
 				transform: `translateX(${this.pointerMovementX}px)`
 			}
 		},
-		roomsByType () {
+		roomsByType() {
 			const rooms = {
 				page: [],
 				stage: [],
@@ -161,7 +164,7 @@ export default {
 			}
 			return rooms
 		},
-		directMessageChannels () {
+		directMessageChannels() {
 			return this.joinedChannels
 				?.filter(channel => channel.members)
 				.map(channel => {
@@ -174,35 +177,35 @@ export default {
 				})
 				.sort((a, b) => (this.hasUnreadMessages(b.id) - this.hasUnreadMessages(a.id)) || this.getDMChannelName(a).localeCompare(this.getDMChannelName(b)))
 		},
-		worldHasTextChannels () {
+		worldHasTextChannels() {
 			return this.rooms.some(room => room.modules.length === 1 && room.modules[0].type === 'chat.native')
 		},
-		worldHasExhibition () {
+		worldHasExhibition() {
 			return this.rooms.some(room => room.modules.length === 1 && room.modules[0].type === 'exhibition.native')
 		},
-		worldHasPosters () {
+		worldHasPosters() {
 			return this.rooms.some(room => room.modules.length === 1 && room.modules[0].type === 'poster.native')
 		},
 	},
 	methods: {
-		getDMChannelName (channel) {
+		getDMChannelName(channel) {
 			return channel.users.map(user => user.deleted ? this.$t('User:label:deleted') : user.profile.display_name).join(', ')
 		},
-		startsWithEmoji (string) {
+		startsWithEmoji(string) {
 			return startsWithEmoji(string)
 		},
-		onPointerdown (event) {
+		onPointerdown(event) {
 			if (this.$mq.above.m) return
 			this.lastPointer = event.pointerId
 		},
-		onPointermove (event) {
+		onPointermove(event) {
 			if (this.$mq.above.m || this.lastPointer !== event.pointerId) return
 			this.pointerMovementX += event.movementX / window.devicePixelRatio // because apparently the browser does not do this
 			if (this.pointerMovementX > 0) {
 				this.pointerMovementX = 0
 			}
 		},
-		async onPointerup (event) {
+		async onPointerup(event) {
 			if (this.$mq.above.m || this.lastPointer !== event.pointerId) return
 			this.lastPointer = null
 			if (this.pointerMovementX < -80) {
@@ -214,7 +217,7 @@ export default {
 			await this.$nextTick()
 			this.snapBack = false
 		},
-		onPointercancel (event) {
+		onPointercancel(event) {
 			this.lastPointer = null
 			this.pointerMovementX = 0
 		}
@@ -506,6 +509,8 @@ export default {
 		.mdi
 			font-size: 24px
 			line-height: 1
+	.room-attendee
+		display: flex
 #app:not(.override-sidebar-collapse) .c-rooms-sidebar
 	+below('l')
 		position: fixed

@@ -1,6 +1,5 @@
 <template lang="pug">
 div.c-audio-translation
-		h4 Audio Translation
 		bunt-select(
 		name="audio-translation",
 		v-model="selectedLanguage",
@@ -18,7 +17,7 @@ export default {
 			required: true
 		}
 	},
-	data () {
+	data() {
 		return {
 			selectedLanguage: null, // Selected language for audio translation
 			languageOptions: [] // Options for the dropdown
@@ -27,13 +26,13 @@ export default {
 	watch: {
 		languages: {
 			immediate: true,
-			handler (newLanguages) {
+			handler(newLanguages) {
 				this.languageOptions = newLanguages.map(entry => entry.language) // Directly assigning the list of languages
 			}
 		}
 	},
 	methods: {
-		sendLanguageChange () {
+		sendLanguageChange() {
 			const selected = this.languages.find(item => item.language === this.selectedLanguage)
 			this.$emit('languageChanged', selected.youtube_id || null)
 		}
@@ -43,11 +42,16 @@ export default {
 
 <style scoped>
 .c-audio-translation {
-		margin-bottom: 3em;
+	height: 65px;
+	padding-top: 3px;
+	margin-right: 5px;
 }
 
-.c-audio-translation h4 {
-		margin-bottom: 0.5em;
+@media (max-width: 992px) {
+  .c-audio-translation {
+    width: 50%;
+    margin-right: 5px;
+  }
 }
 
 .bunt-select {

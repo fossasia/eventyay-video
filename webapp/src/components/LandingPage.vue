@@ -7,8 +7,9 @@
 			ul.splide__list
 				li.splide__slide(v-for="sponsor of sponsors")
 					img.sponsor(:src="sponsor.logo", :alt="sponsor.name", @load="onSponsorImageLoad(sponsor.id)")
-	.content
-		.schedule
+	.content-container
+		.content
+			rich-text-content(v-if="hasMainContent", :content="module.config.main_content")
 			template(v-if="featuredSessions && featuredSessions.length")
 				.header
 					h3 {{ $t('LandingPage:sessions:featured:header') }}
@@ -53,14 +54,15 @@ import moment from 'lib/timetravelMoment'
 import Identicon from 'components/Identicon'
 import MarkdownContent from 'components/MarkdownContent'
 import scheduleProvidesMixin from 'components/mixins/schedule-provides'
+import RichTextContent from 'components/RichTextContent'
 
 export default {
-	components: { Identicon, MarkdownContent, Session },
+	components: { Identicon, MarkdownContent, Session, RichTextContent },
 	mixins: [scheduleProvidesMixin],
 	props: {
 		module: Object
 	},
-	data () {
+	data() {
 		return {
 			moment,
 			sponsors: null,
@@ -71,11 +73,11 @@ export default {
 		...mapState(['now', 'rooms']),
 		...mapState('schedule', ['schedule']),
 		...mapGetters('schedule', ['sessions', 'favs']),
-		featuredSessions () {
+		featuredSessions() {
 			if (!this.sessions) return
 			return this.sessions.filter(session => session.featured)
 		},
-		nextSessions () {
+		nextSessions() {
 			if (!this.sessions) return
 			// current or next sessions per room
 			const sessions = []
@@ -86,11 +88,14 @@ export default {
 			}
 			return sessions
 		},
-		speakers () {
+		speakers() {
 			return this.schedule?.speakers.slice().sort((a, b) => a.name.split(' ').at(-1).localeCompare(b.name.split(' ').at(-1)))
-		}
+		},
+		hasMainContent() {
+			return this.module.config.main_content?.ops?.some(op => op.insert.trim() !== '')
+		},
 	},
-	async mounted () {
+	async mounted() {
 		// TODO make this configurable?
 		const sponsorRoom = this.rooms.find(r => r.id === this.module.config.sponsor_room_id)
 		if (!sponsorRoom) return
@@ -121,7 +126,7 @@ export default {
 		this.sponsorSplide = splide
 	},
 	methods: {
-		onSponsorImageLoad (sponsorId) {
+		onSponsorImageLoad(sponsorId) {
 			this.loadedSponsorImages.push(sponsorId)
 			if (this.loadedSponsorImages.length === this.sponsors.length) {
 				this.sponsorSplide.refresh()
@@ -147,7 +152,7 @@ export default {
 			height: 100%
 			max-width: 100%
 			object-fit: contain
-	.content
+	.content-container
 		display: flex
 		justify-content: center
 		gap: 32px
@@ -157,10 +162,14 @@ export default {
 			min-width: 0
 			display: flex
 			flex-direction: column
-	.markdown-content
-		padding: 0 16px
-		width: 100%
-		max-width: 560px
+	.content
+		display: flex
+		flex-direction: column
+		max-width: 960px
+		.header
+			padding: 0 8px
+	.rich-text-content
+		padding: 0 8px
 	.header
 		display: flex
 		justify-content: space-between
@@ -171,10 +180,6 @@ export default {
 			line-height: 56px
 		.bunt-link-button
 			themed-button-primary()
-	.schedule
-		max-width: 960px
-		.header
-			padding: 0 8px
 	.speakers
 		max-width: calc(124px * 3 + 2px)
 	.speakers-list
@@ -237,7 +242,7 @@ export default {
 			justify-content: center
 
 	+below('m')
-		.content
+		.content-container
 			flex-direction: column
 			align-items: center
 			padding: 0 8px

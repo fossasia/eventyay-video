@@ -33,7 +33,7 @@ export default {
 			default: false
 		}
 	},
-	data () {
+	data() {
 		return {
 			iframeError: null,
 			iframe: null, // Track the iframe element
@@ -44,18 +44,18 @@ export default {
 	computed: {
 		...mapState(['streamingRoom', 'youtubeTransUrl']),
 		...mapGetters(['autoplay']),
-		module () {
+		module() {
 			if (!this.room) {
 				return null
 			}
 			return this.room.modules.find(module => ['livestream.native', 'livestream.youtube', 'livestream.iframe', 'call.bigbluebutton', 'call.janus', 'call.zoom'].includes(module.type))
 		},
-		inRoomManager () {
+		inRoomManager() {
 			return this.$route.name === 'room:manage'
 		}
 	},
 	watch: {
-		background () {
+		background() {
 			if (!this.iframe) return
 			if (this.background) {
 				this.iframe.classList.add('background')
@@ -64,7 +64,7 @@ export default {
 			}
 		},
 		module: {
-			handler (value, oldValue) {
+			handler(value, oldValue) {
 				if (isEqual(value, oldValue)) return
 				this.destroyIframe()
 				this.initializeIframe(false)
@@ -79,22 +79,22 @@ export default {
 			this.initializeIframe(false)
 		}
 	},
-	async mounted () {
+	async mounted() {
 		if (!this.room) {
 			return
 		}
 		this.initializeIframe(false)
-		this.$root.$on('languageChanged', this.handleLanguageChange);
+		this.$root.$on('languageChanged', this.handleLanguageChange)
 	},
-	beforeDestroy () {
+	beforeDestroy() {
 		this.iframe?.remove()
 		if (api.socketState !== 'open') return
 		// TODO move to store?
 		if (this.room) api.call('room.leave', {room: this.room.id})
-		this.$root.$off('languageChanged', this.handleLanguageChange);
+		this.$root.$off('languageChanged', this.handleLanguageChange)
 	},
 	methods: {
-		async initializeIframe (mute) {
+		async initializeIframe(mute) {
 			try {
 				let iframeUrl
 				let hideIfBackground = false
@@ -114,7 +114,10 @@ export default {
 						break
 					}
 					case 'livestream.youtube': {
-						iframeUrl = this.getYoutubeUrl(this.module.config.ytid, this.autoplay, mute)
+						iframeUrl = this.getYoutubeUrl(this.module.config.ytid, this.autoplay, mute, this.module.config.hideControls,
+							this.module.config.noRelated, this.module.config.showinfo, this.module.config.disableKb,
+							this.module.config.loop, this.module.config.modestBranding, this.module.config.enablePrivacyEnhancedMode
+						)
 						break
 					}
 				}
@@ -138,11 +141,11 @@ export default {
 				console.error(error)
 			}
 		},
-		destroyIframe () {
+		destroyIframe() {
 			this.iframe?.remove()
 			this.iframe = null
 		},
-		isPlaying () {
+		isPlaying() {
 			if (this.call) {
 				return this.$refs.janus.roomId
 			}
@@ -161,26 +164,47 @@ export default {
 			return true
 		},
 		handleLanguageChange(languageUrl) {
-			this.languageAudioUrl = languageUrl; // Set the audio source to the selected language URL
-			const mute = !!languageUrl; // Mute if language URL is present, otherwise unmute
-			this.destroyIframe();
-			this.initializeIframe(mute); // Initialize iframe with the appropriate mute state
+			this.languageAudioUrl = languageUrl // Set the audio source to the selected language URL
+			const mute = !!languageUrl // Mute if language URL is present, otherwise unmute
+			this.destroyIframe()
+			this.initializeIframe(mute) // Initialize iframe with the appropriate mute state
 			// Set the language iframe URL when language changes
-			this.languageIframeUrl = this.getLanguageIframeUrl(languageUrl);
+			this.languageIframeUrl = this.getLanguageIframeUrl(languageUrl)
 		},
-		getYoutubeUrl(ytid, autoplay, mute) {
-			// Construct the autoplay parameter based on the input
-			const autoplayParam = autoplay ? 'autoplay=1&' : '';
-			// Construct the mute parameter based on the input
-			const muteParam = mute ? 'mute=1' : 'mute=0';
-			// Return the complete YouTube URL with the provided video ID, autoplay, and mute parameters
-			return `https://www.youtube-nocookie.com/embed/${ytid}?${autoplayParam}rel=0&showinfo=0&${muteParam}`;
+		getYoutubeUrl(ytid, autoplay, mute, hideControls, noRelated, showinfo, disableKb, loop, modestBranding, enablePrivacyEnhancedMode) {
+			const params = new URLSearchParams({
+				autoplay: autoplay ? '1' : '0',
+				mute: mute ? '1' : '0',
+				controls: hideControls ? '0' : '1',
+				rel: noRelated ? '0' : '1',
+				showinfo: showinfo ? '0' : '1',
+				disablekb: disableKb ? '1' : '0',
+				loop: loop ? '1' : '0',
+				modestbranding: modestBranding ? '1' : '0',
+				playlist: ytid,
+			})
+
+			const domain = enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com'
+			return `https://${domain}/embed/${ytid}?${params}`
 		},
 		// Added method to get the language iframe URL
-		getLanguageIframeUrl(languageUrl) {
+		getLanguageIframeUrl(languageUrl, enablePrivacyEnhancedMode) {
 			// Checks if the languageUrl is not provided the retun null
-			if (!languageUrl) return null;
-			return `https://www.youtube.com/embed/${languageUrl}?enablejsapi=1&autoplay=1&modestbranding=1&loop=1&controls=0&disablekb=1&languageUrl=${languageUrl}`;
+			if (!languageUrl) return null
+			const params = new URLSearchParams({
+				enablejsapi: '1',
+				autoplay: '1',
+				modestbranding: '1',
+				loop: '1',
+				controls: '0',
+				disablekb: '1',
+				rel: '0',
+				showinfo: '0',
+				playlist: languageUrl,
+			})
+
+			const domain = enablePrivacyEnhancedMode ? 'www.youtube-nocookie.com' : 'www.youtube.com'
+			return `https://${domain}/embed/${languageUrl}?${params}`
 		}
 	}
 }

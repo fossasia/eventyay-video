@@ -1,20 +1,25 @@
+import datetime as dt
+import json
 import operator
 from collections import namedtuple
 from datetime import timedelta
 from functools import reduce
 
+import jwt
+import requests
 from channels.db import database_sync_to_async
 from channels.layers import get_channel_layer
 from django.core.paginator import InvalidPage, Paginator
 from django.db.models import Q
 from django.db.transaction import atomic
+from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 
 from ...live.channels import GROUP_USER
 from ..models import AuditLog
 from ..models.auth import User
 from ..models.room import AnonymousInvite
-from ..models.world import WorldView
+from ..models.world import World, WorldView
 from ..permissions import Permission
 
 
@@ -88,24 +93,29 @@ def get_public_users(
             inactive=(
                 u["last_login"] is None or u["last_login"] < now() - timedelta(hours=36)
             ),
-            badges=sorted(
-                list(
-                    {
-                        badge
-                        for trait, badge in trait_badges_map.items()
-                        if trait in u["traits"]
-                    }
+            badges=(
+                sorted(
+                    list(
+                        {
+                            badge
+                            for trait, badge in trait_badges_map.items()
+                            if trait in u["traits"]
+                        }
+                    )
                 )
-            )
-            if trait_badges_map
-            else [],
+                if trait_badges_map
+                else []
+            ),
             **(
                 {"client_state": u["client_state"]}
                 if include_admin_info and u["type"] == User.UserType.KIOSK
                 else {}
             ),
             **(
-                {"moderation_state": u["moderation_state"], "token_id": u["token_id"]}
+                {
+                    "moderation_state": u["moderation_state"],
+                    "token_id": u["token_id"],
+                }
                 if include_admin_info
                 else {}
             ),
@@ -222,7 +232,9 @@ def create_user(
     if anonymous_invite:
         user.world_grants.create(world_id=world_id, role="__anonymous_world")
         user.room_grants.create(
-            world_id=world_id, room_id=anonymous_invite.room_id, role="__anonymous_room"
+            world_id=world_id,
+            room_id=anonymous_invite.room_id,
+            role="__anonymous_room",
         )
     return user
 
@@ -244,7 +256,11 @@ def update_user(
                 world_id=world_id,
                 user=user,
                 type="auth.user.traits.changed",
-                data={"object": str(user.pk), "old": user.traits, "new": traits},
+                data={
+                    "object": str(user.pk),
+                    "old": user.traits,
+                    "new": traits,
+                },
             )
             user.traits = traits
         user.save(update_fields=["traits"])
@@ -294,6 +310,9 @@ def update_user(
         ):
             user.client_state = data.get("client_state")
             save_fields.append("client_state")
+            # Call talk component to update favs talks
+            if user.token_id is not None:
+                update_fav_talks(user.token_id, data["client_state"], world_id)
 
         if save_fields:
             user.save(update_fields=save_fields)
@@ -305,6 +324,47 @@ def update_user(
         if serialize
         else user
     )
+
+
+def update_fav_talks(user_token_id, talks, world_id):
+    try:
+        talk_list = talks.get("schedule").get("favs")
+        world = get_object_or_404(World, id=world_id)
+        jwt_config = world.config.get("JWT_secrets")
+        if not jwt_config:
+            return
+        talk_token = get_user_video_token(user_token_id, jwt_config[0])
+
+        talk_config = world.config.get("pretalx")
+        if not talk_config:
+            return
+        talk_url = (
+            talk_config.get("domain")
+            + "/api/events/"
+            + talk_config.get("event")
+            + "/favourite-talk/"
+        )
+        header = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {talk_token}",
+        }
+        requests.post(talk_url, data=json.dumps(talk_list), headers=header)
+    except World.DoesNotExist or Exception:
+        pass
+
+
+def get_user_video_token(user_code, video_settings):
+    iat = dt.datetime.utcnow()
+    exp = iat + dt.timedelta(days=30)
+    payload = {
+        "iss": video_settings.get("issuer"),
+        "aud": video_settings.get("audience"),
+        "exp": exp,
+        "iat": iat,
+        "uid": user_code,
+    }
+    token = jwt.encode(payload, video_settings.get("secret"), algorithm="HS256")
+    return token
 
 
 def start_view(user: User, delete=False):
@@ -594,17 +654,19 @@ def list_users(
                         pretalx_id=u["pretalx_id"],
                         inactive=u["last_login"] is None
                         or u["last_login"] < now() - timedelta(hours=36),
-                        badges=sorted(
-                            list(
-                                {
-                                    badge
-                                    for trait, badge in trait_badges_map.items()
-                                    if trait in u["traits"]
-                                }
+                        badges=(
+                            sorted(
+                                list(
+                                    {
+                                        badge
+                                        for trait, badge in trait_badges_map.items()
+                                        if trait in u["traits"]
+                                    }
+                                )
                             )
-                        )
-                        if trait_badges_map
-                        else [],
+                            if trait_badges_map
+                            else []
+                        ),
                         **(
                             dict(
                                 moderation_state=u["moderation_state"],

@@ -1,9 +1,28 @@
 <template lang="pug">
 .c-schedule
 	template(v-if="schedule")
-		//- .timezone-control
-		//- 	p timezone:
-		//- 	timezone-changer
+		div.filter-actions
+			app-dropdown(v-for="item in filter", className="schedule")
+				template(slot="toggler")
+					span {{item.title}}
+					app-dropdown-content(className="schedule")
+						app-dropdown-item(v-for="track in item.data", :key="track.value")
+							.checkbox-line(:style="{'--track-color': track.color}")
+								bunt-checkbox.checkbox-text(type="checkbox", :label="track.label", name="track_room_views", v-model="track.selected", :value="track.value") {{ getTrackName(track) }}
+			bunt-button.bunt-ripple-ink(v-if="favs",
+				icon="star"
+				@click="onlyFavs = !onlyFavs; if (onlyFavs) resetFiltered()"
+				:class="onlyFavs ? ['active'] : []") {{favs.length}}
+
+			bunt-button.bunt-ripple-ink(@click="resetAllFiltered", icon="filter-off")
+			.export.dropdown
+				bunt-progress-circular.export-spinner(v-if="isExporting", size="small")
+				custom-dropdown(name="calendar-add1"
+					v-model="selectedExporter"
+					:options="exportType"
+					label="Add to Calendar"
+					@input="makeExport")
+
 		bunt-tabs.days(v-if="days && days.length > 1", :active-tab="currentDay.toISOString()", ref="tabs", v-scrollbar.x="")
 			bunt-tab(v-for="day in days", :id="day.toISOString()", :header="moment(day).format('dddd DD. MMMM')", @selected="changeDay(day)")
 		.scroll-parent(ref="scrollParent", v-scrollbar.x.y="")
@@ -35,41 +54,266 @@
 	bunt-progress-circular(v-else, size="huge", :page="true")
 </template>
 <script>
+import _ from 'lodash'
 import { mapState, mapGetters } from 'vuex'
-import { LinearSchedule, GridSchedule} from '@pretalx/schedule'
+import LinearSchedule from 'views/schedule/schedule-components/LinearSchedule'
+import GridSchedule from 'views/schedule/schedule-components/GridSchedule'
 import moment from 'lib/timetravelMoment'
 import TimezoneChanger from 'components/TimezoneChanger'
 import scheduleProvidesMixin from 'components/mixins/schedule-provides'
+import Prompt from 'components/Prompt'
+import api from 'lib/api'
+import config from 'config'
+import CustomDropdown from 'views/schedule/export-select'
+import AppDropdown from 'components/AppDropdown.vue'
+import AppDropdownContent from 'components/AppDropdownContent.vue'
+import AppDropdownItem from 'components/AppDropdownItem.vue'
+const exportTypeSet = [
+	{
+		id: 'ics',
+		label: 'Session ICal'
+	},
+	{
+		id: 'json',
+		label: 'Session JSON'
+	},
+	{
+		id: 'xcal',
+		label: 'Session XCal'
+	},
+	{
+		id: 'xml',
+		label: 'Session XML'
+	},
+	{
+		id: 'myics',
+		label: 'My ⭐ Sessions ICal'
+	},
+	{
+		id: 'myjson',
+		label: 'My ⭐ Sessions JSON'
+	},
+	{
+		id: 'myxcal',
+		label: 'My ⭐ Sessions XCal'
+	},
+	{
+		id: 'myxml',
+		label: 'My ⭐ Sessions XML'
+	},
+]
+
+const defaultFilter = {
+	tracks: {
+		refKey: 'track',
+		data: [],
+		title: 'Tracks'
+	},
+	rooms: {
+		refKey: 'room',
+		data: [],
+		title: 'Rooms'
+	},
+	types: {
+		refKey: 'session_type',
+		data: [],
+		title: 'Types'
+	}
+}
 
 export default {
-	components: { LinearSchedule, GridSchedule, TimezoneChanger },
+	name: 'Schedule',
+	components: { LinearSchedule, GridSchedule, TimezoneChanger, Prompt, CustomDropdown, AppDropdown, AppDropdownContent, AppDropdownItem },
 	mixins: [scheduleProvidesMixin],
-	data () {
+	data() {
 		return {
+			tracksFilter: {},
 			moment,
-			currentDay: moment().startOf('day')
+			currentDay: moment().startOf('day'),
+			selectedExporter: null,
+			exportOptions: [],
+			isExporting: false,
+			error: null,
+			defaultFilter: defaultFilter,
+			onlyFavs: false
 		}
 	},
 	computed: {
 		...mapState(['now']),
 		...mapState('schedule', ['schedule', 'errorLoading']),
 		...mapGetters('schedule', ['days', 'rooms', 'sessions', 'favs']),
+		exportType() {
+			return exportTypeSet
+		},
+		filteredTracks() {
+			let results = null
+			const self = this
+			Object.keys(this.filter).forEach(key => {
+				const refKey = this.filter[key].refKey
+				const selectedIds = this.filter[key].data.filter(t => t.selected).map(t => t.value)
+				let founds = null
+				if (selectedIds.length) {
+					if (results && results.length) {
+						founds = self.schedule.talks.filter(t => selectedIds.includes(t[refKey]) && results && results.includes(t.id))?.map(i => i.id) || []
+					} else {
+						founds = self.schedule.talks.filter(t => { return selectedIds.includes(t[refKey]) })?.map(i => i.id) || []
+					}
+					results = founds
+				}
+			})
+			return results
+		},
+		tracksLookup() {
+			if (!this.schedule) return {}
+			return this.schedule.tracks.reduce((acc, t) => { acc[t.id] = t; return acc }, {})
+		},
+		roomsLookup() {
+			if (!this.schedule) return {}
+			return this.schedule.rooms.reduce((acc, room) => { acc[room.id] = room; return acc }, {})
+		},
+		speakersLookup() {
+			if (!this.schedule) return {}
+			return this.schedule.speakers.reduce((acc, s) => { acc[s.code] = s; return acc }, {})
+		},
+		sessions() {
+			const sessions = []
+			const filter = this.filteredTracks
+			for (const session of this.schedule.talks.filter(s => s.start)) {
+				if (this.onlyFavs && !this.favs.includes(session.code)) continue
+				if (filter && !filter.includes(session.id)) continue
+				sessions.push({
+					id: session.code,
+					title: session.title,
+					abstract: session.abstract,
+					start: moment.tz(session.start, this.currentTimezone),
+					end: moment.tz(session.end, this.currentTimezone),
+					speakers: session.speakers?.map(s => this.speakersLookup[s]),
+					track: this.tracksLookup[session.track],
+					room: this.roomsLookup[session.room],
+					fav_count: session.fav_count,
+					do_not_record: session.do_not_record,
+					tags: session.tags,
+					session_type: session.session_type
+				})
+			}
+			sessions.sort((a, b) => a.start.diff(b.start))
+			return sessions
+		},
+		rooms() {
+			return _.uniqBy(this.sessions, 'room.id').map(s => s.room)
+		},
+		filter() {
+			const filter = this.defaultFilter
+			filter.tracks.data = this.schedule.tracks.map(t => { t.value = t.id; t.label = t.name; return t })
+			filter.rooms.data = this.schedule.rooms.map(t => { t.value = t.id; t.label = t.name; return t })
+			filter.types.data = this.schedule.session_type.map(t => { t.value = t.session_type; t.label = t.session_type; return t })
+			return filter
+		}
+	},
+	watch: {
+		tracksFilter: {
+			handler: function(newValue) {
+				const arr = Object.keys(newValue).filter(key => newValue[key])
+				this.$store.dispatch('schedule/filter', {type: 'track', tracks: arr})
+				this.resetOnlyFavs()
+			},
+			deep: true
+		}
 	},
 	methods: {
-		changeDay (day) {
+		changeDay(day) {
 			if (day.isSame(this.currentDay)) return
 			this.currentDay = day
 		},
-		changeDayByScroll (day) {
+		changeDayByScroll(day) {
 			this.currentDay = day
 			const tabEl = this.$refs.tabs.$refs.tabElements.find(el => el.id === day.toISOString())
 			// TODO smooth scroll, seems to not work with chrome {behavior: 'smooth', block: 'center', inline: 'center'}
 			tabEl?.$el.scrollIntoView()
+		},
+		getTrackName(track) {
+			const languageTrack = localStorage.userLanguage
+			if (typeof track.name === 'object' && track.name !== null) {
+				if (languageTrack && track.name[languageTrack]) {
+					return track.name[languageTrack]
+				} else {
+					return track.name.en || track.name
+				}
+			} else if (track.session_type && track.session_type !== null) {
+				return track.session_type
+			} else {
+				return track.name
+			}
+		},
+		toggleFavFilter() {
+			this.tracksFilter = {}
+			if (this.filter.type === 'fav') {
+				this.$store.dispatch('schedule/filter', {})
+			} else {
+				this.$store.dispatch('schedule/filter', {type: 'fav'})
+			}
+		},
+		async makeExport() {
+			try {
+				this.isExporting = true
+				const url = config.api.base + 'export-talk?export_type=' + this.selectedExporter.id
+				const authHeader = api._config.token ? `Bearer ${api._config.token}` : (api._config.clientId ? `Client ${api._config.clientId}` : null)
+				const result = await fetch(url, {
+					method: 'GET',
+					headers: {
+						Accept: 'application/json',
+						Authorization: authHeader,
+					}
+				}).then(response => response.json())
+				var a = document.createElement('a')
+				document.body.appendChild(a)
+				const blob = new Blob([result], {type: 'octet/stream'})
+				const downloadUrl = window.URL.createObjectURL(blob)
+				a.href = downloadUrl
+				a.download = 'schedule-' + this.selectedExporter.id + '.' + this.selectedExporter.id.replace('my', '')
+				a.click()
+				window.URL.revokeObjectURL(downloadUrl)
+				a.remove()
+				this.isExporting = false
+			} catch (error) {
+				this.isExporting = false
+				this.error = error
+				console.log(error)
+			}
+		},
+		resetAllFiltered() {
+			this.resetFiltered()
+			this.onlyFavs = false
+		},
+		resetFiltered() {
+			Object.keys(this.filter).forEach(key => {
+				this.filter[key].data.forEach(t => {
+					if (t.selected) {
+						t.selected = false
+					}
+				})
+			})
+		},
+		resetOnlyFavs() {
+			this.onlyFavs = false
 		}
 	}
 }
 </script>
 <style lang="stylus">
+@media (max-width: 480px)
+	.filter-actions
+		flex-direction: column
+		.app-drop-down
+			width: 90px
+			margin-bottom: 8px
+	.c-schedule
+		.bunt-ripple-ink
+			margin: 12px 0 20px 15px !important;
+		.export.dropdown
+			padding-right: 0
+			margin-left: 15px !important
+
 .c-schedule
 	display: flex
 	flex-direction: column
@@ -93,6 +337,10 @@ export default {
 		.bunt-scrollbar-rail-wrapper-x
 			+below('m')
 				display: none
+	.filter-actions
+		display: flex
+		flex-direction: row
+		flex-wrap: wrap
 	.error
 		flex: auto
 		display: flex
@@ -110,4 +358,31 @@ export default {
 	.scroll-parent
 		.bunt-scrollbar-rail-wrapper-x, .bunt-scrollbar-rail-wrapper-y
 			z-index: 30
+	.c-filter-prompt
+		.bunt-scrollbar
+			border-radius: 30px
+		.prompt-content
+			padding: 16px
+			display: flex
+			flex-direction: column
+			.item
+				margin: 4px 0px
+	.bunt-ripple-ink
+		width: fit-content
+		padding: 0px 16px
+		border-radius: 2px
+		height: 32px
+		margin: 16px 8px
+		&.active
+			border: 2px solid #f9a557
+	.export.dropdown
+		display: flex
+		margin-left: auto
+		padding-right: 40px
+		.bunt-progress-circular
+			width: 20px
+			height: 20px
+		.export-spinner
+			padding-top: 22px !important
+			margin-right: 10px
 </style>
