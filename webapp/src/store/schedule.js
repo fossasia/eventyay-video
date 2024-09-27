@@ -132,7 +132,7 @@ export default {
 				return item.session_type
 			} else if (typeof item?.session_type === 'object') {
 				const sessionTypeKeys = Object.keys(item.session_type)
-				const keyLanguage = sessionTypeKeys.find(key => key === state.currentLangugage) ||
+				const keyLanguage = sessionTypeKeys.find(key => key === state.currentLanguage) ||
 					sessionTypeKeys.find(key => key === 'en') ||
 					sessionTypeKeys[0]
 
@@ -145,7 +145,7 @@ export default {
 				return item.name
 			} else if (typeof item?.name === 'object') {
 				const keys = Object.keys(item.name)
-				const keyLanguage = keys.find(key => key === state.currentLangugage) ||
+				const keyLanguage = keys.find(key => key === state.currentLanguage) ||
 					keys.find(key => key === 'en') ||
 					keys[0]
 
