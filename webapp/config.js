@@ -12,8 +12,8 @@ if (ENV_DEVELOPMENT || !window.venueless) {
 		api: {
 			base: `${httpProtocol}//${hostname}:8443/api/v1/worlds/${worldName}/`,
 			socket: `${wsProtocol}://${hostname}:8443/ws/world/${worldName}/`,
-			upload: `${httpProtocol}//${hostname}:8443/storage/upload/`,
-			scheduleImport: `${httpProtocol}//${hostname}:8443/storage/schedule_import/`,
+			upload: `${httpProtocol}//${hostname}:8443/storage/${worldName}/upload/`,
+			scheduleImport: `${httpProtocol}//${hostname}:8443/storage/${worldName}/schedule_import/`,
 			feedback: `${httpProtocol}//${hostname}:8443/_feedback/`,
 		},
 		defaultLocale: 'en',
