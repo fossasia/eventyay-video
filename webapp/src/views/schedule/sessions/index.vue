@@ -2,7 +2,7 @@
 .c-schedule
 	template(v-if="schedule")
 		div.filter-actions
-			app-dropdown(v-for="item in filter", className="schedule")
+			app-dropdown(v-for="item in filter", :key="item.refKey", className="schedule")
 				template(slot="toggler")
 					span {{item.title}}
 					app-dropdown-content(className="schedule")
@@ -30,7 +30,7 @@
 					@input="makeExport")
 
 		bunt-tabs.days(v-if="days && days.length > 1", :active-tab="currentDay.toISOString()", ref="tabs", v-scrollbar.x="")
-			bunt-tab(v-for="day in days", :id="day.toISOString()", :header="moment(day).format('dddd DD. MMMM')", @selected="changeDay(day)")
+			bunt-tab(v-for="day in days", :key="day.toISOString()", :id="day.toISOString()", :header="moment(day).format('dddd DD. MMMM')", @selected="changeDay(day)")
 		.scroll-parent(ref="scrollParent", v-scrollbar.x.y="")
 			linear-schedule(:sessions="sessions",
 				:rooms="rooms",
