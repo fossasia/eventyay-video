@@ -9,7 +9,7 @@ if (ENV_DEVELOPMENT || !window.venueless) {
 	// Extract the world name from the subdomain
 	// For a URL like 'wikimania.video.eventyay.com', the worldName should be 'wikimania'
 	const subdomains = hostname.split('.')
-	const worldName = subdomains.length > 2 ? subdomains[0] : 'qqq'  // Get the first subdomain if it exists, otherwise default to 'sample'
+	const worldName = subdomains.length > 2 ? subdomains[0] : 'sample'  // Get the first subdomain if it exists, otherwise default to 'sample'
 
 	config = {
 		api: {
