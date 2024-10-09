@@ -146,7 +146,7 @@ class CreateWorldView(APIView):
                     world = World.objects.get(id=request.data.get('id'))
                     world.title = request.data.get('title')[request.data.get('locale')] or request.data.get('title')[
                         'en']
-                    world.domain = '{}/video/{}'.format(settings.DOMAIN_PATH, request.data.get('id'))
+                    world.domain = '{}{}/{}'.format(settings.DOMAIN_PATH, settings.BASE_PATH, request.data.get('id'))
                     world.locale = request.data.get('locale')
                     world.timezone = request.data.get('timezone')
                     world.save()
@@ -154,7 +154,7 @@ class CreateWorldView(APIView):
                     world = World.objects.create(
                         id=request.data.get('id'),
                         title=request.data.get('title')[request.data.get('locale')] or request.data.get('title')['en'],
-                        domain='{}/video/{}'.format(settings.DOMAIN_PATH, request.data.get('id')),
+                        domain='{}/video/{}'.format(settings.DOMAIN_PATH, settings.BASE_PATH, request.data.get('id')),
                         locale=request.data.get('locale'),
                         timezone=request.data.get('timezone'),
                         config=config,
