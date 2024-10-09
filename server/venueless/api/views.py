@@ -15,6 +15,7 @@ from rest_framework.authentication import get_authorization_header
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.forms.models import model_to_dict
 
 from venueless.api.auth import (
     ApiAccessRequiredPermission,
@@ -27,6 +28,9 @@ from venueless.core.models import Channel, User
 from venueless.core.services.world import notify_schedule_change, notify_world_change
 
 from ..core.models import Room, World
+import jwt
+from django.conf import settings
+from django.utils.crypto import get_random_string
 
 logger = logging.getLogger(__name__)
 
@@ -114,6 +118,67 @@ class WorldThemeView(APIView):
                 status=503,
             )
 
+class CreateWorldView(APIView):
+    authentication_classes = []  # disables authentication
+    permission_classes = []
+
+    @staticmethod
+    def post(request, *args, **kwargs) -> JsonResponse:
+        payload = CreateWorldView.get_payload_from_token(request)
+
+        ## check if user has permission to create world
+        if payload.get("has_permission"):
+            secret = get_random_string(length=64)
+            config = {
+                "JWT_secrets": [
+                    {
+                        "issuer": "any",
+                        "audience": "venueless",
+                        "secret": secret,
+                    }
+                ]
+            }
+
+           ## if world already exists, update it, otherwise create a new world
+            try:
+                if World.objects.filter(id=request.data.get('id')).exists():
+                    world = World.objects.get(id=request.data.get('id'))
+                    world.title = request.data.get('title')[request.data.get('locale')] or request.data.get('title')['en']
+                    world.domain = '{}/video/{}'.format(settings.DOMAIN_PATH, request.data.get('id'))
+                    world.locale = request.data.get('locale')
+                    world.timezone = request.data.get('timezone')
+                    world.save()
+                else:
+                    world= World.objects.create(
+                        id=request.data.get('id'),
+                        title = request.data.get('title')[request.data.get('locale')] or request.data.get('title')['en'],
+                        domain = '{}/video/{}'.format(settings.DOMAIN_PATH, request.data.get('id')),
+                        locale = request.data.get('locale'),
+                        timezone = request.data.get('timezone'),
+                        config = config,
+                    )
+            except Exception as e:
+                logger.error(f"An error occurred while creating a world: %s" % e)
+                return JsonResponse({'error': 'Unable to create or update world'}, status=400)
+
+            return JsonResponse(model_to_dict(world), status=201)
+        else:
+            return JsonResponse({'error': 'You cannot create world'}, status=403)
+
+    @staticmethod
+    def get_payload_from_token(request):
+        auth_header = get_authorization_header(request).split()
+        if auth_header and auth_header[0].lower() == b"bearer":
+            if len(auth_header) == 1:
+                raise exceptions.AuthenticationFailed(
+                    "Invalid token header. No credentials provided."
+                )
+            elif len(auth_header) > 2:
+                raise exceptions.AuthenticationFailed(
+                    "Invalid token header. Token string should not contain spaces."
+                )
+        payload = jwt.decode(auth_header[1], settings.SECRET_KEY, algorithms=["HS256"])
+        return payload
 
 class UserFavouriteView(APIView):
     permission_classes = []
