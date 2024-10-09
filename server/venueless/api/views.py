@@ -118,6 +118,7 @@ class WorldThemeView(APIView):
                 status=503,
             )
 
+
 class CreateWorldView(APIView):
     authentication_classes = []  # disables authentication
     permission_classes = []
@@ -126,7 +127,7 @@ class CreateWorldView(APIView):
     def post(request, *args, **kwargs) -> JsonResponse:
         payload = CreateWorldView.get_payload_from_token(request)
 
-        ## check if user has permission to create world
+        # check if user has permission to create world
         if payload.get("has_permission"):
             secret = get_random_string(length=64)
             config = {
@@ -139,31 +140,32 @@ class CreateWorldView(APIView):
                 ]
             }
 
-           ## if world already exists, update it, otherwise create a new world
+            # if world already exists, update it, otherwise create a new world
             try:
                 if World.objects.filter(id=request.data.get('id')).exists():
                     world = World.objects.get(id=request.data.get('id'))
-                    world.title = request.data.get('title')[request.data.get('locale')] or request.data.get('title')['en']
+                    world.title = request.data.get('title')[request.data.get('locale')] or request.data.get('title')[
+                        'en']
                     world.domain = '{}/video/{}'.format(settings.DOMAIN_PATH, request.data.get('id'))
                     world.locale = request.data.get('locale')
                     world.timezone = request.data.get('timezone')
                     world.save()
                 else:
-                    world= World.objects.create(
+                    world = World.objects.create(
                         id=request.data.get('id'),
-                        title = request.data.get('title')[request.data.get('locale')] or request.data.get('title')['en'],
-                        domain = '{}/video/{}'.format(settings.DOMAIN_PATH, request.data.get('id')),
-                        locale = request.data.get('locale'),
-                        timezone = request.data.get('timezone'),
-                        config = config,
+                        title=request.data.get('title')[request.data.get('locale')] or request.data.get('title')['en'],
+                        domain='{}/video/{}'.format(settings.DOMAIN_PATH, request.data.get('id')),
+                        locale=request.data.get('locale'),
+                        timezone=request.data.get('timezone'),
+                        config=config,
                     )
             except Exception as e:
                 logger.error(f"An error occurred while creating a world: %s" % e)
                 return JsonResponse({'error': 'Unable to create or update world'}, status=400)
 
-            return JsonResponse(model_to_dict(world), status=201)
+            return JsonResponse(model_to_dict(world, exclude=['roles']), status=201)
         else:
-            return JsonResponse({'error': 'You cannot create world'}, status=403)
+            return JsonResponse({'error': 'World cannot be created due to missing permission'}, status=403)
 
     @staticmethod
     def get_payload_from_token(request):
@@ -179,6 +181,7 @@ class CreateWorldView(APIView):
                 )
         payload = jwt.decode(auth_header[1], settings.SECRET_KEY, algorithms=["HS256"])
         return payload
+
 
 class UserFavouriteView(APIView):
     permission_classes = []
@@ -248,19 +251,19 @@ class ExportView(APIView):
         talk_config = world.config.get("pretalx")
         user = User.objects.filter(token_id=request.user)
         talk_base_url = (
-            talk_config.get("domain")
-            + "/"
-            + talk_config.get("event")
-            + "/schedule/export/"
+                talk_config.get("domain")
+                + "/"
+                + talk_config.get("event")
+                + "/schedule/export/"
         )
         export_endpoint = "schedule." + export_type
         talk_url = talk_base_url + export_endpoint
         if "my" in export_type and user:
             user_state = user.first().client_state
             if (
-                user_state
-                and user_state.get("schedule")
-                and user_state.get("schedule").get("favs")
+                    user_state
+                    and user_state.get("schedule")
+                    and user_state.get("schedule").get("favs")
             ):
                 talk_list = user_state.get("schedule").get("favs")
                 talk_list_str = ",".join(talk_list)
@@ -296,7 +299,7 @@ def schedule_update(request, **kwargs):
 
     pretalx_config = request.world.config.get("pretalx", {})
     if domain != get_domain(
-        pretalx_config.get("domain")
+            pretalx_config.get("domain")
     ) or event != pretalx_config.get("event"):
         return Response("Incorrect domain or event data", status=401)
 
