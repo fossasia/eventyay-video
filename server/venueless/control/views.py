@@ -205,7 +205,7 @@ class WorldAdminToken(AdminBase, DetailView):
             action_type="world.adminaccess",
             data={},
         )
-        return redirect(f"https://{world.domain}{base_path}/#token={token}")
+        return redirect(f"https://{world.domain}#token={token}")
 
 
 class FormsetMixin:
