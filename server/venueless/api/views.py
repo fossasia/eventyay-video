@@ -118,6 +118,7 @@ class WorldThemeView(APIView):
                 status=503,
             )
 
+
 class CreateWorldView(APIView):
     authentication_classes = []  # disables authentication
     permission_classes = []
@@ -139,16 +140,18 @@ class CreateWorldView(APIView):
                 ]
             }
 
-            title_default = {value for key, value in request.data.get('title').items() if value}.pop()
+            title_default = {
+                value for key, value in request.data.get("title").items() if value
+            }.pop()
 
-           ## if world already exists, update it, otherwise create a new world
+            # if world already exists, update it, otherwise create a new world
             try:
                 if World.objects.filter(id=request.data.get("id")).exists():
                     world = World.objects.get(id=request.data.get("id"))
                     world.title = (
-                            request.data.get("title")[request.data.get("locale")]
-                            or request.data.get("title")["en"]
-                            or title_default
+                        request.data.get("title")[request.data.get("locale")]
+                        or request.data.get("title")["en"]
+                        or title_default
                     )
                     world.domain = "{}{}/{}".format(
                         settings.DOMAIN_PATH, settings.BASE_PATH, request.data.get("id")
@@ -157,10 +160,11 @@ class CreateWorldView(APIView):
                     world.timezone = request.data.get("timezone")
                     world.save()
                 else:
-                    world= World.objects.create(
+                    world = World.objects.create(
                         id=request.data.get("id"),
                         title=request.data.get("title")[request.data.get("locale")]
-                              or request.data.get("title")["en"] or title_default,
+                        or request.data.get("title")["en"]
+                        or title_default,
                         domain="{}{}/{}".format(
                             settings.DOMAIN_PATH,
                             settings.BASE_PATH,
@@ -168,7 +172,7 @@ class CreateWorldView(APIView):
                         ),
                         locale=request.data.get("locale"),
                         timezone=request.data.get("timezone"),
-                        config = config,
+                        config=config,
                     )
             except Exception as e:
                 logger.error("An error occurred while creating a world: {}".format(e))
@@ -197,6 +201,7 @@ class CreateWorldView(APIView):
                 )
         payload = jwt.decode(auth_header[1], settings.SECRET_KEY, algorithms=["HS256"])
         return payload
+
 
 class UserFavouriteView(APIView):
     permission_classes = []
