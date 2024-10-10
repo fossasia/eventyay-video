@@ -1,5 +1,6 @@
 from django.urls import include, path, re_path
 from rest_framework import routers
+
 from . import views
 
 world_router = routers.DefaultRouter()
@@ -15,6 +16,6 @@ urlpatterns = [
         "worlds/<str:world_id>/favourite-talk/",
         views.UserFavouriteView.as_view(),
     ),
-    path('create-world/', views.CreateWorldView.as_view()),
+    path("create-world/", views.CreateWorldView.as_view()),
     path("worlds/<str:world_id>/export-talk", views.ExportView.as_view()),
 ]

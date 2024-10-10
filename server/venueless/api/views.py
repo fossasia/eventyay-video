@@ -3,19 +3,22 @@ import logging
 from contextlib import suppress
 from urllib.parse import urlparse
 
+import jwt
 import requests
 from asgiref.sync import async_to_sync
+from django.conf import settings
 from django.core import exceptions
 from django.db import transaction
+from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from rest_framework import viewsets
 from rest_framework.authentication import get_authorization_header
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.forms.models import model_to_dict
 
 from venueless.api.auth import (
     ApiAccessRequiredPermission,
@@ -28,9 +31,6 @@ from venueless.core.models import Channel, User
 from venueless.core.services.world import notify_schedule_change, notify_world_change
 
 from ..core.models import Room, World
-import jwt
-from django.conf import settings
-from django.utils.crypto import get_random_string
 
 logger = logging.getLogger(__name__)
 
@@ -142,30 +142,44 @@ class CreateWorldView(APIView):
 
             # if world already exists, update it, otherwise create a new world
             try:
-                if World.objects.filter(id=request.data.get('id')).exists():
-                    world = World.objects.get(id=request.data.get('id'))
-                    world.title = request.data.get('title')[request.data.get('locale')] or request.data.get('title')[
-                        'en']
-                    world.domain = '{}{}/{}'.format(settings.DOMAIN_PATH, settings.BASE_PATH, request.data.get('id'))
-                    world.locale = request.data.get('locale')
-                    world.timezone = request.data.get('timezone')
+                if World.objects.filter(id=request.data.get("id")).exists():
+                    world = World.objects.get(id=request.data.get("id"))
+                    world.title = (
+                        request.data.get("title")[request.data.get("locale")]
+                        or request.data.get("title")["en"]
+                    )
+                    world.domain = "{}{}/{}".format(
+                        settings.DOMAIN_PATH, settings.BASE_PATH, request.data.get("id")
+                    )
+                    world.locale = request.data.get("locale")
+                    world.timezone = request.data.get("timezone")
                     world.save()
                 else:
                     world = World.objects.create(
-                        id=request.data.get('id'),
-                        title=request.data.get('title')[request.data.get('locale')] or request.data.get('title')['en'],
-                        domain='{}{}/{}'.format(settings.DOMAIN_PATH, settings.BASE_PATH, request.data.get('id')),
-                        locale=request.data.get('locale'),
-                        timezone=request.data.get('timezone'),
+                        id=request.data.get("id"),
+                        title=request.data.get("title")[request.data.get("locale")]
+                        or request.data.get("title")["en"],
+                        domain="{}{}/{}".format(
+                            settings.DOMAIN_PATH,
+                            settings.BASE_PATH,
+                            request.data.get("id"),
+                        ),
+                        locale=request.data.get("locale"),
+                        timezone=request.data.get("timezone"),
                         config=config,
                     )
             except Exception as e:
-                logger.error(f"An error occurred while creating a world: %s" % e)
-                return JsonResponse({'error': 'Unable to create or update world'}, status=400)
+                logger.error("An error occurred while creating a world: {}".format(e))
+                return JsonResponse(
+                    {"error": "Unable to create or update world"}, status=400
+                )
 
-            return JsonResponse(model_to_dict(world, exclude=['roles']), status=201)
+            return JsonResponse(model_to_dict(world, exclude=["roles"]), status=201)
         else:
-            return JsonResponse({'error': 'World cannot be created due to missing permission'}, status=403)
+            return JsonResponse(
+                {"error": "World cannot be created due to missing permission"},
+                status=403,
+            )
 
     @staticmethod
     def get_payload_from_token(request):
@@ -251,19 +265,19 @@ class ExportView(APIView):
         talk_config = world.config.get("pretalx")
         user = User.objects.filter(token_id=request.user)
         talk_base_url = (
-                talk_config.get("domain")
-                + "/"
-                + talk_config.get("event")
-                + "/schedule/export/"
+            talk_config.get("domain")
+            + "/"
+            + talk_config.get("event")
+            + "/schedule/export/"
         )
         export_endpoint = "schedule." + export_type
         talk_url = talk_base_url + export_endpoint
         if "my" in export_type and user:
             user_state = user.first().client_state
             if (
-                    user_state
-                    and user_state.get("schedule")
-                    and user_state.get("schedule").get("favs")
+                user_state
+                and user_state.get("schedule")
+                and user_state.get("schedule").get("favs")
             ):
                 talk_list = user_state.get("schedule").get("favs")
                 talk_list_str = ",".join(talk_list)
@@ -299,7 +313,7 @@ def schedule_update(request, **kwargs):
 
     pretalx_config = request.world.config.get("pretalx", {})
     if domain != get_domain(
-            pretalx_config.get("domain")
+        pretalx_config.get("domain")
     ) or event != pretalx_config.get("event"):
         return Response("Incorrect domain or event data", status=401)
 
