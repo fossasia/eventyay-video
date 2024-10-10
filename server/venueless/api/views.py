@@ -3,12 +3,16 @@ import logging
 from contextlib import suppress
 from urllib.parse import urlparse
 
+import jwt
 import requests
 from asgiref.sync import async_to_sync
+from django.conf import settings
 from django.core import exceptions
 from django.db import transaction
+from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from rest_framework import viewsets
 from rest_framework.authentication import get_authorization_header
@@ -113,6 +117,90 @@ class WorldThemeView(APIView):
                 + kwargs["world_id"],
                 status=503,
             )
+
+
+class CreateWorldView(APIView):
+    authentication_classes = []  # disables authentication
+    permission_classes = []
+
+    @staticmethod
+    def post(request, *args, **kwargs) -> JsonResponse:
+        payload = CreateWorldView.get_payload_from_token(request)
+
+        # check if user has permission to create world
+        if payload.get("has_permission"):
+            secret = get_random_string(length=64)
+            config = {
+                "JWT_secrets": [
+                    {
+                        "issuer": "any",
+                        "audience": "venueless",
+                        "secret": secret,
+                    }
+                ]
+            }
+
+            title_default = {
+                value for key, value in request.data.get("title").items() if value
+            }.pop()
+
+            # if world already exists, update it, otherwise create a new world
+            try:
+                if World.objects.filter(id=request.data.get("id")).exists():
+                    world = World.objects.get(id=request.data.get("id"))
+                    world.title = (
+                        request.data.get("title")[request.data.get("locale")]
+                        or request.data.get("title")["en"]
+                        or title_default
+                    )
+                    world.domain = "{}{}/{}".format(
+                        settings.DOMAIN_PATH, settings.BASE_PATH, request.data.get("id")
+                    )
+                    world.locale = request.data.get("locale")
+                    world.timezone = request.data.get("timezone")
+                    world.save()
+                else:
+                    world = World.objects.create(
+                        id=request.data.get("id"),
+                        title=request.data.get("title")[request.data.get("locale")]
+                        or request.data.get("title")["en"]
+                        or title_default,
+                        domain="{}{}/{}".format(
+                            settings.DOMAIN_PATH,
+                            settings.BASE_PATH,
+                            request.data.get("id"),
+                        ),
+                        locale=request.data.get("locale"),
+                        timezone=request.data.get("timezone"),
+                        config=config,
+                    )
+            except Exception as e:
+                logger.error("An error occurred while creating a world: {}".format(e))
+                return JsonResponse(
+                    {"error": "Unable to create or update world"}, status=400
+                )
+
+            return JsonResponse(model_to_dict(world, exclude=["roles"]), status=201)
+        else:
+            return JsonResponse(
+                {"error": "World cannot be created due to missing permission"},
+                status=403,
+            )
+
+    @staticmethod
+    def get_payload_from_token(request):
+        auth_header = get_authorization_header(request).split()
+        if auth_header and auth_header[0].lower() == b"bearer":
+            if len(auth_header) == 1:
+                raise exceptions.AuthenticationFailed(
+                    "Invalid token header. No credentials provided."
+                )
+            elif len(auth_header) > 2:
+                raise exceptions.AuthenticationFailed(
+                    "Invalid token header. Token string should not contain spaces."
+                )
+        payload = jwt.decode(auth_header[1], settings.SECRET_KEY, algorithms=["HS256"])
+        return payload
 
 
 class UserFavouriteView(APIView):
