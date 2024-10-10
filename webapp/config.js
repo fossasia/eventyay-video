@@ -6,8 +6,8 @@ if (ENV_DEVELOPMENT || !window.venueless) {
 	const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
 	const httpProtocol = window.location.protocol
 	// Extract the world name from the URL path
-	const pathSegments = window.location.pathname.split('/');
-	const worldName = pathSegments.length > 2 ? pathSegments[2] : 'sample';
+	const pathSegments = window.location.pathname.split('/')
+	const worldName = pathSegments.length > 2 ? pathSegments[2] : 'sample'
 	config = {
 		api: {
 			base: `${httpProtocol}//${hostname}:8443/api/v1/worlds/${worldName}/`,

@@ -1,5 +1,4 @@
 import logging
-import re
 from io import BytesIO
 
 from asgiref.sync import async_to_sync
@@ -34,7 +33,7 @@ class UploadMixin:
 
     @cached_property
     def world(self):
-        world_id = self.kwargs.get('world_id', None)
+        world_id = self.kwargs.get("world_id", None)
         return get_object_or_404(World, id=world_id)
 
     @cached_property

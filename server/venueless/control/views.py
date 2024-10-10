@@ -182,7 +182,6 @@ class WorldAdminToken(AdminBase, DetailView):
     success_url = "/control/worlds/"
 
     def get(self, request, *args, **kwargs):
-        base_path = settings.BASE_PATH
         world = self.get_object()
         jwt_config = world.config["JWT_secrets"][0]
         secret = jwt_config["secret"]
