@@ -1,51 +1,51 @@
 # prod
 aiofile==3.8.*
-aiohttp==3.10.5
+aiohttp==3.10.10
 beautifulsoup4==4.12.*
-celery==5.3.*
+celery==5.4.*
 channels==4.1.*
 channels_redis==4.2.*
 Django==4.2.*
-django-cors-headers==4.3.*
+django-cors-headers==4.4.*
 django-decorator-include==3.0
 django-extensions==3.2.*
 django-formset-js-improved
-django-multifactor==0.6.2
+django-multifactor==0.7.0
 djangorestframework==3.15.*
-emoji==2.12.*
+emoji==2.14.*
 icalendar==5.0.*
-lxml==5.2.*
+lxml==5.3.*
 matplotlib==3.9.*
 numpy==2.1.*
 orjson==3.10.*
-openpyxl~=3.1.2
-Pillow==10.3.*
+openpyxl~=3.1.4
+Pillow==10.4.*
 pandas==2.2.*
 pdf2image==1.17.*
 pdfrw==0.4
-pyjwt==2.8.*
+pyjwt==2.9.*
 python-dateutil==2.9.*
 pytz
-redis==5.0.4
+redis==5.1.1
 reportlab==4.2.*
-requests==2.31.*
+requests==2.32.*
 sentry-sdk==2.14.*
 tqdm==4.66.*
-websockets==12.*
+websockets==13.*
 
 # deploy
 psycopg2==2.9.9
-gunicorn==21.2.0
+gunicorn==23.0.0
 uvicorn[standard]==0.30.6
 
 # dev
 daphne==4.1.*
-black==23.7
+black==24.10.0
 isort==5.13.2
-flake8==7.0.0
+flake8==7.1.1
 pytest==8.3.3
 pytest-django==4.9.0
-pytest-asyncio==0.23.7
+pytest-asyncio==0.24.0
 pytest-cov==5.0.0
 pytest-rerunfailures==14.0
 aioresponses==0.7.6
