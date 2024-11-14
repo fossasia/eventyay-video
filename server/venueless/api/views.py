@@ -124,6 +124,12 @@ class CreateWorldView(APIView):
     permission_classes = []
 
     @staticmethod
+    def get_protocol(url):
+        parsed = urlparse(url)
+        protocol = parsed.scheme
+        return protocol.lower()
+
+    @staticmethod
     def post(request, *args, **kwargs) -> JsonResponse:
         payload = CreateWorldView.get_payload_from_token(request)
 
@@ -198,6 +204,14 @@ class CreateWorldView(APIView):
                     {"error": "An unexpected error occurred"}, status=500
                 )
 
+            site_url = settings.SITE_URL
+            protocol = CreateWorldView.get_protocol(site_url)
+            domain_path = "{}{}/{}".format(
+                settings.DOMAIN_PATH,
+                settings.BASE_PATH,
+                request.data.get("id"),
+            )
+            world.domain = "{}://{}".format(protocol, domain_path)
             return JsonResponse(model_to_dict(world, exclude=["roles"]), status=201)
         else:
             return JsonResponse(
