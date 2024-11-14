@@ -167,7 +167,7 @@ class CreateWorldView(APIView):
                 if World.objects.filter(id=world_id).exists():
                     world = World.objects.get(id=world_id)
                     world.title = title
-                    world.domain = domain_path or ""
+                    world.domain = domain_path
                     world.locale = request.data.get("locale") or "en"
                     world.timezone = request.data.get("timezone") or "UTC"
                     world.save()
@@ -175,7 +175,7 @@ class CreateWorldView(APIView):
                     world = World.objects.create(
                         id=world_id,
                         title=title,
-                        domain=domain_path or "",
+                        domain=domain_path,
                         locale=request.data.get("locale") or "en",
                         timezone=request.data.get("timezone") or "UTC",
                         config=config,
