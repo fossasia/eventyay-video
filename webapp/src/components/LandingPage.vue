@@ -1,5 +1,5 @@
 <template lang="pug">
-.c-landing-page(v-scrollbar.y="", :style="{'--header-background-color': module.config.header_background_color, '--header-background-image': `url(${module.config.header_background_image})`}")
+.c-landing-page(v-scrollbar.y="", :style="{ '--header-background-color': module.config.header_background_color, '--header-background-image': `url(${module.config.header_background_image})` }")
 	.hero
 		img(:src="module.config.header_image")
 	.sponsors.splide(ref="sponsors")
@@ -13,7 +13,7 @@
 			template(v-if="featuredSessions && featuredSessions.length")
 				.header
 					h3 {{ $t('LandingPage:sessions:featured:header') }}
-					bunt-link-button(:to="{name: 'schedule'}") {{ $t('LandingPage:sessions:featured:link') }}
+					bunt-link-button(:to="{ name: 'schedule' }") {{ $t('LandingPage:sessions:featured:link') }}
 				.sessions
 					session(
 						v-for="session of featuredSessions",
@@ -24,7 +24,7 @@
 					)
 			.header
 				h3 {{ $t('LandingPage:sessions:next:header') }}
-				bunt-link-button(:to="{name: 'schedule'}") {{ $t('LandingPage:sessions:next:link') }}
+				bunt-link-button(:to="{ name: 'schedule' }") {{ $t('LandingPage:sessions:next:link') }}
 			.sessions
 				session(
 					v-for="session of nextSessions",
@@ -36,13 +36,13 @@
 		.speakers(v-if="speakers")
 			.header
 				h3 {{ $t('LandingPage:speakers:header', {speakers: speakers.length}) }}
-				bunt-link-button(:to="{name: 'schedule:speakers'}") {{ $t('LandingPage:speakers:link') }}
+				bunt-link-button(:to="{ name: 'schedule:speakers' }") {{ $t('LandingPage:speakers:link') }}
 			.speakers-list
 				router-link.speaker(v-for="speaker of speakers.slice(0, 32)", :to="speaker.attendee ? {name: '', params: {}} : { name: 'schedule:speaker', params: { speakerId: speaker.code } }")
 					img.avatar(v-if="speaker.avatar", :src="speaker.avatar")
 					identicon(v-else, :user="{id: speaker.name, profile: {display_name: speaker.name}}")
 					.name {{ speaker.name }}
-				router-link.additional-speakers(v-if="speakers.length > 32", :to="{name: 'schedule:speakers'}") {{ $t('LandingPage:speakers:more', {additional_speakers: speakers.length - 32}) }}
+				router-link.additional-speakers(v-if="speakers.length > 32", :to="{ name: 'schedule:speakers' }") {{ $t('LandingPage:speakers:more', {additional_speakers: speakers.length - 32}) }}
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'
@@ -99,7 +99,7 @@ export default {
 		// TODO make this configurable?
 		const sponsorRoom = this.rooms.find(r => r.id === this.module.config.sponsor_room_id)
 		if (!sponsorRoom) return
-		this.sponsors = (await api.call('exhibition.list', {room: sponsorRoom.id})).exhibitors
+		this.sponsors = (await api.call('exhibition.list', { room: sponsorRoom.id })).exhibitors
 		await this.$nextTick()
 		const splide = new Splide(this.$refs.sponsors, {
 			type: 'loop',

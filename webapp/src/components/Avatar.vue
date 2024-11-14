@@ -1,5 +1,5 @@
 <template lang="pug">
-.c-avatar(:style="{'--avatar-size': size + 'px'}", :class="{deleted: user.deleted}")
+.c-avatar(:style="{ '--avatar-size': size + 'px' }", :class="{ deleted: user.deleted }")
 	img(v-if="imageUrl", :src="imageUrl")
 	identicon(v-else, :user="user")
 </template>

@@ -43,7 +43,7 @@ export default {
 		fields() {
 			if (!this.user.profile?.fields) return
 			return this.world?.profile_fields
-				.map(field => ({...field, value: this.user.profile.fields[field.id]}))
+				.map(field => ({ ...field, value: this.user.profile.fields[field.id] }))
 				.filter(field => !!field.value)
 		},
 	},

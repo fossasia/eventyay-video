@@ -1,5 +1,5 @@
 <template lang="pug">
-.c-livestream(:class="[`size-${size}`, {playing, buffering, seeking, automuted, muted, 'is-offline': offline, 'choosing-level': showLevelChooser, 'choosing-captions': showCaptionsChooser, 'choosing-source': showSourceChooser}]", v-resize-observer="onResize")
+.c-livestream(:class="[`size-${size}`, { playing, buffering, seeking, automuted, muted, 'is-offline': offline, 'choosing-level': showLevelChooser, 'choosing-captions': showCaptionsChooser, 'choosing-source': showSourceChooser }]", v-resize-observer="onResize")
 	.video-container(ref="videocontainer")
 		video(ref="video", style="width:100%;height:100%", @playing="playingVideo", @pause="pausingVideo", @volumechange="onVolumechange")
 		.offline(v-if="offline")
@@ -17,7 +17,7 @@
 						.load-progress(v-for="load of progressStyles.load", :style="load")
 						.play-progress
 					.progress-indicator
-					.time(:style="{'--hovered-progress': hoveredProgress}") {{ formatTime(hoveredTime) }}
+					.time(:style="{ '--hovered-progress': hoveredProgress }") {{ formatTime(hoveredTime) }}
 				bunt-icon-button#btn-play(v-if="!offline", @click="toggleVideo") {{ playing ? 'pause' : 'play' }}
 				.live-indicator(v-if="!offline && isLive") live
 				.buffer
@@ -26,17 +26,17 @@
 				bunt-icon-button(v-else-if="!offline && module.config.subtitle_url", @click="openExternalSubtitles") closed-caption-outline
 				bunt-icon-button(v-if="!offline", @click="showLevelChooser = !showLevelChooser") {{ levelIcon }}
 				bunt-icon-button(v-if="!offline", @click="toggleVolume") {{ muted || volume === 0 ? 'volume_off' : 'volume_high' }}
-				input.volume-slider(v-if="!offline", type="range", step="any", min="0", max="1", aria-label="Volume", :value="volume", @input="onVolumeSlider", :style="{'--volume': volume}")
+				input.volume-slider(v-if="!offline", type="range", step="any", min="0", max="1", aria-label="Volume", :value="volume", @input="onVolumeSlider", :style="{ '--volume': volume }")
 				bunt-icon-button(v-if="!offline", @click="toggleFullscreen") {{ fullscreen ? 'fullscreen-exit' : 'fullscreen' }}
 			.source-chooser(v-if="showSourceChooser", @click.stop="")
-				.source(@click="chooseSource(null)", :class="{chosen: !chosenAlternative}") {{ $t('Livestream:default-source:text') }}
-				.source(v-for="a in module.config.alternatives", :class="{chosen: a.label === chosenAlternative}", @click="chooseSource(a)") {{ a.label }}
+				.source(@click="chooseSource(null)", :class="{ chosen: !chosenAlternative }") {{ $t('Livestream:default-source:text') }}
+				.source(v-for="a in module.config.alternatives", :class="{ chosen: a.label === chosenAlternative }", @click="chooseSource(a)") {{ a.label }}
 			.caption-chooser(v-if="showCaptionsChooser", @click.stop="")
-				.track(@click="chooseTextTrack(null)", :class="{chosen: !textTracks.some(t => t.mode === 'showing')}") {{ $t('Livestream:captions-off:text') }}
-				.track(v-for="track of textTracks", :class="{chosen: track.mode === 'showing'}", @click="chooseTextTrack(track)") {{ track.label }}
+				.track(@click="chooseTextTrack(null)", :class="{ chosen: !textTracks.some(t => t.mode === 'showing') }") {{ $t('Livestream:captions-off:text') }}
+				.track(v-for="track of textTracks", :class="{ chosen: track.mode === 'showing' }", @click="chooseTextTrack(track)") {{ track.label }}
 			.level-chooser(v-if="showLevelChooser", @click.stop="")
-				.level(@click="chooseLevel(null)", :class="{chosen: !manualLevel}") Auto
-				.level(v-for="level of levels", :class="{chosen: level === manualLevel, auto: level === autoLevel}", @click="chooseLevel(level)") {{ level.height + 'p' }}
+				.level(@click="chooseLevel(null)", :class="{ chosen: !manualLevel }") Auto
+				.level(v-for="level of levels", :class="{ chosen: level === manualLevel, auto: level === autoLevel }", @click="chooseLevel(level)") {{ level.height + 'p' }}
 </template>
 <script>
 // TODO

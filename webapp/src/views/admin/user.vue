@@ -2,7 +2,7 @@
 .c-admin-user
 	template(v-if="user")
 		.ui-page-header
-			bunt-icon-button(@click="$router.push({name: 'admin:users'})") arrow_left
+			bunt-icon-button(@click="$router.push({ name: 'admin:users' })") arrow_left
 			h1 User: {{ (user.profile && user.profile.display_name) || user.id }}
 			.actions(v-if="user.id !== ownUser.id")
 				bunt-button.btn-dm(v-if="!user.deleted", @click="openDM") message
@@ -75,25 +75,25 @@ export default {
 		}),
 	},
 	async created() {
-		this.user = await api.call('user.fetch', {id: this.userId})
+		this.user = await api.call('user.fetch', { id: this.userId })
 	},
 	methods: {
 		async openDM() {
 			// TODO loading indicator
-			await this.$store.dispatch('chat/openDirectMessage', {users: [this.user]})
+			await this.$store.dispatch('chat/openDirectMessage', { users: [this.user] })
 		},
 		async startCall() {
-			const channel = await this.$store.dispatch('chat/openDirectMessage', {users: [this.user]})
-			await this.$store.dispatch('chat/startCall', {channel})
+			const channel = await this.$store.dispatch('chat/openDirectMessage', { users: [this.user] })
+			await this.$store.dispatch('chat/startCall', { channel })
 		},
 		async completedUserAction() {
 			this.userAction = null
-			this.user = await api.call('user.fetch', {id: this.userId})
+			this.user = await api.call('user.fetch', { id: this.userId })
 		},
 		async uploadAvatar() {
 			this.savingAvatar = true
 			await this.$refs.avatar.update()
-			await this.$store.dispatch('adminUpdateUser', {profile: Object.assign({}, this.user.profile, {avatar: this.user.profile.avatar}), id: this.user.id})
+			await this.$store.dispatch('adminUpdateUser', { profile: Object.assign({}, this.user.profile, { avatar: this.user.profile.avatar }), id: this.user.id })
 			this.showChangeAvatar = false
 			this.savingAvatar = false
 			this.edit = false
@@ -102,7 +102,7 @@ export default {
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 			this.saving = true
-			await this.$store.dispatch('adminUpdateUser', {profile: this.user.profile, id: this.user.id})
+			await this.$store.dispatch('adminUpdateUser', { profile: this.user.profile, id: this.user.id })
 			this.saving = false
 			this.edit = false
 		}

@@ -66,7 +66,7 @@ export default {
 			}]
 			this.iframeDomains.push(...Object.entries(this.config.iframe_blockers)
 				.filter(([domain, domainConfig]) => domain !== 'default')
-				.map(([domain, {enabled, policy_url}]) => ({
+				.map(([domain, { enabled, policy_url }]) => ({
 					domain,
 					enabled,
 					policy_url
@@ -83,7 +83,7 @@ export default {
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 
-			const iframeBlockers = Object.fromEntries(this.iframeDomains.map(({domain, enabled, policy_url}) => [
+			const iframeBlockers = Object.fromEntries(this.iframeDomains.map(({ domain, enabled, policy_url }) => [
 				domain,
 				{
 					enabled,
@@ -92,7 +92,7 @@ export default {
 			]))
 
 			this.saving = true
-			await api.call('world.config.patch', {iframe_blockers: iframeBlockers})
+			await api.call('world.config.patch', { iframe_blockers: iframeBlockers })
 			this.saving = false
 			// TODO error handling
 		},

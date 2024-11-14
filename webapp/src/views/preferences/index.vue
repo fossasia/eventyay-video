@@ -5,7 +5,7 @@
 	scrollbars(y)
 		.inputs
 			.avatar-wrapper
-				avatar(:user="{profile}", :size="128")
+				avatar(:user="{ profile }", :size="128")
 				bunt-button#btn-change-avatar(@click="showChangeAvatar = true") {{ $t('preferences/index:btn-change-avatar:label') }}
 			bunt-input.display-name(name="displayName", :label="$t('profile/GreetingPrompt:displayname:label')", v-model.trim="profile.display_name", :validation="$v.profile.display_name")
 			change-additional-fields(v-model="profile.fields")
@@ -89,7 +89,7 @@ export default {
 		async uploadAvatar() {
 			this.savingAvatar = true
 			await this.$refs.avatar.update()
-			await this.$store.dispatch('updateUser', {profile: Object.assign({}, this.user.profile, {avatar: this.profile.avatar})})
+			await this.$store.dispatch('updateUser', { profile: Object.assign({}, this.user.profile, { avatar: this.profile.avatar }) })
 			this.showChangeAvatar = false
 			this.savingAvatar = false
 		},
@@ -97,7 +97,7 @@ export default {
 			this.$v.$touch()
 			if (this.$v.$invalid) return
 			this.saving = true
-			await this.$store.dispatch('updateUser', {profile: this.profile})
+			await this.$store.dispatch('updateUser', { profile: this.profile })
 			this.$store.dispatch('notifications/updateSettings', this.notificationSettings)
 			this.$store.dispatch('setAutoplay', this.autoplay)
 			this.$store.dispatch('schedule/setCurrentLanguage', this.interfaceLanguage)

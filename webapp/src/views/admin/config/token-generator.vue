@@ -9,7 +9,7 @@
 								:value="traits ? traits.join(', ') : ''")
 		bunt-button.btn-generate(@click="save", :loading="saving") Generate
 		bunt-input-outline-container(label="Result")
-			textarea(slot-scope="{focus, blur}", @focus="focus", @blur="blur", v-model="result")
+			textarea(slot-scope="{ focus, blur }", @focus="focus", @blur="blur", v-model="result")
 </template>
 <script>
 import api from 'lib/api'
@@ -42,9 +42,9 @@ export default {
 			this.config = await api.call('world.config.get')
 
 			// Enforce some defaults
-			this.config.theme = {logo: {}, colors: {}, streamOfflineImage: null, textOverwrites: {}, ...this.config.theme}
-			this.config.theme.colors = {...DEFAULT_COLORS, ...this.config.theme.colors}
-			this.config.theme.logo = {...DEFAULT_LOGO, ...this.config.theme.logo}
+			this.config.theme = { logo: {}, colors: {}, streamOfflineImage: null, textOverwrites: {}, ...this.config.theme }
+			this.config.theme.colors = { ...DEFAULT_COLORS, ...this.config.theme.colors }
+			this.config.theme.logo = { ...DEFAULT_LOGO, ...this.config.theme.logo }
 		} catch (error) {
 			this.error = error
 			console.log(error)

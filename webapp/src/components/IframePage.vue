@@ -4,7 +4,7 @@
 	iframe-blocker(:src="url", allow="camera *; autoplay *; microphone *; fullscreen *; display-capture *", allowfullscreen, allowusermedia, @load="loaded")
 </template>
 <script>
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 import IframeBlocker from './IframeBlocker'
 
 export default {
@@ -25,8 +25,8 @@ export default {
 
 		url() {
 			let url = this.module.config.url
-			url = url.replace('{display_name}', encodeURIComponent(this.user.profile.display_name))
-			url = url.replace('{id}', encodeURIComponent(this.user.id))
+			url = url.replace('{ display_name }', encodeURIComponent(this.user.profile.display_name))
+			url = url.replace('{ id }', encodeURIComponent(this.user.id))
 			return url
 		}
 	},

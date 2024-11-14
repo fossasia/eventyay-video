@@ -2,15 +2,15 @@
 .c-admin-config
 	nav.admin-nav
 		h1 Configuration
-		router-link(:to="{name: 'admin:config'}") Event
-		router-link(:to="{name: 'admin:config:schedule'}") Schedule
-		router-link(:to="{name: 'admin:config:theme'}") Theme
-		router-link(:to="{name: 'admin:config:permissions'}") Permissions
-		router-link(:to="{name: 'admin:config:registration'}") User Profile
-		router-link(:to="{name: 'admin:config:privacy'}") Privacy
-		router-link(:to="{name: 'admin:config:token-generator'}") Token Generator
-		router-link(:to="{name: 'admin:config:audit-log'}") Audit Log
-		router-link(:to="{name: 'admin:config:reports'}") Reports
+		router-link(:to="{ name: 'admin:config' }") Event
+		router-link(:to="{ name: 'admin:config:schedule' }") Schedule
+		router-link(:to=" {name: 'admin:config:theme' }") Theme
+		router-link(:to="{ name: 'admin:config:permissions' }") Permissions
+		router-link(:to="{ name: 'admin:config:registration' }") User Profile
+		router-link(:to="{ name: 'admin:config:privacy' }") Privacy
+		router-link(:to="{ name: 'admin:config:token-generator' }") Token Generator
+		router-link(:to="{ name: 'admin:config:audit-log' }") Audit Log
+		router-link(:to="{ name: 'admin:config:reports' }") Reports
 	router-view
 </template>
 <script>

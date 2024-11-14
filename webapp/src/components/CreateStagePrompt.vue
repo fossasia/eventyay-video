@@ -6,7 +6,7 @@ prompt.c-create-stage-prompt(@close="$emit('close')")
 			bunt-input(name="name", :label="$t('CreateStagePrompt:name:label')", icon="theater", :placeholder="$t('CreateStagePrompt:name:placeholder')", v-model="name", :validation="$v.name")
 			bunt-input(name="url", :label="$t('CreateStagePrompt:url:label')", icon="link", placeholder="https://example.com/stream.m3u8", v-model="url", :validation="$v.url")
 			bunt-input-outline-container(:label="$t('CreateChatPrompt:description:label')")
-				textarea(v-model="description", slot-scope="{focus, blur}", @focus="focus", @blur="blur")
+				textarea(v-model="description", slot-scope="{ focus, blur }", @focus="focus", @blur="blur")
 			bunt-button(type="submit", :loading="loading", :error-message="error") {{ $t('CreateStagePrompt:submit:label') }}
 </template>
 <script>

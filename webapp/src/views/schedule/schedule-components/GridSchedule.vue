@@ -4,13 +4,13 @@
 		template(v-for="slice of visibleTimeslices")
 			.timeslice(:ref="slice.name", :class="getSliceClasses(slice)", :data-slice="slice.date.format()", :style="getSliceStyle(slice)") {{ getSliceLabel(slice) }}
 			.timeline(:class="getSliceClasses(slice)", :style="getSliceStyle(slice)")
-		.now(v-if="nowSlice", ref="now", :class="{'on-daybreak': nowSlice.onDaybreak}", :style="{'grid-area': `${nowSlice.slice.name} / 1 / auto / auto`, '--offset': nowSlice.offset}")
+		.now(v-if="nowSlice", ref="now", :class="{ 'on-daybreak': nowSlice.onDaybreak }", :style="{ 'grid-area': `${nowSlice.slice.name} / 1 / auto / auto`, '--offset': nowSlice.offset }")
 			svg(viewBox="0 0 10 10")
 				path(d="M 0 0 L 10 5 L 0 10 z")
-		.room(:style="{'grid-area': `1 / 1 / auto / auto`}")
-		.room(v-for="(room, index) of rooms", :style="{'grid-area': `1 / ${index + 2 } / auto / auto`}") {{ getLocalizedString(room.name) }}
+		.room(:style="{ 'grid-area': `1 / 1 / auto / auto` }")
+		.room(v-for="(room, index) of rooms", :style="{ 'grid-area': `1 / ${index + 2 } / auto / auto` }") {{ getLocalizedString(room.name) }}
 			bunt-button.room-description(v-if="getLocalizedString(room.description)", :tooltip="getLocalizedString(room.description)", tooltip-placement="bottom-end") ?
-		.room(v-if="hasSessionsWithoutRoom", :style="{'grid-area': `1 / ${rooms.length + 2} / auto / -1`}") no location
+		.room(v-if="hasSessionsWithoutRoom", :style="{ 'grid-area': `1 / ${rooms.length + 2} / auto / -1` }") no location
 		template(v-for="session of sessions")
 			session(
 				v-if="isProperSession(session)",
@@ -80,7 +80,7 @@ export default {
 			const minimumSliceMins = 30
 			const slices = []
 			const slicesLookup = {}
-			const pushSlice = function(date, {hasSession = false, hasBreak = false, hasStart = false, hasEnd = false} = {}) {
+			const pushSlice = function(date, { hasSession = false, hasBreak = false, hasStart = false, hasEnd = false } = {}) {
 				const name = getSliceName(date)
 				let slice = slicesLookup[name]
 				if (slice) {
@@ -102,7 +102,7 @@ export default {
 					slicesLookup[name] = slice
 				}
 			}
-			const fillHalfHours = function(start, end, {hasSession, hasBreak} = {}) {
+			const fillHalfHours = function(start, end, { hasSession, hasBreak } = {}) {
 				// fill to the nearest half hour, then each half hour, then fill to end
 				let mins = end.diff(start, 'minutes')
 				const startingMins = minimumSliceMins - start.minute() % minimumSliceMins
@@ -123,7 +123,7 @@ export default {
 
 				// last slice is actually just after the end of the session and has no session
 				const lastSlice = halfHourSlices.pop()
-				halfHourSlices.forEach(slice => pushSlice(slice, {hasSession, hasBreak}))
+				halfHourSlices.forEach(slice => pushSlice(slice, { hasSession, hasBreak }))
 				pushSlice(lastSlice)
 			}
 			for (const session of this.sessions) {
@@ -137,10 +137,10 @@ export default {
 
 				const isProper = this.isProperSession(session)
 				// add start and end slices for the session itself
-				pushSlice(session.start, {hasSession: isProper, hasBreak: !isProper, hasStart: true})
-				pushSlice(session.end, {hasEnd: true})
+				pushSlice(session.start, { hasSession: isProper, hasBreak: !isProper, hasStart: true })
+				pushSlice(session.end, { hasEnd: true })
 				// add half hour slices between a session
-				fillHalfHours(session.start, session.end, {hasSession: isProper, hasBreak: !isProper})
+				fillHalfHours(session.start, session.end, { hasSession: isProper, hasBreak: !isProper })
 			}
 
 			const sliceIsFraction = function(slice) {
@@ -265,7 +265,7 @@ export default {
 		if (this.scrollParent) {
 			this.scrollParent.scrollTop = scrollTop
 		} else {
-			window.scroll({top: scrollTop})
+			window.scroll({ top: scrollTop })
 		}
 	},
 	methods: {
@@ -296,9 +296,9 @@ export default {
 				if (index < 0) {
 					index = this.timeslices.length - 1
 				}
-				return {'grid-area': `${slice.name} / 1 / ${this.timeslices[index].name} / auto`}
+				return { 'grid-area': `${slice.name} / 1 / ${this.timeslices[index].name} / auto` }
 			}
-			return {'grid-area': `${slice.name} / 1 / auto / auto`}
+			return { 'grid-area': `${slice.name} / 1 / auto / auto` }
 		},
 		getSliceLabel(slice) {
 			if (slice.datebreak) return slice.date.format('ddd[\n]DD. MMM')
@@ -312,7 +312,7 @@ export default {
 			if (this.scrollParent) {
 				this.scrollParent.scrollTop = offset
 			} else {
-				window.scroll({top: offset})
+				window.scroll({ top: offset })
 			}
 		},
 		onIntersect(entries) {

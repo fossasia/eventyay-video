@@ -54,9 +54,9 @@ export default {
 					reactivate: this.user.moderation_state === 'banned' ? 'unbanned' : 'unsilenced'
 				}
 				if (this.action === 'block') {
-					await this.$store.dispatch('chat/blockUser', {user: this.user})
+					await this.$store.dispatch('chat/blockUser', { user: this.user })
 				} else {
-					await this.$store.dispatch('chat/moderateUser', {action: this.action, user: this.user})
+					await this.$store.dispatch('chat/moderateUser', { action: this.action, user: this.user })
 				}
 				this.success = successLabels[this.action]
 				setTimeout(() => this.$emit('close'), this.closeDelay)

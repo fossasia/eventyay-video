@@ -1,5 +1,5 @@
 <template lang="pug">
-.c-media-source(:class="{'in-background': background, 'in-room-manager': inRoomManager}")
+.c-media-source(:class="{ 'in-background': background, 'in-room-manager': inRoomManager }")
 	transition(name="background-room")
 		router-link.background-room(v-if="background", :to="room ? {name: 'room', params: {roomId: room.id}}: {name: 'channel', params: {channelId: call.channel}}")
 			.description
@@ -90,7 +90,7 @@ export default {
 		this.iframe?.remove()
 		if (api.socketState !== 'open') return
 		// TODO move to store?
-		if (this.room) api.call('room.leave', {room: this.room.id})
+		if (this.room) api.call('room.leave', { room: this.room.id })
 		this.$root.$off('languageChanged', this.handleLanguageChange)
 	},
 	methods: {
@@ -100,12 +100,12 @@ export default {
 				let hideIfBackground = false
 				switch (this.module.type) {
 					case 'call.bigbluebutton': {
-						({url: iframeUrl} = await api.call('bbb.room_url', {room: this.room.id}))
+						({ url: iframeUrl } = await api.call('bbb.room_url', { room: this.room.id }))
 						hideIfBackground = true
 						break
 					}
 					case 'call.zoom': {
-						({url: iframeUrl} = await api.call('zoom.room_url', {room: this.room.id}))
+						({ url: iframeUrl } = await api.call('zoom.room_url', { room: this.room.id }))
 						hideIfBackground = true
 						break
 					}

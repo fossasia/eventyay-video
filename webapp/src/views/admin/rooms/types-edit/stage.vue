@@ -12,7 +12,7 @@
 			bunt-input(name="label", v-model="a.label", label="Label")
 			bunt-input(name="hls_url", v-model="a.hls_url", label="HLS URL")
 			bunt-icon-button(@click="deleteAlternativeStream(i)") delete-outline
-		bunt-button(@click="$set(modules['livestream.native'].config, 'alternatives', modules['livestream.native'].config.alternatives || []); modules['livestream.native'].config.alternatives.push({label: '', hls_url: ''})") Add alternative stream
+		bunt-button(@click="$set(modules['livestream.native'].config, 'alternatives', modules['livestream.native'].config.alternatives || []); modules['livestream.native'].config.alternatives.push({ label: '', hls_url: '' })") Add alternative stream
 	bunt-input(v-else-if="modules['livestream.youtube']", name="ytid", v-model="modules['livestream.youtube'].config.ytid", label="YouTube Video ID", :validation="$v.modules['livestream.youtube'].config.ytid")
 	// Language and URL input for YouTube stream
 	.language-urls(v-if="modules['livestream.youtube']")
@@ -39,7 +39,7 @@ import features from 'features'
 import UploadUrlInput from 'components/UploadUrlInput'
 import mixin from './mixin'
 import SidebarAddons from './SidebarAddons'
-import {youtubeid} from 'lib/validators'
+import { youtubeid } from 'lib/validators'
 import ISO6391 from 'iso-639-1'
 
 const STREAM_SOURCE_OPTIONS = [

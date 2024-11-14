@@ -8,7 +8,7 @@
 		.file-error(v-if="fileError")
 			.mdi.mdi-alert-octagon
 			.message {{ fileError }}
-		cropper(v-else-if="avatarImage", ref="cropper", classname="cropper", stencil-component="circle-stencil", :src="avatarImage", :stencil-props="{aspectRatio: '1/1'}", :restrictions="pixelsRestrictions")
+		cropper(v-else-if="avatarImage", ref="cropper", classname="cropper", stencil-component="circle-stencil", :src="avatarImage", :stencil-props="{ aspectRatio: '1/1' }", :restrictions="pixelsRestrictions")
 		identicon(v-else, :user="identiconUser", @click.native="changeIdenticon")
 </template>
 <script>
@@ -88,7 +88,7 @@ export default {
 				img.src = event.target.result
 			}
 		},
-		pixelsRestrictions({minWidth, minHeight, maxWidth, maxHeight, imageWidth, imageHeight}) {
+		pixelsRestrictions({ minWidth, minHeight, maxWidth, maxHeight, imageWidth, imageHeight }) {
 			return {
 				minWidth: Math.max(128, minWidth),
 				minHeight: Math.max(128, minHeight),
@@ -100,7 +100,7 @@ export default {
 			return new Promise((resolve, reject) => {
 				const { canvas } = this.$refs.cropper?.getResult() || {}
 				if (!canvas) {
-					this.$emit('input', {identicon: this.identicon})
+					this.$emit('input', { identicon: this.identicon })
 					return resolve()
 				}
 				if (!this.changedImage) return resolve()
@@ -109,7 +109,7 @@ export default {
 					const request = api.uploadFile(blob, 'avatar.png', null, MAX_AVATAR_SIZE, MAX_AVATAR_SIZE)
 					request.addEventListener('load', (event) => {
 						const response = JSON.parse(request.responseText)
-						this.$emit('input', {url: response.url})
+						this.$emit('input', { url: response.url })
 						resolve()
 					})
 				}, 'image/png') // TODO use original mimetype

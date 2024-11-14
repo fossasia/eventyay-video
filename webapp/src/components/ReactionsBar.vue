@@ -1,5 +1,5 @@
 <template lang="pug">
-.c-reactions-bar(:class="{expanded}")
+.c-reactions-bar(:class="{ expanded }")
 	.actions(@click="expand")
 		bunt-icon-button(v-for="reaction of availableReactions", @click.stop="react(reaction.emoji)")
 			.emoji(:style="reaction.style")
@@ -21,7 +21,7 @@ export default {
 	computed: {
 		availableReactions() {
 			const emoji = ['👏', '❤️', '👍', '🤣', '😮']
-			return emoji.map(e => ({emoji: e, style: nativeEmojiToStyle(e)}))
+			return emoji.map(e => ({ emoji: e, style: nativeEmojiToStyle(e) }))
 		}
 	},
 	methods: {

@@ -23,7 +23,7 @@ bunt-input-outline-container.c-chat-input
 		.autocomplete-dropdown(:style="autocompleteCoordinates")
 			template(v-if="autocomplete.options")
 				template(v-for="option, index of autocomplete.options")
-					.user(:class="{selected: index === autocomplete.selected}", :title="option.profile.display_name", @mouseover="selectMention(index)", @click.stop="handleMention")
+					.user(:class="{ selected: index === autocomplete.selected }", :title="option.profile.display_name", @mouseover="selectMention(index)", @click.stop="handleMention")
 						avatar(:user="option", :size="24")
 						.name {{ option.profile.display_name }}
 			bunt-progress-circular(v-else, size="large", :page="true")
@@ -74,7 +74,7 @@ export default {
 			// TODO debounce?
 			if (!this.autocomplete) return
 			if (this.autocomplete.type === 'mention') {
-				const { results } = await api.call('user.list.search', {search_term: search, page: 1, include_banned: false})
+				const { results } = await api.call('user.list.search', { search_term: search, page: 1, include_banned: false })
 				this.autocomplete.options = results
 				// if (results.length === 1) {
 				// 	this.autocomplete.selected = 0
@@ -224,7 +224,7 @@ export default {
 					body: text
 				})
 			}
-			this.quill.setContents([{insert: '\n'}])
+			this.quill.setContents([{ insert: '\n' }])
 		},
 		async attachFiles(event) {
 			const files = Array.from(event.target.files)
@@ -251,7 +251,7 @@ export default {
 		addEmoji(emoji) {
 			// TODO skin color
 			const selection = this.quill.getSelection(true)
-			this.quill.updateContents(new Delta().retain(selection.index).delete(selection.length).insert({emoji: emoji.native}), 'user')
+			this.quill.updateContents(new Delta().retain(selection.index).delete(selection.length).insert({ emoji: emoji.native }), 'user')
 			this.quill.setSelection(selection.index + 1, 0)
 		},
 		removeFile(file) {

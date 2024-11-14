@@ -11,8 +11,8 @@
 			.button-group(v-if="['stage', 'channel-bbb', 'channel-janus', 'channel-zoom'].includes(roomType) && canManage")
 				// TODO buntpapier does not support replace
 				// hardlink params so home page alias works
-				bunt-link-button(:to="{name: 'room:manage', params: {roomId: room.id}}", replace) manage
-				bunt-link-button(:to="{name: 'room'}", replace) view
+				bunt-link-button(:to="{ name: 'room:manage', params: { roomId: room.id } }", replace) manage
+				bunt-link-button(:to="{ name: 'room' }", replace) view
 	router-view(:room="room", :modules="modules")
 	transition(name="prompt")
 		recordings-prompt(v-if="showRecordingsPrompt", :room="room", @close="showRecordingsPrompt = false")
@@ -21,7 +21,7 @@
 <script>
 // TODO
 // better ellipsing for room name + session title on small screens
-import {mapGetters, mapState} from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { inferRoomType } from 'lib/room-types'
 import RecordingsPrompt from 'components/RecordingsPrompt'
 import QRCodePrompt from 'components/QRCodePrompt'

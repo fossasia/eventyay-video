@@ -70,13 +70,13 @@ export default {
 	computed: {
 		sourceOptions() {
 			const sourceOptions = [
-				{id: null, label: 'No Schedule'},
-				{id: 'pretalx', label: 'Eventyay-talk'},
-				{id: 'file', label: 'File Upload'},
-				{id: 'url', label: 'External URL'},
+				{ id: null, label: 'No Schedule' },
+				{ id: 'pretalx', label: 'Eventyay-talk' },
+				{ id: 'file', label: 'File Upload' },
+				{ id: 'url', label: 'External URL' },
 			]
 			if (this.$features.enabled('conftool')) {
-				sourceOptions.push({id: 'conftool', label: 'Conftool'})
+				sourceOptions.push({ id: 'conftool', label: 'Conftool' })
 			}
 			return sourceOptions
 		},
@@ -197,7 +197,7 @@ export default {
 			// save pretalx config first
 			if (!await this.save()) return
 			this.connecting = true
-			const {results: [token]} = await api.call('world.tokens.generate', {
+			const { results: [token] } = await api.call('world.tokens.generate', {
 				number: 1,
 				days: 365,
 				traits: ['schedule-update'],
@@ -210,7 +210,7 @@ export default {
 			this.$v.$touch()
 			if (this.$v.$invalid) return false
 			this.saving = true
-			await api.call('world.config.patch', {pretalx: this.config.pretalx})
+			await api.call('world.config.patch', { pretalx: this.config.pretalx })
 			// TODO error handling
 			this.saving = false
 			return true

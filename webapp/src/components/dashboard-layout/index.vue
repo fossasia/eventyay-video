@@ -14,7 +14,7 @@ export default {
 	async mounted() {
 		await this.$nextTick()
 		this.contentRect = this.$el.getBoundingClientRect()
-		this.observer = new ResizeObserver(([{contentRect}]) => {
+		this.observer = new ResizeObserver(([{ contentRect }]) => {
 			this.contentRect = contentRect
 		})
 		this.observer.observe(this.$el)
