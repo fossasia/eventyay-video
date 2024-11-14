@@ -156,20 +156,18 @@ class CreateWorldView(APIView):
 
             # if world already exists, update it, otherwise create a new world
             world_id = request.data.get("id")
+            domain_path = "{}{}/{}".format(
+                settings.DOMAIN_PATH,
+                settings.BASE_PATH,
+                request.data.get("id"),
+            )
             try:
                 if not world_id:
                     raise ValidationError("World ID is required")
                 if World.objects.filter(id=world_id).exists():
                     world = World.objects.get(id=world_id)
                     world.title = title
-                    world.domain = (
-                        "{}{}/{}".format(
-                            settings.DOMAIN_PATH,
-                            settings.BASE_PATH,
-                            request.data.get("id"),
-                        )
-                        or ""
-                    )
+                    world.domain = domain_path or ""
                     world.locale = request.data.get("locale") or "en"
                     world.timezone = request.data.get("timezone") or "UTC"
                     world.save()
@@ -177,12 +175,7 @@ class CreateWorldView(APIView):
                     world = World.objects.create(
                         id=world_id,
                         title=title,
-                        domain="{}{}/{}".format(
-                            settings.DOMAIN_PATH,
-                            settings.BASE_PATH,
-                            request.data.get("id"),
-                        )
-                        or "",
+                        domain=domain_path or "",
                         locale=request.data.get("locale") or "en",
                         timezone=request.data.get("timezone") or "UTC",
                         config=config,
@@ -206,11 +199,6 @@ class CreateWorldView(APIView):
 
             site_url = settings.SITE_URL
             protocol = CreateWorldView.get_protocol(site_url)
-            domain_path = "{}{}/{}".format(
-                settings.DOMAIN_PATH,
-                settings.BASE_PATH,
-                request.data.get("id"),
-            )
             world.domain = "{}://{}".format(protocol, domain_path)
             return JsonResponse(model_to_dict(world, exclude=["roles"]), status=201)
         else:
