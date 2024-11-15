@@ -35,14 +35,14 @@
 				)
 		.speakers(v-if="speakers")
 			.header
-				h3 {{ $t('LandingPage:speakers:header', {speakers: speakers.length}) }}
+				h3 {{ $t('LandingPage:speakers:header', { speakers: speakers.length }) }}
 				bunt-link-button(:to="{ name: 'schedule:speakers' }") {{ $t('LandingPage:speakers:link') }}
 			.speakers-list
 				router-link.speaker(v-for="speaker of speakers.slice(0, 32)", :to="speaker.attendee ? {name: '', params: {}} : { name: 'schedule:speaker', params: { speakerId: speaker.code } }")
 					img.avatar(v-if="speaker.avatar", :src="speaker.avatar")
 					identicon(v-else, :user="{id: speaker.name, profile: {display_name: speaker.name}}")
 					.name {{ speaker.name }}
-				router-link.additional-speakers(v-if="speakers.length > 32", :to="{ name: 'schedule:speakers' }") {{ $t('LandingPage:speakers:more', {additional_speakers: speakers.length - 32}) }}
+				router-link.additional-speakers(v-if="speakers.length > 32", :to="{ name: 'schedule:speakers' }") {{ $t('LandingPage:speakers:more', { additional_speakers: speakers.length - 32 }) }}
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'

@@ -36,7 +36,7 @@ export default {
 	async created() {
 		if (this.$store.getters['schedule/pretalxApiBaseUrl']) {
 			this.speakers = (await (await fetch(`${this.$store.getters['schedule/pretalxApiBaseUrl']}/speakers/?limit=999`)).json()).results.sort((a, b) => a.name.localeCompare(b.name))
-			// const speakersToAttendee = await api.call('user.fetch', {pretalx_ids: this.speakers.map(speaker => speaker.code)})
+			// const speakersToAttendee = await api.call('user.fetch', { pretalx_ids: this.speakers.map(speaker => speaker.code) })
 			for (const speaker of this.speakers) {
 				speaker.sessions = speaker.submissions.map(submission => this.sessionsLookup[submission])
 				// speaker.attendee = speakersToAttendee[speaker.code]
@@ -65,7 +65,7 @@ export default {
 		flex-direction: column
 		align-items: center
 		> *
-			width: @css{min(920px, 100%)}
+			width: @css{ min(920px, 100%) }
 	.speaker
 		color: $clr-primary-text-light
 		display: flex

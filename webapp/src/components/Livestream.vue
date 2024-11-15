@@ -217,7 +217,7 @@ export default {
 				})
 				player.on(Hls.Events.MANIFEST_PARSED, async(event, data) => {
 					if (data.levels[0].height) {
-						this.levels = data.levels.map((level, index) => ({...level, index})).sort((a, b) => b.height - a.height)
+						this.levels = data.levels.map((level, index) => ({ ...level, index })).sort((a, b) => b.height - a.height)
 					}
 					start()
 					started = true

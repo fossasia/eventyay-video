@@ -89,7 +89,7 @@
 import * as pdfjs from 'pdfjs-dist/webpack'
 import Quill from 'quill'
 import { mapGetters } from 'vuex'
-import { required} from 'buntpapier/src/vuelidate/validators'
+import { required } from 'buntpapier/src/vuelidate/validators'
 import api from 'lib/api'
 import router from 'router'
 import Avatar from 'components/Avatar'

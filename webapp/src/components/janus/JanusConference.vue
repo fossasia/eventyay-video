@@ -22,7 +22,7 @@
 
 	.users(v-show="connectionState === 'connected'", ref="container", :style="gridStyle", v-resize-observer="onResize")
 		.me.feed(v-show="videoPublishingState !== 'unpublished'")
-			.video-container(:style="{ boxShadow: size != 'tiny' ? `0 0 0px 4px ${primaryColor.alpha(!knownMuteState && talkingParticipants.includes(ourAudioId) ? 255 : 0) }` : 'none'}", id="janus_ourVideo")
+			.video-container(:style="{ boxShadow: size != 'tiny' ? `0 0 0px 4px ${primaryColor.alpha(!knownMuteState && talkingParticipants.includes(ourAudioId) ? 255 : 0)}` : 'none' }", id="janus_ourVideo")
 				video(v-show="publishingWithVideo && videoPublishingState !== 'unpublished'", ref="ourVideo", autoplay, playsinline, muted="muted")
 			.publishing-state(v-if="videoPublishingState !== 'published'")
 				bunt-progress-circular(v-if="videoPublishingState == 'publishing'", size="huge", :page="true")
@@ -38,7 +38,7 @@
 				.bunt-icon.mdi.mdi-microphone-off
 
 		.peer.feed(v-for="(f, idx) in sortedFeeds", :key="f.rfid", :style="{ width: layout.width, height: layout.height }")
-			.video-container(:style="{ boxShadow: size != 'tiny' ? `0 0 0px 4px ${primaryColor.alpha(f.participant && !f.participant.muted && talkingParticipants.includes(f.rfid) ? 255 : 0) }` : 'none'}", :id="'janus_' + f.rfid")
+			.video-container(:style="{ boxShadow: size != 'tiny' ? `0 0 0px 4px ${primaryColor.alpha(f.participant && !f.participant.muted && talkingParticipants.includes(f.rfid) ? 255 : 0)}` : 'none' }", :id="'janus_' + f.rfid")
 				video(v-show="f.rfattached", ref="peerVideo", autoplay, playsinline)
 			.subscribing-state(v-if="!f.rfattached")
 				bunt-progress-circular(size="huge", :page="true")

@@ -22,7 +22,7 @@ export default {
 		},
 	},
 	created() {
-		this.$store.dispatch('chat/subscribe', {channel: this.module.channel_id, config: this.module.config})
+		this.$store.dispatch('chat/subscribe', { channel: this.module.channel_id, config: this.module.config })
 	}
 }
 </script>
