@@ -191,25 +191,25 @@ export default {
 			filter.tracks.data = this.filterItemsByLanguage(this?.schedule?.tracks)
 			return filter
 		},
-		inEventTimezone () {
+		inEventTimezone() {
 			if (!this.schedule?.talks?.length) return false
 			const example = this.schedule.talks[0].start
 			return moment.tz(example, this.userTimezone).format('Z') === moment.tz(example, this.schedule.timezone).format('Z')
 		},
 	},
-	async created () {
-		this.userTimezone = moment.tz.guess()
-		this.currentTimezone = localStorage.getItem(`userTimezone`)
-	},
 	watch: {
 		tracksFilter: {
-			handler: function(newValue) {
+			handler: function (newValue) {
 				const arr = Object.keys(newValue).filter(key => newValue[key])
-				this.$store.dispatch('schedule/filter', { type: 'track', tracks: arr })
+				this.$store.dispatch('schedule/filter', {type: 'track', tracks: arr})
 				this.onlyFavs = false
 			},
 			deep: true
 		}
+	},
+	async created() {
+		this.userTimezone = moment.tz.guess()
+		this.currentTimezone = localStorage.getItem('userTimezone')
 	},
 	methods: {
 		changeDay(day) {
@@ -288,8 +288,8 @@ export default {
 		resetOnlyFavs() {
 			this.onlyFavs = false
 		},
-		saveTimezone () {
-			localStorage.setItem(`userTimezone`, this.currentTimezone)
+		saveTimezone() {
+			localStorage.setItem('userTimezone', this.currentTimezone)
 		},
 	}
 }
