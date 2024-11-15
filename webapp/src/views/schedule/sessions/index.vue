@@ -199,7 +199,7 @@ export default {
 	},
 	watch: {
 		tracksFilter: {
-			handler: function (newValue) {
+			handler: function(newValue) {
 				const arr = Object.keys(newValue).filter(key => newValue[key])
 				this.$store.dispatch('schedule/filter', {type: 'track', tracks: arr})
 				this.onlyFavs = false
