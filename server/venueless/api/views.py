@@ -31,6 +31,7 @@ from venueless.core.models import Channel, User
 from venueless.core.services.world import notify_schedule_change, notify_world_change
 
 from ..core.models import Room, World
+from .utils import get_protocol
 
 logger = logging.getLogger(__name__)
 
@@ -124,12 +125,6 @@ class CreateWorldView(APIView):
     permission_classes = []
 
     @staticmethod
-    def get_protocol(url):
-        parsed = urlparse(url)
-        protocol = parsed.scheme
-        return protocol.lower()
-
-    @staticmethod
     def post(request, *args, **kwargs) -> JsonResponse:
         payload = CreateWorldView.get_payload_from_token(request)
 
@@ -180,6 +175,11 @@ class CreateWorldView(APIView):
                         timezone=request.data.get("timezone") or "UTC",
                         config=config,
                     )
+
+                site_url = settings.SITE_URL
+                protocol = get_protocol(site_url)
+                world.domain = "{}://{}".format(protocol, domain_path)
+                return JsonResponse(model_to_dict(world, exclude=["roles"]), status=201)
             except IntegrityError as e:
                 logger.error(f"Database integrity error while saving world: {e}")
                 return JsonResponse(
@@ -196,11 +196,6 @@ class CreateWorldView(APIView):
                 return JsonResponse(
                     {"error": "An unexpected error occurred"}, status=500
                 )
-
-            site_url = settings.SITE_URL
-            protocol = CreateWorldView.get_protocol(site_url)
-            world.domain = "{}://{}".format(protocol, domain_path)
-            return JsonResponse(model_to_dict(world, exclude=["roles"]), status=201)
         else:
             return JsonResponse(
                 {"error": "World cannot be created due to missing permission"},
