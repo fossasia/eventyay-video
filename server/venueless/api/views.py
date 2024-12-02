@@ -149,7 +149,7 @@ class CreateWorldView(APIView):
 
             title = titles.get(locale) or titles.get("en") or title_default
 
-            attendee_trait_grants = request.data.get("traits", {}).get("attendee", '')
+            attendee_trait_grants = request.data.get("traits", {}).get("attendee", "")
 
             # if world already exists, update it, otherwise create a new world
             world_id = request.data.get("id")
@@ -169,7 +169,11 @@ class CreateWorldView(APIView):
                     world.timezone = request.data.get("timezone") or "UTC"
                     world.trait_grants = {
                         "admin": ["admin"],
-                        "attendee": [attendee_trait_grants] if attendee_trait_grants else ['attendee'],
+                        "attendee": (
+                            [attendee_trait_grants]
+                            if attendee_trait_grants
+                            else ["attendee"]
+                        ),
                         "scheduleuser": ["schedule-update"],
                     }
                     world.save()
@@ -183,7 +187,11 @@ class CreateWorldView(APIView):
                         config=config,
                         trait_grants={
                             "admin": ["admin"],
-                            "attendee": [attendee_trait_grants] if attendee_trait_grants else ['attendee'],
+                            "attendee": (
+                                [attendee_trait_grants]
+                                if attendee_trait_grants
+                                else ["attendee"]
+                            ),
                             "scheduleuser": ["schedule-update"],
                         },
                     )
