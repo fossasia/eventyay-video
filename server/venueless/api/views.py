@@ -150,6 +150,11 @@ class CreateWorldView(APIView):
             title = titles.get(locale) or titles.get("en") or title_default
 
             attendee_trait_grants = request.data.get("traits", {}).get("attendee", "")
+            trait_grants = {
+                "admin": ["admin"],
+                "attendee": [attendee_trait_grants] if attendee_trait_grants else ["attendee"],
+                "scheduleuser": ["schedule-update"],
+            }
 
             # if world already exists, update it, otherwise create a new world
             world_id = request.data.get("id")
@@ -167,15 +172,7 @@ class CreateWorldView(APIView):
                     world.domain = domain_path
                     world.locale = request.data.get("locale") or "en"
                     world.timezone = request.data.get("timezone") or "UTC"
-                    world.trait_grants = {
-                        "admin": ["admin"],
-                        "attendee": (
-                            [attendee_trait_grants]
-                            if attendee_trait_grants
-                            else ["attendee"]
-                        ),
-                        "scheduleuser": ["schedule-update"],
-                    }
+                    world.trait_grants = trait_grants
                     world.save()
                 else:
                     world = World.objects.create(
@@ -185,15 +182,7 @@ class CreateWorldView(APIView):
                         locale=request.data.get("locale") or "en",
                         timezone=request.data.get("timezone") or "UTC",
                         config=config,
-                        trait_grants={
-                            "admin": ["admin"],
-                            "attendee": (
-                                [attendee_trait_grants]
-                                if attendee_trait_grants
-                                else ["attendee"]
-                            ),
-                            "scheduleuser": ["schedule-update"],
-                        },
+                        trait_grants=trait_grants,
                     )
 
                 site_url = settings.SITE_URL
