@@ -152,7 +152,9 @@ class CreateWorldView(APIView):
             attendee_trait_grants = request.data.get("traits", {}).get("attendee", "")
             trait_grants = {
                 "admin": ["admin"],
-                "attendee": [attendee_trait_grants] if attendee_trait_grants else ["attendee"],
+                "attendee": (
+                    [attendee_trait_grants] if attendee_trait_grants else ["attendee"]
+                ),
                 "scheduleuser": ["schedule-update"],
             }
 
