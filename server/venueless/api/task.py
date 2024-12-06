@@ -91,27 +91,29 @@ def configure_video_settings_for_talks(
     :param traits: A dictionary representing the traits of the token
     :param long: A boolean representing if the token is long or short
     """
-    world = World.objects.get(id=world_id)
-    event_slug = world_id
-    jwt_secrets = world.config.get("JWT_secrets", [])
-    if not jwt_secrets:
-        logger.error("JWT_secrets is missing or empty in the configuration")
-        return
-    jwt_config = jwt_secrets[0]
-    video_tokens = generate_video_token(world, days, number, traits, long)
-    talk_token = generate_talk_token(jwt_config, video_tokens, event_slug)
-    header = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {talk_token}",
-    }
-    payload = {
-        "video_settings": {
-            "audience": jwt_config.get("audience"),
-            "issuer": jwt_config.get("issuer"),
-            "secret": jwt_config.get("secret"),
-        }
-    }
     try:
+        if not isinstance(world_id, str) or not world_id.isalnum():
+            raise ValueError("Invalid world_id format")
+        world = World.objects.get(id=world_id)
+        event_slug = world_id
+        jwt_secrets = world.config.get("JWT_secrets", [])
+        if not jwt_secrets:
+            logger.error("JWT_secrets is missing or empty in the configuration")
+            return
+        jwt_config = jwt_secrets[0]
+        video_tokens = generate_video_token(world, days, number, traits, long)
+        talk_token = generate_talk_token(jwt_config, video_tokens, event_slug)
+        header = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {talk_token}",
+        }
+        payload = {
+            "video_settings": {
+                "audience": jwt_config.get("audience"),
+                "issuer": jwt_config.get("issuer"),
+                "secret": jwt_config.get("secret"),
+            }
+        }
         requests.post(
             "{}/api/configure-video-settings/".format(settings.EVENTYAY_TALK_BASE_PATH),
             json=payload,
@@ -127,9 +129,11 @@ def configure_video_settings_for_talks(
     except requests.exceptions.ConnectionError as e:
         logger.error("Connection error: %s", str(e))
         self.retry(exc=e)
-    except requests.exceptions.Timeout as e:
-        logger.error("Request timed out: %s", str(e))
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code in (401, 403, 404):
+            logger.error("Non-retryable error: %s", str(e))
+            raise
+        logger.error("HTTP error: %s", str(e))
         self.retry(exc=e)
-    except requests.exceptions.RequestException as e:
-        logger.error("Request failed: %s", str(e))
-        self.retry(exc=e)
+    except ValueError as e:
+        logger.error("Error configuring video settings: %s", e)
