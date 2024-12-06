@@ -187,7 +187,9 @@ class CreateWorldView(APIView):
                         config=config,
                         trait_grants=trait_grants,
                     )
-                configure_video_settings_for_talks.delay(world_id, days=30, number=1, traits=["schedule-update"], long=True)
+                configure_video_settings_for_talks.delay(
+                    world_id, days=30, number=1, traits=["schedule-update"], long=True
+                )
                 site_url = settings.SITE_URL
                 protocol = get_protocol(site_url)
                 world.domain = "{}://{}".format(protocol, domain_path)

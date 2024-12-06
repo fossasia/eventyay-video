@@ -79,7 +79,9 @@ def generate_talk_token(video_settings, video_tokens, event_slug):
 
 
 @shared_task(bind=True, max_retries=5, default_retry_delay=60)
-def configure_video_settings_for_talks(self,world_id, days, number, traits, long=False):
+def configure_video_settings_for_talks(
+    self, world_id, days, number, traits, long=False
+):
     """
     Configure video settings for talks
     :param self: instance of the task
@@ -110,12 +112,16 @@ def configure_video_settings_for_talks(self,world_id, days, number, traits, long
         }
     }
     try:
-        requests.post('{}/api/configure-video-settings/'.format(settings.EVENTYAY_TALK_BASE_PATH), json=payload, headers=header)
-        world.config['pretalx'] = {
+        requests.post(
+            "{}/api/configure-video-settings/".format(settings.EVENTYAY_TALK_BASE_PATH),
+            json=payload,
+            headers=header,
+        )
+        world.config["pretalx"] = {
             "event": event_slug,
             "domain": "{}".format(settings.EVENTYAY_TALK_BASE_PATH),
             "pushed": datetime.datetime.now().isoformat(),
-            "connected": True
+            "connected": True,
         }
         world.save()
     except requests.exceptions.ConnectionError as e:
