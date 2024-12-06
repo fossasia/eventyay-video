@@ -150,6 +150,9 @@ class CreateWorldView(APIView):
             title = titles.get(locale) or titles.get("en") or title_default
 
             attendee_trait_grants = request.data.get("traits", {}).get("attendee", "")
+            if not isinstance(attendee_trait_grants, str):
+                raise ValidationError("Attendee traits must be a string")
+
             trait_grants = {
                 "admin": ["admin"],
                 "attendee": (
