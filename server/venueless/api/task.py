@@ -1,4 +1,3 @@
-import datetime
 import datetime as dt
 import logging
 import uuid
@@ -33,8 +32,8 @@ def generate_video_token(world, days, number, traits, long=False):
     secret = jwt_config.get("secret")
     audience = jwt_config.get("audience")
     issuer = jwt_config.get("issuer")
-    iat = datetime.datetime.utcnow()
-    exp = iat + datetime.timedelta(days=days)
+    iat = dt.datetime.now(dt.timezone.utc)
+    exp = iat + dt.timedelta(days=days)
     result = []
     bulk_create = []
     for _ in range(number):
@@ -67,7 +66,7 @@ def generate_talk_token(video_settings, video_tokens, event_slug):
     :param event_slug:  A string representing the event slug
     :return: A token
     """
-    iat = dt.datetime.utcnow()
+    iat = dt.datetime.now(dt.timezone.utc)
     exp = iat + dt.timedelta(days=30)
     payload = {
         "exp": exp,
@@ -123,7 +122,7 @@ def configure_video_settings_for_talks(
         world.config["pretalx"] = {
             "event": event_slug,
             "domain": "{}".format(settings.EVENTYAY_TALK_BASE_PATH),
-            "pushed": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "pushed": dt.datetime.now(dt.timezone.utc).isoformat(),
             "connected": True,
         }
         world.save()
