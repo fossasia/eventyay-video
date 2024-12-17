@@ -2,6 +2,7 @@ import datetime
 import datetime as dt
 import logging
 import uuid
+from http import HTTPStatus
 
 import jwt
 import requests
@@ -122,18 +123,22 @@ def configure_video_settings_for_talks(
         world.config["pretalx"] = {
             "event": event_slug,
             "domain": "{}".format(settings.EVENTYAY_TALK_BASE_PATH),
-            "pushed": datetime.datetime.now().isoformat(),
+            "pushed": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "connected": True,
         }
         world.save()
     except requests.exceptions.ConnectionError as e:
-        logger.error("Connection error: %s", str(e))
+        logger.error("Connection error: %s", e)
         self.retry(exc=e)
     except requests.exceptions.HTTPError as e:
-        if e.response.status_code in (401, 403, 404):
-            logger.error("Non-retryable error: %s", str(e))
+        if e.response.status_code in (
+            HTTPStatus.UNAUTHORIZED.value,
+            HTTPStatus.FORBIDDEN.value,
+            HTTPStatus.NOT_FOUND.value,
+        ):
+            logger.error("Non-retryable error: %s", e)
             raise
-        logger.error("HTTP error: %s", str(e))
+        logger.error("HTTP error: %s", e)
         self.retry(exc=e)
     except ValueError as e:
         logger.error("Error configuring video settings: %s", e)
