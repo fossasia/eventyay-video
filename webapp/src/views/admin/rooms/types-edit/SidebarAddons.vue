@@ -24,7 +24,7 @@ export default {
 			},
 			set(value) {
 				if (value) {
-					this.addModule('chat.native', {volatile: true})
+					this.addModule('chat.native', { volatile: true })
 				} else {
 					this.removeModule('chat.native')
 				}

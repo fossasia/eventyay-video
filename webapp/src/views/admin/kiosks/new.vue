@@ -1,7 +1,7 @@
 <template lang="pug">
 .c-admin-kiosk-new
 	.ui-page-header
-		bunt-icon-button(@click="$router.replace({name: 'admin:kiosks:index'})") arrow_left
+		bunt-icon-button(@click="$router.replace({ name: 'admin:kiosks:index' })") arrow_left
 		h1 New kiosk
 	.scroll-wrapper(v-scrollbar.y="")
 		.ui-form-body

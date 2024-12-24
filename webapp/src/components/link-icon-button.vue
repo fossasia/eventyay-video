@@ -1,5 +1,5 @@
 <template lang="pug">
-router-link.bunt-icon-button(:to="to", :class="{disabled}", v-tooltip="tooltipOptions || {text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}", :aria-disabled="disabled", :aria-label="tooltip || iconClass()")
+router-link.bunt-icon-button(:to="to", :class="{ disabled }", v-tooltip="tooltipOptions || { text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed }", :aria-disabled="disabled", :aria-label="tooltip || iconClass()")
 	i.bunt-icon.mdi(v-if="iconClass()", :class="[iconClass()]", aria-hidden="true")
 	slot(v-else)
 	ripple-ink(v-if!="!noInk && !disabled")

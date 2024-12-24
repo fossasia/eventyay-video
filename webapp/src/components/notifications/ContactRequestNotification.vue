@@ -7,7 +7,7 @@
 		.display-name {{ contactRequest.user ? contactRequest.user.profile.display_name : '' }}
 	.actions
 		bunt-button#btn-accept(@click="accept") {{ $t('ContactRequest:accept-button:label') }}
-	.timer(:style="{'--late-start-gap': lateStartGap + 's'}")
+	.timer(:style="{ '--late-start-gap': lateStartGap + 's' }")
 </template>
 <script>
 import Avatar from 'components/Avatar'

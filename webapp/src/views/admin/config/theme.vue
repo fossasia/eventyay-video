@@ -96,10 +96,10 @@ export default {
 			this.config = await api.call('world.config.get')
 
 			// Enforce some defaults
-			this.config.theme = {logo: {}, colors: {}, streamOfflineImage: null, textOverwrites: {}, ...this.config.theme}
-			this.config.theme.colors = {...DEFAULT_COLORS, ...this.config.theme.colors}
-			this.config.theme.logo = {...DEFAULT_LOGO, ...this.config.theme.logo}
-			this.config.theme.identicons = {...DEFAULT_IDENTICONS, ...this.config.theme.identicons}
+			this.config.theme = { logo: {}, colors: {}, streamOfflineImage: null, textOverwrites: {}, ...this.config.theme }
+			this.config.theme.colors = { ...DEFAULT_COLORS, ...this.config.theme.colors }
+			this.config.theme.logo = { ...DEFAULT_LOGO, ...this.config.theme.logo }
+			this.config.theme.identicons = { ...DEFAULT_IDENTICONS, ...this.config.theme.identicons }
 		} catch (error) {
 			this.error = error
 			console.log(error)
@@ -118,7 +118,7 @@ export default {
 			}
 
 			this.saving = true
-			await api.call('world.config.patch', {theme: this.config.theme})
+			await api.call('world.config.patch', { theme: this.config.theme })
 			this.saving = false
 			// TODO error handling
 

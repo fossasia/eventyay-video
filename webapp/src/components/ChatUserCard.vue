@@ -1,7 +1,7 @@
 <template lang="pug">
 .c-chat-user-card
 	.ui-background-blocker(v-if="!userAction", @click="$emit('close')")
-	.user-card(v-if="!userAction", :class="{deleted: user.deleted}", ref="card", @mousedown="showMoreActions=false")
+	.user-card(v-if="!userAction", :class="{ deleted: user.deleted }", ref="card", @mousedown="showMoreActions=false")
 		scrollbars(y)
 			avatar(:user="user", :size="128")
 			.name
@@ -14,7 +14,7 @@
 				bunt-button.btn-dm(v-if="hasPermission('world:chat.direct')", @click="openDM") {{ $t('UserAction:action.dm:label') }}
 				bunt-button.btn-call(v-if="hasPermission('world:chat.direct')", @click="startCall") {{ $t('UserAction:action.call:label') }}
 				menu-dropdown(v-model="showMoreActions", :blockBackground="false", @mousedown.native.stop="")
-					template(v-slot:button="{toggle}")
+					template(v-slot:button="{ toggle }")
 						bunt-icon-button(@click="toggle") dots-vertical
 					template(v-slot:menu)
 						.unblock(v-if="isBlocked", @click="userAction = 'unblock'") {{ $t('UserAction:action.unblock:label') }}
@@ -74,18 +74,18 @@ export default {
 		}
 	},
 	async created() {
-		this.onlineStatus = (await api.call('user.online_status', {ids: [this.user.id]}))[this.user.id]
+		this.onlineStatus = (await api.call('user.online_status', { ids: [this.user.id] }))[this.user.id]
 		this.blockedUsers = (await api.call('user.list.blocked')).users
 	},
 	methods: {
 		getUserName,
 		async openDM() {
 			// TODO loading indicator
-			await this.$store.dispatch('chat/openDirectMessage', {users: [this.user]})
+			await this.$store.dispatch('chat/openDirectMessage', { users: [this.user] })
 		},
 		async startCall() {
-			const channel = await this.$store.dispatch('chat/openDirectMessage', {users: [this.user]})
-			await this.$store.dispatch('chat/startCall', {channel})
+			const channel = await this.$store.dispatch('chat/openDirectMessage', { users: [this.user] })
+			await this.$store.dispatch('chat/startCall', { channel })
 		}
 	}
 }

@@ -1,22 +1,22 @@
 <template lang="pug">
-.c-announcement(v-if="announcement", :class="[announcement.state, {expired: announcement.expired}]")
+.c-announcement(v-if="announcement", :class="[announcement.state, { expired: announcement.expired }]")
 	.header
 		h2(v-if="!announcement.id") Draft New Announcement
 		template(v-else)
 			h2 Edit
 			.actions
-				bunt-link-button#btn-clone(:to="{name: 'admin:announcements:item', params: {announcementId: 'new'}, query: {text: announcement.text, show_until: announcement.show_until ? announcement.show_until.format() : null}}") Clone
+				bunt-link-button#btn-clone(:to="{ name: 'admin:announcements:item', params: { announcementId: 'new' }, query: { text: announcement.text, show_until: announcement.show_until ? announcement.show_until.format() : null } }") Clone
 				bunt-button#btn-progress-state(v-if="announcement.state !== 'archived'", :loading="settingState", @click="progressState") {{ announcement.state === 'draft' ? 'activate' : 'archive' }}
 	scrollbars(y)
 		bunt-input-outline-container(label="Text", name="text")
-			textarea.text(slot-scope="{focus, blur}", @focus="focus", @blur="blur", v-model="announcement.text", :disabled="announcement.state !== 'draft'")
+			textarea.text(slot-scope="{ focus, blur }", @focus="focus", @blur="blur", v-model="announcement.text", :disabled="announcement.state !== 'draft'")
 		bunt-input.floating-label(name="show-until", label="Show Until", type="datetime-local", v-model="plainShowUntil", :disabled="announcement.state !== 'draft'")
 		.button-group
-			bunt-button(:class="{selected: !announcement.show_until}", @click="clearShowUntil", :disabled="announcement.state !== 'draft'") forever
-			bunt-button(@click="modifyToShowUntil({minutes: 10})", :disabled="announcement.state !== 'draft'") {{showUntilModifyOperator}}10min
-			bunt-button(@click="modifyToShowUntil({minutes: 30})", :disabled="announcement.state !== 'draft'") {{showUntilModifyOperator}}30min
-			bunt-button(@click="modifyToShowUntil({hours: 1})", :disabled="announcement.state !== 'draft'") {{showUntilModifyOperator}}1h
-			bunt-button(@click="modifyToShowUntil({hours: 24})", :disabled="announcement.state !== 'draft'") {{showUntilModifyOperator}}24h
+			bunt-button(:class="{ selected: !announcement.show_until }", @click="clearShowUntil", :disabled="announcement.state !== 'draft'") forever
+			bunt-button(@click="modifyToShowUntil({ minutes: 10 })", :disabled="announcement.state !== 'draft'") {{showUntilModifyOperator}}10min
+			bunt-button(@click="modifyToShowUntil({ minutes: 30 })", :disabled="announcement.state !== 'draft'") {{showUntilModifyOperator}}30min
+			bunt-button(@click="modifyToShowUntil({ hours: 1 })", :disabled="announcement.state !== 'draft'") {{showUntilModifyOperator}}1h
+			bunt-button(@click="modifyToShowUntil({ hours: 24 })", :disabled="announcement.state !== 'draft'") {{showUntilModifyOperator}}24h
 		bunt-button#btn-save(:loading="saving", @click="save", :disabled="announcement.state !== 'draft'") {{ !announcement.id ? 'create' : 'save' }}
 </template>
 <script>

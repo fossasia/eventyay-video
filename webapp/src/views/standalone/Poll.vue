@@ -1,10 +1,10 @@
 <template lang="pug">
-.c-standalone-poll(v-if="pinnedPoll", :style="{'--total-votes': totalVotes}")
+.c-standalone-poll(v-if="pinnedPoll", :style="{ '--total-votes': totalVotes }")
 	.question
 		| {{ pinnedPoll.content }}
-	.option(v-for="option of pinnedPoll.options", :class="{'most-votes': optionsWithMostVotes.includes(option.id)}")
+	.option(v-for="option of pinnedPoll.options", :class="{ 'most-votes': optionsWithMostVotes.includes(option.id) }")
 		.content {{ option.content }}
-		.votes(:style="{'--votes': pinnedPoll.results[option.id]}") {{ totalVotes ? (pinnedPoll.results[option.id] / totalVotes * 100).toFixed() : 0 }}%
+		.votes(:style="{ '--votes': pinnedPoll.results[option.id] }") {{ totalVotes ? (pinnedPoll.results[option.id] / totalVotes * 100).toFixed() : 0 }}%
 </template>
 <script>
 import { mapGetters } from 'vuex'

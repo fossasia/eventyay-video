@@ -1,5 +1,5 @@
 <template lang="pug">
-.c-notifications(:class="{'has-background-media': hasBackgroundMedia}")
+.c-notifications(:class="{ 'has-background-media': hasBackgroundMedia }")
 	notification-permission-notification(v-if="showNotificationPermissionPrompt")
 	contact-request-notification(v-for="contactRequest of openContactRequests", :contactRequest="contactRequest")
 	announcement(v-for="announcement of visibleAnnouncements", :announcement="announcement")

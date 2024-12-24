@@ -3,7 +3,7 @@
 	.header
 		.actions
 			h2 Rooms
-			bunt-link-button.btn-create(:to="{name: 'admin:rooms:new'}") Create a new room
+			bunt-link-button.btn-create(:to="{ name: 'admin:rooms:new' }") Create a new room
 		bunt-input.search(name="search", placeholder="Search rooms", icon="search", v-model="search")
 	.rooms-list
 		.header

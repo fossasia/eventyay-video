@@ -11,8 +11,8 @@
 			.name Name
 			.state State
 			.actions
-		RecycleScroller.tbody.bunt-scrollbar(v-if="filteredUsers", :items="filteredUsers", :item-size="48", v-slot="{item: user}", v-scrollbar.y="")
-			router-link(:to="{name: 'admin:user', params: {userId: user.id}}", :class="{error: user.error, updating: user.updating}").user.table-row
+		RecycleScroller.tbody.bunt-scrollbar(v-if="filteredUsers", :items="filteredUsers", :item-size="48", v-slot="{ item: user }", v-scrollbar.y="")
+			router-link(:to="{name: 'admin:user', params: {userId: user.id}}", :class="{ error: user.error, updating: user.updating }").user.table-row
 				avatar.avatar(:user="user", :size="32")
 				.id(:title="user.id") {{ user.id }}
 				.tokenid(:title="user.token_id") {{ user.token_id }}
@@ -22,7 +22,7 @@
 				.state {{ user.moderation_state }}
 				.actions(v-if="user.id !== ownUser.id", @click.prevent.stop="")
 					.placeholder.mdi.mdi-dots-horizontal
-					bunt-button.btn-open-dm(@click="$store.dispatch('chat/openDirectMessage', {users: [user]})") message
+					bunt-button.btn-open-dm(@click="$store.dispatch('chat/openDirectMessage', { users: [user] })") message
 					bunt-button.btn-reactivate(
 						v-if="user.moderation_state",
 						:loading="user.updating === 'reactivate'",
@@ -87,7 +87,7 @@ export default {
 			user.updating = action
 			user.error = null
 			try {
-				await api.call(`user.${action}`, {id: user.id})
+				await api.call(`user.${action}`, { id: user.id })
 				user.moderation_state = postState
 			} catch (error) {
 				user.error = {

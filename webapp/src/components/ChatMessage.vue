@@ -1,5 +1,5 @@
 <template lang="pug">
-.c-chat-message(:class="[mode, {selected, readonly, 'system-message': isSystemMessage, 'merge-with-previous-message': mergeWithPreviousMessage, 'merge-with-next-message': mergeWithNextMessage, 'sender-deleted': sender.deleted}]")
+.c-chat-message(:class="[mode, { selected, readonly, 'system-message': isSystemMessage, 'merge-with-previous-message': mergeWithPreviousMessage, 'merge-with-next-message': mergeWithNextMessage, 'sender-deleted': sender.deleted }]")
 	.avatar-column(v-if="message.event_type !== 'channel.poll'")
 		avatar(v-if="!mergeWithPreviousMessage", :user="sender", :size="avatarSize", @click.native="$emit('showUserCard', $event, sender, 'right-start')", ref="avatar")
 		.timestamp(v-if="mergeWithPreviousMessage") {{ shortTimestamp }}
@@ -30,7 +30,7 @@
 				.title {{ message.content.preview_card.title }}
 				.description {{ message.content.preview_card.description }}
 			.reactions(v-if="Object.keys(message.reactions).length > 0")
-				.reaction(v-for="users, emoji of message.reactions", :class="{'reacted-by-me': users.includes(user.id)}", @click="toggleReaction(emoji, users)", @pointerenter="initReactionTooltip($event, {emoji, users})", @pointerleave="reactionTooltip = null")
+				.reaction(v-for="users, emoji of message.reactions", :class="{ 'reacted-by-me': users.includes(user.id) }", @click="toggleReaction(emoji, users)", @pointerenter="initReactionTooltip($event, { emoji, users })", @pointerleave="reactionTooltip = null")
 					span.emoji(:style="nativeEmojiToStyle(emoji)")
 					.count {{ users.length }}
 				emoji-picker-button(@selected="addReaction", strategy="fixed", placement="top-start", :offset="[0, 3]", icon-style="plus")
@@ -45,7 +45,7 @@
 		.actions(v-if="!readonly")
 			emoji-picker-button(@selected="addReaction", strategy="fixed", placement="bottom-end", :offset="[36, 3]", icon-style="plus")
 			menu-dropdown(v-if="(hasPermission('room:chat.moderate') || message.sender === user.id)", v-model="selected", placement="bottom-end", strategy="fixed", :offset="[0, 3]")
-				template(v-slot:button="{toggle}")
+				template(v-slot:button="{ toggle }")
 					bunt-icon-button(@click="toggle") dots-vertical
 				template(v-slot:menu)
 					.edit-message(v-if="message.sender === user.id && message.content.type !== 'call'", @click="startEditingMessage") {{ $t('ChatMessage:message-edit:label') }}
@@ -159,19 +159,19 @@ export default {
 	methods: {
 		getUserName,
 		addReaction(emoji) {
-			this.$store.dispatch('chat/addReaction', {message: this.message, reaction: emoji.native})
+			this.$store.dispatch('chat/addReaction', { message: this.message, reaction: emoji.native })
 		},
 		toggleReaction(emoji, users) {
 			if (users.includes(this.user.id)) {
 				if (users.length === 1) {
 					this.reactionTooltip = null
 				}
-				this.$store.dispatch('chat/removeReaction', {message: this.message, reaction: emoji})
+				this.$store.dispatch('chat/removeReaction', { message: this.message, reaction: emoji })
 			} else {
-				this.$store.dispatch('chat/addReaction', {message: this.message, reaction: emoji})
+				this.$store.dispatch('chat/addReaction', { message: this.message, reaction: emoji })
 			}
 		},
-		async initReactionTooltip(event, {emoji, users}) {
+		async initReactionTooltip(event, { emoji, users }) {
 			this.reactionTooltip = {
 				emoji,
 				// TODO 'and you'
@@ -193,7 +193,7 @@ export default {
 		},
 		editMessage(content) {
 			this.editing = false
-			this.$store.dispatch('chat/editMessage', {message: this.message, content})
+			this.$store.dispatch('chat/editMessage', { message: this.message, content })
 		},
 		deleteMessage() {
 			this.$store.dispatch('chat/deleteMessage', this.message)

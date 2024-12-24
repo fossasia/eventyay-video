@@ -89,7 +89,7 @@ export default {
 				if (data.error) {
 					this.error = data.error
 				} else {
-					this.$emit('save', {url: data.url})
+					this.$emit('save', { url: data.url })
 				}
 				this.uploading = false
 			}).catch(error => {
@@ -102,17 +102,17 @@ export default {
 			this.error = null
 			this.$v.$touch()
 			if (this.$v.$invalid) return
-			this.$emit('save', {domain: this.domain, event: this.event})
+			this.$emit('save', { domain: this.domain, event: this.event })
 		},
 		saveConftool() {
 			this.error = null
-			this.$emit('save', {conftool: true, url: this.currentConfig.url})
+			this.$emit('save', { conftool: true, url: this.currentConfig.url })
 		},
 		saveURL() {
 			this.error = null
 			this.$v.$touch()
 			if (this.$v.$invalid) return
-			this.$emit('save', {url: this.url})
+			this.$emit('save', { url: this.url })
 		},
 	}
 }

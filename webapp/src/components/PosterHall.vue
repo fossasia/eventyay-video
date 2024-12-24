@@ -3,7 +3,7 @@
 	template(v-if="posters")
 		.list-actions
 			bunt-input-outline-container#input-search
-				.search-field(slot-scope="{focus, blur}")
+				.search-field(slot-scope="{ focus, blur }")
 					.icon.mdi.mdi-magnify
 					.applied-filter(v-for="filter of filters", :title="`${$t(`PosterHall:filter:field-${filter.field}`)}: ${filter.value}`")
 						.field {{ $t(`PosterHall:filter:field-${filter.field}`) }}:
@@ -11,23 +11,23 @@
 						bunt-icon-button(@click="removeFilter(filter)") close
 					input(ref="input", name="search", v-model="search", :placeholder="$t('PosterHall:input-search:placeholder')", @focus="focus", @blur="blur", autofocus, autocomplete="off")
 			menu-dropdown(v-model="showAddFilters", placement="bottom-end", @mousedown.native.stop="")
-				template(v-slot:button="{toggle}")
+				template(v-slot:button="{ toggle }")
 					bunt-button(icon="filter-plus", @click="toggle") {{ $t('PosterHall:button-add-filter') }}
 				template(v-slot:menu)
 					scrollbars.not-menu-item(y)
 						.filter
 							label {{ $t(`PosterHall:add-filter:header-categories`) }}
 							.filter-items
-								.filter-item(v-for="category of categories", :title="category.name", :class="{active: filters.some(filter => filter.field === 'category' && filter.value === category.name)}", @click="toggleFilter({field: 'category', value: category.key, label: category.name})")
+								.filter-item(v-for="category of categories", :title="category.name", :class="{ active: filters.some(filter => filter.field === 'category' && filter.value === category.name) }", @click="toggleFilter({ field: 'category', value: category.key, label: category.name })")
 									.name {{ category.name }}
 									.count {{ category.count }}
 						.filter
 							label {{ $t(`PosterHall:add-filter:header-tags`) }}
 							.filter-items
-								.filter-item(v-for="tag of tags", :title="tag.name", :class="{active: filters.some(filter => filter.field === 'tag' && filter.value === tag.name)}", @click="toggleFilter({field: 'tag', value: tag.key, label: tag.name})")
+								.filter-item(v-for="tag of tags", :title="tag.name", :class="{ active: filters.some(filter => filter.field === 'tag' && filter.value === tag.name) }", @click="toggleFilter({ field: 'tag', value: tag.key, label: tag.name })")
 									.name {{ tag.name }}
 									.count {{ tag.count }}
-		RecycleScroller.posters.bunt-scrollbar(:items="flatCategorizedFilteredPosters", type-field="type", v-slot="{item: poster}", v-scrollbar.y="")
+		RecycleScroller.posters.bunt-scrollbar(:items="flatCategorizedFilteredPosters", type-field="type", v-slot="{ item: poster }", v-scrollbar.y="")
 			h2.category(v-if="poster.type === 'category'") {{ poster.label }}
 			router-link.poster(v-else, :to="{name: 'poster', params: {posterId: poster.id}}", :key="poster.id")
 				.content
@@ -108,7 +108,7 @@ export default {
 			return intersection(this.posters.filter(poster => this.filters.every(filter => matchesFilter(filter, poster))), ...this.search.trim().toLowerCase().split(' ').map(singleSearch))
 		},
 		categorizedFilteredPosters() {
-			if (!this.posterModule.config.categories) return {'': this.filteredPosters}
+			if (!this.posterModule.config.categories) return { '': this.filteredPosters }
 			// prefill configured categories to enforce order, null/'' category is first, unknown categories are at the end, by order of poster appearance
 			const categorizedPosters = {
 				'': []
@@ -155,14 +155,14 @@ export default {
 			// hack categories into a flat list with posters for the virtual scroller
 			const flatCategorizedFilteredPosters = []
 			for (const [category, posters] of Object.entries(this.categorizedFilteredPosters)) {
-				flatCategorizedFilteredPosters.push({id: category, label: this.categoriesLookup[category] ? this.categoriesLookup[category].label : category, type: 'category', size: 56})
-				flatCategorizedFilteredPosters.push(...posters.map(poster => ({...poster, type: 'poster', size: 368})))
+				flatCategorizedFilteredPosters.push({ id: category, label: this.categoriesLookup[category] ? this.categoriesLookup[category].label : category, type: 'category', size: 56 })
+				flatCategorizedFilteredPosters.push(...posters.map(poster => ({ ...poster, type: 'poster', size: 368 })))
 			}
 			return flatCategorizedFilteredPosters
 		}
 	},
 	async created() {
-		this.posters = (await api.call('poster.list', {room: this.room.id}))
+		this.posters = (await api.call('poster.list', { room: this.room.id }))
 	},
 	methods: {
 		toggleFilter(filter) {
