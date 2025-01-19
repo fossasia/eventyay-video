@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic concepts &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API resources" href="resources/index.html" />
+    <link rel="prev" title="REST API" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer/index.html">Developer documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">REST API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Basic concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#authentication">Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pagination">Pagination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#errors">Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-types">Data types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#query-parameters">Query parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="resources/index.html">API resources</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">REST API</a></li>
+      <li class="breadcrumb-item active">Basic concepts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/rest/fundamentals.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="basic-concepts">
+<h1>Basic concepts<a class="headerlink" href="#basic-concepts" title="Permalink to this heading"></a></h1>
+<p>This page describes basic concepts and definition that you need to know to interact with venueless’ public REST API,
+such as authentication, pagination and similar definitions.</p>
+<section id="authentication">
+<span id="rest-auth"></span><h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this heading"></a></h2>
+<p>To access the API, you need to present valid authentication credentials. These credentials currently take the form
+of an JWT token that is issued by a valid identity provider for a given world. The API currently does not allow
+any access across the scope of one world.</p>
+<p>You can send your authorization token in the <code class="docutils literal notranslate"><span class="pre">Authorization</span></code> Header:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">Bearer</span> <span class="n">myverysecretjwttoken</span>
+</pre></div>
+</div>
+<p>Accessing the API requires that your JWT token is granted at least the <code class="docutils literal notranslate"><span class="pre">world.api</span></code> permission.</p>
+</section>
+<section id="pagination">
+<h2>Pagination<a class="headerlink" href="#pagination" title="Permalink to this heading"></a></h2>
+<p>Most lists of objects returned by venueless’ API will be paginated. The response will take the form of:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span>{
+    &quot;count&quot;: 117,
+    &quot;next&quot;: &quot;https://world.venueless.org/api/v1/organizers/?page=2&quot;,
+    &quot;previous&quot;: null,
+    &quot;results&quot;: […],
+}
+</pre></div>
+</div>
+<p>As you can see, the response contains the total number of results in the field <code class="docutils literal notranslate"><span class="pre">count</span></code>.
+The fields <code class="docutils literal notranslate"><span class="pre">next</span></code> and <code class="docutils literal notranslate"><span class="pre">previous</span></code> contain links to the next and previous page of results,
+respectively, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if there is no such page. You can use those URLs to retrieve the
+respective page.</p>
+<p>The field <code class="docutils literal notranslate"><span class="pre">results</span></code> contains a list of objects representing the first results. For most
+objects, every page contains 50 results.</p>
+</section>
+<section id="errors">
+<h2>Errors<a class="headerlink" href="#errors" title="Permalink to this heading"></a></h2>
+<p>Error responses (of type 400-499) are returned in one of the following forms, depending on
+the type of error. General errors look like:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">405</span> <span class="ne">Method Not Allowed</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">42</span>
+
+<span class="p">{</span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Method &#39;DELETE&#39; not allowed.&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Field specific input errors include the name of the offending fields as keys in the response:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">400</span> <span class="ne">Bad Request</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">94</span>
+
+<span class="p">{</span><span class="nt">&quot;amount&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;A valid integer is required.&quot;</span><span class="p">],</span><span class="w"> </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;This field may not be blank.&quot;</span><span class="p">]}</span>
+</pre></div>
+</div>
+</section>
+<section id="data-types">
+<h2>Data types<a class="headerlink" href="#data-types" title="Permalink to this heading"></a></h2>
+<p>All structured API responses are returned in JSON format using standard JSON data types such
+as integers, floating point numbers, strings, lists, objects and booleans. Most fields can
+be <code class="docutils literal notranslate"><span class="pre">null</span></code> as well.</p>
+<p>The following table shows some data types that have no native JSON representation and how
+we serialize them to JSON.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Internal type</p></th>
+<th class="head"><p>JSON representation</p></th>
+<th class="head"><p>Examples</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Datetime</p></td>
+<td><p>String in ISO 8601 format
+with timezone (normally UTC)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;2017-12-27T10:00:00Z&quot;</span></code>
+<code class="docutils literal notranslate"><span class="pre">&quot;2017-12-27T10:00:00.596934Z&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;2017-12-27T10:00:00+02:00&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Date</p></td>
+<td><p>String in ISO 8601 format</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2017-12-27</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<section id="query-parameters">
+<h3>Query parameters<a class="headerlink" href="#query-parameters" title="Permalink to this heading"></a></h3>
+<p>Most list endpoints allow a filtering of the results using query parameters. In this case, booleans should be passed
+as the string values <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">ordering</span></code> parameter is documented for a resource, you can use it to sort the result set by one of the allowed
+fields. Prepend a <code class="docutils literal notranslate"><span class="pre">-</span></code> to the field name to reverse the sort order.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="REST API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="resources/index.html" class="btn btn-neutral float-right" title="API resources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

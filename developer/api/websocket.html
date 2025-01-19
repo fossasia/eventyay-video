@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Websocket connection &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="User/Account handling" href="user.html" />
+    <link rel="prev" title="Internal API" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Development setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Internal API</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Websocket connection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#generic-rpc">Generic RPC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#keepalive">Keepalive</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#connection-management">Connection management</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">User/Account handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">World configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#schedule-updates">Schedule updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="permissions.html">Permission model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="world.html">World actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rooms.html">Rooms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chat.html">Chat module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="announcements.html">Announcements module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bbb.html">BigBlueButton module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uploads.html">File uploads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exhibition.html">Exhibition module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="poster.html">Poster module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="polls.html">Polls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="questions.html">Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roulette.html">Roulette module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html">Performance testing and profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Internal API</a></li>
+      <li class="breadcrumb-item active">Websocket connection</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/api/websocket.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="websocket-connection">
+<h1>Websocket connection<a class="headerlink" href="#websocket-connection" title="Permalink to this heading"></a></h1>
+<p>The internal API is currently exclusively spoken over a long-standing websocket connection between the client and the
+server. The URL of the websocket endpoint is <code class="docutils literal notranslate"><span class="pre">wss://&lt;hostname&gt;/ws/world/&lt;worldid&gt;</span></code>.</p>
+<p>We use a JSON-based message protocal on the websocket.
+On the root level, we use an array structure that is built like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[$ACTION_NAME, ($SEQUENCE_NUMBER or $COMMAND_ID), $PAYLOAD]
+[&quot;ping&quot;, 1501676765]
+[&quot;ot&quot;, 4953, {&quot;variant&quot;: 103, &quot;ops&quot;:[{&quot;retain&quot;: 5}, {&quot;insert&quot;: &quot;foobar&quot;}]}]
+</pre></div>
+</div>
+<section id="generic-rpc">
+<h2>Generic RPC<a class="headerlink" href="#generic-rpc" title="Permalink to this heading"></a></h2>
+<p>Unless otherwise noted, all acctions annotated with <code class="docutils literal notranslate"><span class="pre">&lt;==&gt;</span></code> in this documentation, use the following communication
+style.</p>
+<p>Success case:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [$ACTION_NAME, $CORRELATION_ID, $PAYLOAD]
+&lt;- [&quot;success&quot;, $CORRELATION_ID, $UPDATE_OR_RESULT]
+&lt;≈ [$ACTION_NAME, $UPDATE_OR_RESULT]
+</pre></div>
+</div>
+<p>Error case:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [$ACTION_NAME, $CORRELATION_ID, $PAYLOAD]
+&lt;- [&quot;error&quot;, $CORRELATION_ID, $ERROR_PAYLOAD]
+</pre></div>
+</div>
+<p>In this documentation, <code class="docutils literal notranslate"><span class="pre">&lt;-</span></code> means the message is sent <em>only</em> to the original client, and
+<code class="docutils literal notranslate"><span class="pre">&lt;≈</span></code> denotes a broadcast to all other clients. <code class="docutils literal notranslate"><span class="pre">=&gt;</span></code> represents a message to the server.</p>
+</section>
+<section id="keepalive">
+<h2>Keepalive<a class="headerlink" href="#keepalive" title="Permalink to this heading"></a></h2>
+<p>Since WebSocket ping-pong is not exposed to JavaScript, we have to build our own on top:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&quot;ping&quot;, $TIMESTAMP]
+[&quot;pong&quot;, $SAME_TIMESTAMP]
+</pre></div>
+</div>
+</section>
+<section id="connection-management">
+<h2>Connection management<a class="headerlink" href="#connection-management" title="Permalink to this heading"></a></h2>
+<p>After you established your connection, it’s your job to send an authentication message.
+If you connected to an invalid endpoint, however, you will receive a message like
+this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;world.unknown_world&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>The server can at any time drop the connection unexpected, in which case you should
+retry. If the server drops the connection due to an unexpected error in the server,
+you receive a message like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;server.fatal&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>If the server would like you to reload the client code, you get a message like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;connection.reload&quot;</span><span class="p">,</span> <span class="p">{}]</span>
+</pre></div>
+</div>
+<p>If the server would like you to disconnect because the user opened too many new connections, you get a message like
+this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;connection.replaced&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Internal API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="user.html" class="btn btn-neutral float-right" title="User/Account handling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

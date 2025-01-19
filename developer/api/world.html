@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World actions &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Rooms" href="rooms.html" />
+    <link rel="prev" title="Permission model" href="permissions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Development setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Internal API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="websocket.html">Websocket connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">User/Account handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">World configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#schedule-updates">Schedule updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="permissions.html">Permission model</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">World actions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#room-creation">Room creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#world-configuration">World configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rooms.html">Rooms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chat.html">Chat module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="announcements.html">Announcements module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bbb.html">BigBlueButton module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uploads.html">File uploads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exhibition.html">Exhibition module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="poster.html">Poster module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="polls.html">Polls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="questions.html">Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roulette.html">Roulette module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html">Performance testing and profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Internal API</a></li>
+      <li class="breadcrumb-item active">World actions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/api/world.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="world-actions">
+<h1>World actions<a class="headerlink" href="#world-actions" title="Permalink to this heading"></a></h1>
+<p>Users with sufficient <a class="reference internal" href="permissions.html#permissions"><span class="std std-ref">Permission model</span></a> can take world-relevant actions like create rooms.</p>
+<section id="room-creation">
+<h2>Room creation<a class="headerlink" href="#room-creation" title="Permalink to this heading"></a></h2>
+<p>Rooms can be created with</p>
+<blockquote>
+<div><p>&lt;= [“room.create”, { … }]</p>
+</div></blockquote>
+<p>The body of the room is structured like this:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Neuer Raum&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;modules&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">    </span><span class="nt">&quot;permission_preset&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;public&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;announcements&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The content of <code class="docutils literal notranslate"><span class="pre">modules</span></code> can be any list of objects just like in the <a class="reference internal" href="config.html#world-config"><span class="std std-ref">World configuration</span></a>,
+though only the presence of <code class="docutils literal notranslate"><span class="pre">{&quot;type&quot;:</span> <span class="pre">&quot;chat.native&quot;}</span></code> will currently be processed by the server.</p>
+<p>All users will receive a complete <code class="docutils literal notranslate"><span class="pre">room.create</span></code> message. The payload is the same as a room object in the world config.</p>
+<p>Additionally, the requesting user will receive a success response in the form</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;room&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;room-id-goes-here&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;channel&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;channel-id-goes-here-if-appropriate&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="world-configuration">
+<h2>World configuration<a class="headerlink" href="#world-configuration" title="Permalink to this heading"></a></h2>
+<p>As an administrator, you can also get a world’s internal configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;world.config.get&quot;, 123, {}]
+&lt;- [&quot;success&quot;, 123, {…}]
+</pre></div>
+</div>
+<p>And update it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;world.config.patch&quot;, 123, {&quot;title&quot;: &quot;Bla&quot;}]
+&lt;- [&quot;success&quot;, 123, {…}]
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="permissions.html" class="btn btn-neutral float-left" title="Permission model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rooms.html" class="btn btn-neutral float-right" title="Rooms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

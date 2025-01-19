@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Management commands &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Developer documentation" href="../developer/index.html" />
+    <link rel="prev" title="Installation guide" href="setup.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Administrator documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="setup.html">Installation guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Management commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#user-management">User management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#createsuperuser"><code class="docutils literal notranslate"><span class="pre">createsuperuser</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#database-management">Database management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#migrate"><code class="docutils literal notranslate"><span class="pre">migrate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#showmigrations"><code class="docutils literal notranslate"><span class="pre">showmigrations</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#world-management">World management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#create-world"><code class="docutils literal notranslate"><span class="pre">create_world</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#clone-world"><code class="docutils literal notranslate"><span class="pre">clone_world</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#generate-token"><code class="docutils literal notranslate"><span class="pre">generate_token</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#list-worlds"><code class="docutils literal notranslate"><span class="pre">list_worlds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#import-config"><code class="docutils literal notranslate"><span class="pre">import_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#connection-management">Connection management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#connections-list"><code class="docutils literal notranslate"><span class="pre">connections</span> <span class="pre">list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#connections-drop"><code class="docutils literal notranslate"><span class="pre">connections</span> <span class="pre">drop</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#connections-force-reload"><code class="docutils literal notranslate"><span class="pre">connections</span> <span class="pre">force_reload</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#debugging">Debugging</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#shell-plus"><code class="docutils literal notranslate"><span class="pre">shell_plus</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer/index.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Administrator documentation</a></li>
+      <li class="breadcrumb-item active">Management commands</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/admin/management.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="management-commands">
+<h1>Management commands<a class="headerlink" href="#management-commands" title="Permalink to this heading"></a></h1>
+<p>This reference describes management commands supported by the venueless server.
+Generally, to run any command with our recommended Docker-based setup, you use a command line like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker exec -it venueless.service venueless &lt;COMMAND&gt; &lt;ARGS&gt;
+</pre></div>
+</div>
+<p>We will not repeat the first part of that in the examples on this page. In the development setup, it looks like this
+instead:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker-compose exec server python manage.py &lt;COMMAND&gt; &lt;ARGS&gt;
+</pre></div>
+</div>
+<section id="user-management">
+<h2>User management<a class="headerlink" href="#user-management" title="Permalink to this heading"></a></h2>
+<section id="createsuperuser">
+<h3><code class="docutils literal notranslate"><span class="pre">createsuperuser</span></code><a class="headerlink" href="#createsuperuser" title="Permalink to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">createsuperuser</span></code> allows you to interactively create a user for the backend configuration interface.</p>
+</section>
+</section>
+<section id="database-management">
+<h2>Database management<a class="headerlink" href="#database-management" title="Permalink to this heading"></a></h2>
+<section id="migrate">
+<h3><code class="docutils literal notranslate"><span class="pre">migrate</span></code><a class="headerlink" href="#migrate" title="Permalink to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">migrate</span></code> command updates the database tables to conform to what venueless expects.  As migrate touches the
+database, you should have a backup of the state before the command run. Running migrate if venueless has no pending
+database changes is harmless. It will result in no changes to the database.</p>
+<p>If migrations touch upon large populated tables, they may run for some time. The release notes will include a warning
+if an upgrade can trigger this behaviour.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, this command is run by default during server startup.</p>
+</div>
+</section>
+<section id="showmigrations">
+<h3><code class="docutils literal notranslate"><span class="pre">showmigrations</span></code><a class="headerlink" href="#showmigrations" title="Permalink to this heading"></a></h3>
+<p>If you ran into trouble during <code class="docutils literal notranslate"><span class="pre">migrate</span></code>, run <code class="docutils literal notranslate"><span class="pre">showmigrations</span></code>. It will show you the current state of all venueless
+migrations. It may be useful debug output to include in bug reports about database problems.</p>
+</section>
+</section>
+<section id="world-management">
+<h2>World management<a class="headerlink" href="#world-management" title="Permalink to this heading"></a></h2>
+<section id="create-world">
+<h3><code class="docutils literal notranslate"><span class="pre">create_world</span></code><a class="headerlink" href="#create-world" title="Permalink to this heading"></a></h3>
+<p>The interactive <code class="docutils literal notranslate"><span class="pre">create_world</span></code> command allows you to create an empty venueless world from scratch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">create_world</span>
+<span class="n">Enter</span> <span class="n">the</span> <span class="n">internal</span> <span class="n">ID</span> <span class="k">for</span> <span class="n">the</span> <span class="n">new</span> <span class="n">world</span> <span class="p">(</span><span class="n">alphanumeric</span><span class="p">):</span> <span class="n">myevent2020</span>
+<span class="n">Enter</span> <span class="n">the</span> <span class="n">title</span> <span class="k">for</span> <span class="n">the</span> <span class="n">new</span> <span class="n">world</span><span class="p">:</span> <span class="n">My</span> <span class="n">Event</span> <span class="mi">2020</span>
+<span class="n">Enter</span> <span class="n">the</span> <span class="n">domain</span> <span class="n">of</span> <span class="n">the</span> <span class="n">new</span> <span class="n">world</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="n">myevent</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">org</span><span class="p">):</span> <span class="n">venueless</span><span class="o">.</span><span class="n">mydomain</span><span class="o">.</span><span class="n">com</span>
+<span class="n">World</span> <span class="n">created</span><span class="o">.</span>
+<span class="n">Default</span> <span class="n">API</span> <span class="n">keys</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;issuer&#39;</span><span class="p">:</span> <span class="s1">&#39;any&#39;</span><span class="p">,</span> <span class="s1">&#39;audience&#39;</span><span class="p">:</span> <span class="s1">&#39;venueless&#39;</span><span class="p">,</span> <span class="s1">&#39;secret&#39;</span><span class="p">:</span> <span class="s1">&#39;zvB7hI28vbrI7KtsRnJ1TZBSN3DvYdoy9VoJGLI1ouHQP5VtRG3U6AgKJ9YOqKNU&#39;</span><span class="p">}]</span>
+</pre></div>
+</div>
+</section>
+<section id="clone-world">
+<h3><code class="docutils literal notranslate"><span class="pre">clone_world</span></code><a class="headerlink" href="#clone-world" title="Permalink to this heading"></a></h3>
+<p>The interactive <code class="docutils literal notranslate"><span class="pre">clone_world</span></code> command allows you to create a venueless world while copying all settings and rooms
+(but not users and user-generated content) from an existing one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">clone_world</span> <span class="n">myevent2019</span>
+<span class="n">Enter</span> <span class="n">the</span> <span class="n">internal</span> <span class="n">ID</span> <span class="k">for</span> <span class="n">the</span> <span class="n">new</span> <span class="n">world</span> <span class="p">(</span><span class="n">alphanumeric</span><span class="p">):</span> <span class="n">myevent2020</span>
+<span class="n">Enter</span> <span class="n">the</span> <span class="n">title</span> <span class="k">for</span> <span class="n">the</span> <span class="n">new</span> <span class="n">world</span><span class="p">:</span> <span class="n">My</span> <span class="n">Event</span> <span class="mi">2020</span>
+<span class="n">Enter</span> <span class="n">the</span> <span class="n">domain</span> <span class="n">of</span> <span class="n">the</span> <span class="n">new</span> <span class="n">world</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="n">myevent</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">org</span><span class="p">):</span> <span class="n">venueless</span><span class="o">.</span><span class="n">mydomain</span><span class="o">.</span><span class="n">com</span>
+<span class="n">World</span> <span class="n">cloned</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-token">
+<h3><code class="docutils literal notranslate"><span class="pre">generate_token</span></code><a class="headerlink" href="#generate-token" title="Permalink to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">generate_token</span></code> command allows you to create a valid access token to a venueless world:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">generate_token</span> <span class="n">myevent2019</span> <span class="o">--</span><span class="n">trait</span> <span class="n">moderator</span> <span class="o">--</span><span class="n">trait</span> <span class="n">speaker</span> <span class="o">--</span><span class="n">days</span> <span class="mi">90</span>
+<span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">venueless</span><span class="o">.</span><span class="n">mydomain</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="c1">#token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9…</span>
+</pre></div>
+</div>
+</section>
+<section id="list-worlds">
+<h3><code class="docutils literal notranslate"><span class="pre">list_worlds</span></code><a class="headerlink" href="#list-worlds" title="Permalink to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">list_worlds</span></code> command allows you to list all worlds in the database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">list_worlds</span>
+<span class="n">ID</span>                  <span class="n">Title</span>                             <span class="n">URL</span>
+<span class="n">myevent2019</span>         <span class="n">My</span> <span class="n">Event</span> <span class="mi">2019</span>                     <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="mf">2019.</span><span class="n">myevent</span><span class="o">.</span><span class="n">com</span>
+<span class="n">myevent2020</span>         <span class="n">My</span> <span class="n">Event</span> <span class="mi">2020</span>                     <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="mf">2020.</span><span class="n">myevent</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+</section>
+<section id="import-config">
+<h3><code class="docutils literal notranslate"><span class="pre">import_config</span></code><a class="headerlink" href="#import-config" title="Permalink to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">import</span></code> command allows you to import a world configuration from a JSON file. It is mainly used during development
+and testing to get started quickly. It takes a filename as the only argument. Note that the command looks for the file
+<em>within</em> the Docker container:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">import_config</span> <span class="n">sample</span><span class="o">/</span><span class="n">worlds</span><span class="o">/</span><span class="n">sample</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="connection-management">
+<h2>Connection management<a class="headerlink" href="#connection-management" title="Permalink to this heading"></a></h2>
+<p>Connection management commands allow you to operate on the current user sessions on your system. They are useful during
+system maintenance.</p>
+<section id="connections-list">
+<h3><code class="docutils literal notranslate"><span class="pre">connections</span> <span class="pre">list</span></code><a class="headerlink" href="#connections-list" title="Permalink to this heading"></a></h3>
+<p>Shows a list of connection labels and their estimated number of current connections. The estimated number might be
+significantly higher than expected if connections where dropped without a cleanup, and old connection labels might
+be lingering around for a couple of seconds. Connection labels are composed by the git commit ID of the venueless
+build and the environment (read from the <code class="docutils literal notranslate"><span class="pre">VENUELESS_ENVIRONMENT</span></code> environment variable, <code class="docutils literal notranslate"><span class="pre">unknown</span></code>) by default.
+Sample output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">connections</span> <span class="nb">list</span>
+<span class="n">label</span>                              <span class="n">est</span><span class="o">.</span> <span class="n">number</span> <span class="n">of</span> <span class="n">connections</span>
+<span class="mi">411</span><span class="n">b261</span><span class="o">.</span><span class="n">production</span>                 <span class="mi">3189</span>
+</pre></div>
+</div>
+</section>
+<section id="connections-drop">
+<h3><code class="docutils literal notranslate"><span class="pre">connections</span> <span class="pre">drop</span></code><a class="headerlink" href="#connections-drop" title="Permalink to this heading"></a></h3>
+<p>Tells the server to drop all connections, optionally filtered with a specific connection label. For example, you might
+want to drop all connections still connected to an old version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">connections</span> <span class="n">drop</span> <span class="mi">411</span><span class="n">b261</span><span class="o">.*</span>
+</pre></div>
+</div>
+<p>The server will send out a message to all workers still having clients with this version to close these connections
+immediately. If you do not want to drop all at once, you can pass a sleep interval, e.g. a number of milliseconds to
+wait between every message that is sent out:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">connections</span> <span class="n">drop</span> <span class="o">--</span><span class="n">interval</span> <span class="mi">50</span> <span class="mi">411</span><span class="n">b261</span><span class="o">.*</span>
+</pre></div>
+</div>
+</section>
+<section id="connections-force-reload">
+<h3><code class="docutils literal notranslate"><span class="pre">connections</span> <span class="pre">force_reload</span></code><a class="headerlink" href="#connections-force-reload" title="Permalink to this heading"></a></h3>
+<p>Tells the server to send a force-reload command to all connections, optionally filtered with a specific connection
+label. For example, you might want to force-reload all connections still connected to an old version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">connections</span> <span class="n">force_reload</span> <span class="mi">411</span><span class="n">b261</span><span class="o">.*</span>
+</pre></div>
+</div>
+<p>This will not close the connections server-side, but instead instruct browsers to reload the application, e.g. to fetch
+a new JavaScript application version.
+If you do not want to reload all at once, you can pass a sleep interval, e.g. a number of milliseconds to
+wait between every message that is sent out:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">connections</span> <span class="n">force_reload</span> <span class="o">--</span><span class="n">interval</span> <span class="mi">50</span> <span class="mi">411</span><span class="n">b261</span><span class="o">.*</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading"></a></h2>
+<section id="shell-plus">
+<h3><code class="docutils literal notranslate"><span class="pre">shell_plus</span></code><a class="headerlink" href="#shell-plus" title="Permalink to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">shell_plus</span></code> command opens a shell with the venueless configuration and environment. All database models and some
+more useful modules will be imported automatically.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="setup.html" class="btn btn-neutral float-left" title="Installation guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../developer/index.html" class="btn btn-neutral float-right" title="Developer documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

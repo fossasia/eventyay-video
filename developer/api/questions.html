@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Questions &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Roulette module" href="roulette.html" />
+    <link rel="prev" title="Polls" href="polls.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Development setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Internal API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="websocket.html">Websocket connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">User/Account handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">World configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#schedule-updates">Schedule updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="permissions.html">Permission model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="world.html">World actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rooms.html">Rooms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chat.html">Chat module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="announcements.html">Announcements module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bbb.html">BigBlueButton module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uploads.html">File uploads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exhibition.html">Exhibition module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="poster.html">Poster module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="polls.html">Polls</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Questions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#permissions">Permissions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#room-config">Room Config</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#todos">TODOs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="roulette.html">Roulette module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html">Performance testing and profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Internal API</a></li>
+      <li class="breadcrumb-item active">Questions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/api/questions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="questions">
+<h1>Questions<a class="headerlink" href="#questions" title="Permalink to this heading"></a></h1>
+<p>Users can ask questions in a room, which need to be approved by a moderator and then can be read and upvoted by other users. Questions can be marked as answered.
+Asking questions can be locked per room to only allow questions at a certain time.
+To clear questions after or before a logical session, single questions can be deleted (“delete all” to be implemented by the client).</p>
+<p>Model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+    id: uuid,
+    room_id: uuid,
+    sender: uuid,
+    timestamp: Datetime,
+    content: String,
+    state: String, // &#39;mod_queue&#39;, &#39;visible&#39;, &#39;archived&#39;
+    answered: Boolean,
+    is_pinned: Boolean,
+    score: Number,
+    voted: Boolean // has the current user voted on the question? Available on list actions.
+}
+</pre></div>
+</div>
+<section id="permissions">
+<h2>Permissions<a class="headerlink" href="#permissions" title="Permalink to this heading"></a></h2>
+<p>There are four permissions involved with the questions API:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">room:question.read</span></code> to be able to see questions at all</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">room:question.ask</span></code> to be able to ask questions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">room:question.vote</span></code> to be able to vote on questions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">room:question.moderate</span></code> to be able to update or delete questions, and to activate and deactivate the questions module</p></li>
+</ul>
+</section>
+<section id="room-config">
+<h2>Room Config<a class="headerlink" href="#room-config" title="Permalink to this heading"></a></h2>
+<p>To enable questions for a room, add the questions module to the room modules:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+    &quot;name&quot;: &quot;Room with questions&quot;,
+    &quot;modules&quot;: [{
+        type: &#39;question&#39;,
+        config: {
+            active: true,  // false by default
+            requires_moderation: false  // true by default
+        }
+    }],
+    …
+}
+</pre></div>
+</div>
+<p>## <code class="docutils literal notranslate"><span class="pre">question.ask</span></code></p>
+<p>To ask a question, send a message like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;question.ask&quot;, 1234, {&quot;room&quot;: &quot;room_0&quot;, &quot;content&quot;: &quot;What is your favourite colour?&quot;}]
+&lt;- [&quot;success&quot;, 1234, {&quot;question&quot;: {…}}]
+&lt;= [&quot;question.created_or_updated&quot;, {&quot;question&quot;: {…}}]
+</pre></div>
+</div>
+<p>On creates and on updates, all people in the room who have the required access rights will receive a message like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;= [&quot;question.created_or_updated&quot;, {&quot;question&quot;: {…}}]
+</pre></div>
+</div>
+<p>## <code class="docutils literal notranslate"><span class="pre">question.update</span></code></p>
+<p>To update a question (only permitted for moderators), send a message like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;question.update&quot;, 1234, {&quot;room&quot;: 123, &quot;id&quot;: &quot;UUID&quot;, &quot;state&quot;: &quot;visible&quot;}]
+&lt;- [&quot;success&quot;, 1234, {&quot;question&quot;: {…}}]
+&lt;= [&quot;question.created_or_updated&quot;, {&quot;question&quot;: {…}}]
+</pre></div>
+</div>
+<p>## <code class="docutils literal notranslate"><span class="pre">question.list</span></code></p>
+<p>Given a room ID, return all the questions that are visible to the user:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;question.list&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">},</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that the question object has an added <code class="docutils literal notranslate"><span class="pre">voted</span></code> boolean attribute denoting
+if the current user has voted for this question.</p>
+<p>## <code class="docutils literal notranslate"><span class="pre">question.vote</span></code></p>
+<p>Given a room ID and a question ID, users can add their <code class="docutils literal notranslate"><span class="pre">vote:</span> <span class="pre">true</span></code> or remove it with <code class="docutils literal notranslate"><span class="pre">vote:</span> <span class="pre">false</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;question.vote&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;vote&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">},</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>## <code class="docutils literal notranslate"><span class="pre">question.delete</span></code></p>
+<p>Only moderators may delete questions. Delete notifications are broadcasted like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;question.delete&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">},</span> <span class="o">...</span><span class="p">]</span>
+<span class="o">&lt;=</span> <span class="p">[</span><span class="s2">&quot;question.deleted&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>## <code class="docutils literal notranslate"><span class="pre">question.pin</span></code>, <code class="docutils literal notranslate"><span class="pre">question.unpin</span></code></p>
+<p>Only moderators may pin questions, like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;question.pin&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">},</span> <span class="o">...</span><span class="p">]</span>
+<span class="o">&lt;=</span> <span class="p">[</span><span class="s2">&quot;question.pinned&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>Unpinning doesn’t need a question ID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;question.unpin&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">[{},</span> <span class="o">...</span><span class="p">]</span>
+<span class="o">&lt;=</span> <span class="p">[</span><span class="s2">&quot;question.unpinned&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+</section>
+<section id="todos">
+<h2>TODOs<a class="headerlink" href="#todos" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>add moderator command <code class="docutils literal notranslate"><span class="pre">question.activate</span></code> that updates the module config</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="polls.html" class="btn btn-neutral float-left" title="Polls" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="roulette.html" class="btn btn-neutral float-right" title="Roulette module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

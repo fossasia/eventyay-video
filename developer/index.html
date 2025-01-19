@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer documentation &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Development setup" href="setup.html" />
+    <link rel="prev" title="Management commands" href="../admin/management.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">Development setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/index.html">Internal API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance testing and profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Developer documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/developer/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="developer-documentation">
+<h1>Developer documentation<a class="headerlink" href="#developer-documentation" title="Permalink to this heading"></a></h1>
+<p>Welcome to our developer documentation! Here, we document everything around developing on venueless.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Development setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#running-tests">Running tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#code-style">Code style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#non-docker-development-setup">Non-docker development setup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">Internal API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/websocket.html">Websocket connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/user.html">User/Account handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config.html">World configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/config.html#schedule-updates">Schedule updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/permissions.html">Permission model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/world.html">World actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/rooms.html">Rooms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/chat.html">Chat module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/announcements.html">Announcements module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/bbb.html">BigBlueButton module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/uploads.html">File uploads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/exhibition.html">Exhibition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/poster.html">Poster module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/polls.html">Polls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/questions.html">Questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/roulette.html">Roulette module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance testing and profiling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#load-testing">Load testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#profiling">Profiling</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../admin/management.html" class="btn btn-neutral float-left" title="Management commands" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="setup.html" class="btn btn-neutral float-right" title="Development setup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

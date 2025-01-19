@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation guide &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Management commands" href="management.html" />
+    <link rel="prev" title="Administrator documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Administrator documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Installation guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-this-guide">On this guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-files">Data files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#redis">Redis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#config-file">Config file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#docker-image-and-service">Docker image and service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ssl">SSL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-your-world">Create your world</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cronjobs">Cronjobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#updates">Updates</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="management.html">Management commands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developer/index.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Administrator documentation</a></li>
+      <li class="breadcrumb-item active">Installation guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/admin/setup.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation-guide">
+<h1>Installation guide<a class="headerlink" href="#installation-guide" title="Permalink to this heading"></a></h1>
+<p>This guide describes the installation of a small-scale installation of venueless using docker. By small-scale, we mean
+that everything is being run on one host, and you don’t expect many thousands of participants for your events.
+It is absolutely possible to run venueless without docker if you have some experience working with Django and JavaScript
+projects, but we currently do not provide any documentation or support for it. At this time, venueless is a young,
+fast-moving project, and we do not have the capacity to keep multiple different setup guides up to date.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>venueless is still a work in progress and anything about deploying it might change. While we tried to
+give a good tutorial here, installing venueless will <strong>require solid Linux experience</strong> to get it right, and
+venueless is only really useful in combination with other pieces of software (eg. BigBlueButton, live streaming servers, …)
+which are not explained here and complex to install on their own. If this is too much for you, please
+<strong>reach out to hello&#64;venueless.org</strong> to talk about commercial support or our SaaS offering.</p>
+</div>
+<p>We tested this guide on the Linux distribution <strong>Debian 10.0</strong> but it should work very similar on other
+modern distributions, especially on all systemd-based ones.</p>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
+<p>Please set up the following systems beforehand, we’ll not explain them here (but see these links for external
+installation guides):</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.docker.com/engine/installation/linux/debian/">Docker</a></p></li>
+<li><p>A HTTP reverse proxy, e.g. <a class="reference external" href="https://botleg.com/stories/https-with-lets-encrypt-and-nginx/">nginx</a> to allow HTTPS and websocket connections</p></li>
+<li><p>A <a class="reference external" href="https://www.tecmint.com/install-postgresql-database-in-debian-10/">PostgreSQL</a> 11+ database server</p></li>
+<li><p>A <a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-debian-10">redis</a> server</p></li>
+</ul>
+<p>This guide will assume PostgreSQL and redis are running on the host system. You can of course run them as docker
+containers as well if you prefer, you just need to adjust the hostnames in venueless’ configuration file.
+We also recommend that you use a firewall, although this is not a venueless-specific recommendation. If you’re new to
+Linux and firewalls, we recommend that you start with <a class="reference external" href="https://en.wikipedia.org/wiki/Uncomplicated_Firewall">ufw</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please, do not run venueless without HTTPS encryption. You’ll handle user data and thanks to <a class="reference external" href="https://letsencrypt.org/">Let’s Encrypt</a>
+SSL certificates can be obtained for free these days. We also <em>do not</em> provide support for HTTP-only
+installations except for evaluation purposes.</p>
+</div>
+</section>
+<section id="on-this-guide">
+<h2>On this guide<a class="headerlink" href="#on-this-guide" title="Permalink to this heading"></a></h2>
+<p>All code lines prepended with a <code class="docutils literal notranslate"><span class="pre">#</span></code> symbol are commands that you need to execute on your server as <code class="docutils literal notranslate"><span class="pre">root</span></code> user;
+all lines prepended with a <code class="docutils literal notranslate"><span class="pre">$</span></code> symbol can also be run by an unprivileged user.</p>
+</section>
+<section id="data-files">
+<h2>Data files<a class="headerlink" href="#data-files" title="Permalink to this heading"></a></h2>
+<p>First of all, you need to create a directory on your server that venueless can use to store files such as logs and make
+that directory writable to the user that runs venueless inside the docker container:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># mkdir /var/venueless-data
+# chown -R 15371:15371 /var/venueless-data
+</pre></div>
+</div>
+</section>
+<section id="database">
+<h2>Database<a class="headerlink" href="#database" title="Permalink to this heading"></a></h2>
+<p>Next, we need a database and a database user. We can create these with any kind of database managing tool or directly on
+your <code class="docutils literal notranslate"><span class="pre">psql</span></code> shell:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># sudo -u postgres createuser -P venueless
+# sudo -u postgres createdb -O venueless venueless
+</pre></div>
+</div>
+<p>Make sure that your database listens on the network. If PostgreSQL runs on the same host as docker, but not inside a
+docker container, we recommend that you just listen on the Docker interface by changing the following line in
+<code class="docutils literal notranslate"><span class="pre">/etc/postgresql/&lt;version&gt;/main/postgresql.conf</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>listen_addresses = &#39;localhost,172.17.0.1&#39;
+</pre></div>
+</div>
+<p>You also need to add a new line to <code class="docutils literal notranslate"><span class="pre">/etc/postgresql/&lt;version&gt;/main/pg_hba.conf</span></code> to allow network connections to this
+user and database:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>host    venueless          venueless          172.17.0.1/16           md5
+</pre></div>
+</div>
+<p>Restart PostgreSQL after you changed these files:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># systemctl restart postgresql
+</pre></div>
+</div>
+<p>If you have a firewall running, you should also make sure that port 5432 is reachable from the <code class="docutils literal notranslate"><span class="pre">172.17.0.1/16</span></code> subnet.</p>
+</section>
+<section id="redis">
+<h2>Redis<a class="headerlink" href="#redis" title="Permalink to this heading"></a></h2>
+<p>For caching and many of our real-time features, we rely on redis as a powerful key-value store. Again, you will
+need to configure redis to listen on the correct interface by setting a parameter in <code class="docutils literal notranslate"><span class="pre">/etc/redis/redis.conf</span></code>.
+Additionally, we strongly recommend setting an authentication password:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>bind 172.17.0.1 127.0.0.1
+requirepass mysecurepassword
+</pre></div>
+</div>
+<p>Now restart redis-server:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># systemctl restart redis-server
+</pre></div>
+</div>
+</section>
+<section id="config-file">
+<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this heading"></a></h2>
+<p>We now create a config directory and config file for venueless:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># mkdir /etc/venueless
+# touch /etc/venueless/venueless.cfg
+# chown -R 15371:15371 /etc/venueless/
+# chmod 0700 /etc/venueless/venueless.cfg
+</pre></div>
+</div>
+<p>Fill the configuration file <code class="docutils literal notranslate"><span class="pre">/etc/venueless/venueless.cfg</span></code> with the following content (adjusted to your environment):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[venueless]
+url=https://venueless.mydomain.com
+short_url=https://shorturl.com
+
+[database]
+backend=postgresql
+name=venueless
+user=venueless
+; Replace with the password you chose above
+password=*********
+; In most docker setups, 172.17.0.1 is the address of the docker host. Adjuts
+; this to wherever your database is running, e.g. the name of a linked container
+host=172.17.0.1
+
+[redis]
+; In most docker setups, 172.17.0.1 is the address of the docker host. Adjuts
+; this to wherever your database is running, e.g. the name of a linked container
+host=172.17.0.1
+; Replace with the password you chose above
+auth=mysecurepassword
+</pre></div>
+</div>
+</section>
+<section id="docker-image-and-service">
+<h2>Docker image and service<a class="headerlink" href="#docker-image-and-service" title="Permalink to this heading"></a></h2>
+<p>First of all, download the latest venueless image by running:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ docker pull venueless/venueless:stable
+</pre></div>
+</div>
+<p>We recommend starting the docker container using systemd to make sure it runs correctly after a reboot. Create a file
+named <code class="docutils literal notranslate"><span class="pre">/etc/systemd/system/venueless.service</span></code> with the following content:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[Unit]
+Description=venueless
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStart=/usr/bin/docker run --name %n -p 8002:80 \
+    -v /var/venueless-data:/data \
+    -v /etc/venueless:/etc/venueless \
+    --sysctl net.core.somaxconn=4096 \
+    venueless/venueless:stable all
+ExecStop=/usr/bin/docker stop %n
+
+[Install]
+WantedBy=multi-user.target
+</pre></div>
+</div>
+<p>You can now run the following commands to enable and start the service:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># systemctl daemon-reload
+# systemctl enable venueless
+# systemctl start venueless
+</pre></div>
+</div>
+</section>
+<section id="ssl">
+<h2>SSL<a class="headerlink" href="#ssl" title="Permalink to this heading"></a></h2>
+<p>The following snippet is an example on how to configure a nginx proxy for venueless:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>server {
+    listen 80 default_server;
+    listen [::]:80 ipv6only=on default_server;
+    server_name venueless.mydomain.com;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 443 default_server;
+    listen [::]:443 ipv6only=on default_server;
+    server_name venueless.mydomain.com;
+
+    ssl on;
+    ssl_certificate /path/to/cert.chain.pem;
+    ssl_certificate_key /path/to/key.pem;
+
+    location / {
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Real-IP $remote_addr;
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+        proxy_set_header    Upgrade $http_upgrade;
+        proxy_set_header    Connection &quot;upgrade&quot;;
+        proxy_set_header    X-Forwarded-Ssl on;
+        proxy_read_timeout  300s;
+        proxy_redirect              http:// https://;
+        proxy_pass                  http://localhost:8002;
+    }
+}
+</pre></div>
+</div>
+<p>We recommend reading about setting <a class="reference external" href="https://mozilla.github.io/server-side-tls/ssl-config-generator/">strong encryption settings</a> for your web server.</p>
+</section>
+<section id="create-your-world">
+<h2>Create your world<a class="headerlink" href="#create-your-world" title="Permalink to this heading"></a></h2>
+<p>Everything in venueless happens in a <strong>world</strong>. A world basically represents your digital event, with everything it includes:
+Users, settings, rooms, and so on.</p>
+<p>To create your first world, execute the following command and answer its questions.
+Right now, every world needs its own domain to run on:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ docker exec -it venueless.service venueless create_world
+Enter the internal ID for the new world (alphanumeric): myevent2020
+Enter the title for the new world: My Event 2020
+Enter the domain of the new world (e.g. myevent.example.org): venueless.mydomain.com
+World created.
+Default API keys: [{&#39;issuer&#39;: &#39;any&#39;, &#39;audience&#39;: &#39;venueless&#39;, &#39;secret&#39;: &#39;zvB7hI28vbrI7KtsRnJ1TZBSN3DvYdoy9VoJGLI1ouHQP5VtRG3U6AgKJ9YOqKNU&#39;}]
+</pre></div>
+</div>
+<p>That’s it! You should now be able to access venueless on the configured domain. To get access to the administration
+web interface, you first need to create a user:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ docker exec -it venueless.service venueless createsuperuser
+</pre></div>
+</div>
+<p>Then, open <code class="docutils literal notranslate"><span class="pre">/control/</span></code> on your own domain and log in.</p>
+</section>
+<section id="cronjobs">
+<h2>Cronjobs<a class="headerlink" href="#cronjobs" title="Permalink to this heading"></a></h2>
+<p>If you have multiple BigBlueButton servers, you should add a cronjob that polls the current meeting and user numbers for
+the BBB servers to update the load balancer’s cost function:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>* * * * *   docker exec venueless.service venueless bbb_update_cost
+</pre></div>
+</div>
+<p>Also, the following cronjob performs various cleanup tasks:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>*/10 * * * *   docker exec venueless.service venueless cleanup
+</pre></div>
+</div>
+</section>
+<section id="updates">
+<h2>Updates<a class="headerlink" href="#updates" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>While we try hard not to break things, <strong>please perform a backup before every upgrade</strong>.</p>
+</div>
+<p>Updates are fairly simple, but require at least a short downtime:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># docker pull venueless/venueless:stable
+# systemctl restart venueless.service
+</pre></div>
+</div>
+<p>Restarting the service can take a few seconds, especially if the update requires changes to the database.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Administrator documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="management.html" class="btn btn-neutral float-right" title="Management commands" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

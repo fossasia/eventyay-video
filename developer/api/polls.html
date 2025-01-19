@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polls &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Questions" href="questions.html" />
+    <link rel="prev" title="Poster module" href="poster.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Development setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Internal API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="websocket.html">Websocket connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">User/Account handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">World configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#schedule-updates">Schedule updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="permissions.html">Permission model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="world.html">World actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rooms.html">Rooms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chat.html">Chat module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="announcements.html">Announcements module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bbb.html">BigBlueButton module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uploads.html">File uploads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exhibition.html">Exhibition module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="poster.html">Poster module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Polls</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#permissions">Permissions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#room-config">Room Config</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="questions.html">Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roulette.html">Roulette module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html">Performance testing and profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Internal API</a></li>
+      <li class="breadcrumb-item active">Polls</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/api/polls.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="polls">
+<h1>Polls<a class="headerlink" href="#polls" title="Permalink to this heading"></a></h1>
+<p>Moderators can create polls, which are visible while they are “open” or
+“closed” and only visible to moderators while they are in “draft” or “archived”
+state.</p>
+<p>Posting polls can be locked per room to only allow polls at a certain time.  To
+clear polls after or before a logical session, single polls can be deleted or
+archived (“delete all” to be implemented by the client):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">uuid</span><span class="p">,</span>
+    <span class="n">room_id</span><span class="p">:</span> <span class="n">uuid</span><span class="p">,</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="n">Datetime</span><span class="p">,</span>
+    <span class="n">content</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="o">//</span> <span class="s1">&#39;open&#39;</span><span class="p">,</span> <span class="s1">&#39;closed&#39;</span><span class="p">,</span> <span class="s1">&#39;draft&#39;</span><span class="p">,</span> <span class="s1">&#39;archived&#39;</span>
+    <span class="n">poll_type</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="o">//</span> <span class="s1">&#39;choice&#39;</span><span class="p">,</span> <span class="s1">&#39;multi&#39;</span>
+    <span class="n">results</span><span class="p">:</span> <span class="n">Object</span><span class="p">,</span>  <span class="o">//</span> <span class="n">only</span> <span class="n">included</span> <span class="k">for</span> <span class="n">mods</span><span class="p">,</span> <span class="k">for</span> <span class="n">closed</span> <span class="n">polls</span><span class="p">,</span> <span class="ow">or</span> <span class="n">polls</span> <span class="n">the</span> <span class="n">user</span> <span class="n">has</span> <span class="n">voted</span> <span class="n">on</span>
+    <span class="n">answers</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>  <span class="o">//</span> <span class="n">ONLY</span> <span class="n">INCLUDED</span> <span class="n">ON</span> <span class="s2">&quot;poll.list&quot;</span>
+    <span class="n">is_pinned</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">,</span>
+    <span class="n">options</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nb">id</span><span class="p">:</span> <span class="n">uuid</span><span class="p">,</span>
+            <span class="n">content</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
+            <span class="n">order</span><span class="p">:</span> <span class="n">Integer</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+    <span class="n">answered</span><span class="p">:</span> <span class="n">List</span> <span class="o">//</span> <span class="n">answers</span> <span class="n">the</span> <span class="n">current</span> <span class="n">user</span> <span class="n">has</span> <span class="n">posted</span><span class="p">,</span> <span class="n">available</span> <span class="n">on</span> <span class="nb">list</span> <span class="n">actions</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="permissions">
+<h2>Permissions<a class="headerlink" href="#permissions" title="Permalink to this heading"></a></h2>
+<p>There are three permissions involved with the polls API:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">room:poll.read</span></code> to be able to see polls at all</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">room:poll.vote</span></code> to be able to vote on polls</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">room:poll.manage</span></code> to be able to update or delete polls, and to activate and deactivate the polls module</p></li>
+</ul>
+</section>
+<section id="room-config">
+<h2>Room Config<a class="headerlink" href="#room-config" title="Permalink to this heading"></a></h2>
+<p>To enable polls for a room, add the polls module to the room modules:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{
+    &quot;name&quot;: &quot;Room with polls&quot;,
+    &quot;modules&quot;: [{
+        type: &#39;poll&#39;,
+        config: {
+            active: true,  // false by default
+            requires_moderation: false  // true by default
+        }
+    }],
+    …
+}
+</pre></div>
+</div>
+<p>## <code class="docutils literal notranslate"><span class="pre">poll.create</span></code></p>
+<p>To create a poll, send a message like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;poll.create&quot;, 1234, {&quot;room&quot;: &quot;room_0&quot;, &quot;content&quot;: &quot;What is your favourite colour?&quot;, options=[{&quot;content&quot;: &quot;Yes&quot;, &quot;order&quot;: 1}, {&quot;content&quot;: &quot;No&quot;, &quot;order&quot;: 2}]}]
+&lt;- [&quot;success&quot;, 1234, {&quot;poll&quot;: {…}}]
+&lt;= [&quot;poll.created_or_updated&quot;, {&quot;poll&quot;: {…}}]
+</pre></div>
+</div>
+<p>On creates and on updates, all people in the room who have the required access rights will receive a message like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;= [&quot;poll.created_or_updated&quot;, {&quot;poll&quot;: {…}}]
+</pre></div>
+</div>
+<p>## <code class="docutils literal notranslate"><span class="pre">poll.update</span></code></p>
+<p>To update a poll (only permitted for moderators), send a message like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;poll.update&quot;, 1234, {&quot;room&quot;: 123, &quot;id&quot;: &quot;UUID&quot;, &quot;state&quot;: &quot;visible&quot;}]
+&lt;- [&quot;success&quot;, 1234, {&quot;poll&quot;: {…}}]
+&lt;= [&quot;poll.created_or_updated&quot;, {&quot;poll&quot;: {…}}]
+</pre></div>
+</div>
+<p>To change the options, adjust the <code class="docutils literal notranslate"><span class="pre">&quot;options&quot;</span></code>. To update an option, remember
+to include its ID, to remove it, drop it from the options list, and to add a
+new option, add it to the list without an ID.</p>
+<p>## <code class="docutils literal notranslate"><span class="pre">poll.list</span></code></p>
+<p>Given a room ID, return all the polls that are visible to the user:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;poll.list&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">},</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that the poll object has an added <code class="docutils literal notranslate"><span class="pre">answers</span></code>  # TODO wtf is in there?
+boolean attribute denoting how the user has answered this poll.</p>
+<p>## <code class="docutils literal notranslate"><span class="pre">poll.vote</span></code></p>
+<p>Given a room ID and a poll ID, users can select one or multiple options as a list of IDs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;poll.vote&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ed1&quot;</span><span class="p">,</span> <span class="s2">&quot;ed2&quot;</span><span class="p">]}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">},</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>## <code class="docutils literal notranslate"><span class="pre">poll.delete</span></code></p>
+<p>Only moderators may delete polls. Delete notifications are broadcasted like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;poll.delete&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">},</span> <span class="o">...</span><span class="p">]</span>
+<span class="o">&lt;=</span> <span class="p">[</span><span class="s2">&quot;poll.deleted&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>## <code class="docutils literal notranslate"><span class="pre">poll.pin</span></code>, <code class="docutils literal notranslate"><span class="pre">poll.unpin</span></code></p>
+<p>Only moderators may pin polls, like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;poll.pin&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">},</span> <span class="o">...</span><span class="p">]</span>
+<span class="o">&lt;=</span> <span class="p">[</span><span class="s2">&quot;poll.pinned&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>Unpinning does not require an ID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;poll.unpin&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">[{},</span> <span class="o">...</span><span class="p">]</span>
+<span class="o">&lt;=</span> <span class="p">[</span><span class="s2">&quot;poll.unpinned&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="poster.html" class="btn btn-neutral float-left" title="Poster module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="questions.html" class="btn btn-neutral float-right" title="Questions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

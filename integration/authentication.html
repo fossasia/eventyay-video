@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authentication &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Iframe Guest API" href="iframe.html" />
+    <link rel="prev" title="Integration documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Integration documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="iframe.html">Iframe Guest API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer/index.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Integration documentation</a></li>
+      <li class="breadcrumb-item active">Authentication</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/integration/authentication.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="authentication">
+<h1>Authentication<a class="headerlink" href="#authentication" title="Permalink to this heading"></a></h1>
+<p>Authentication to venueless is done exclusively through <a class="reference external" href="https://en.wikipedia.org/wiki/JSON_Web_Token">JSON Web Tokens</a> (JWT). Unless the venueless world allows
+public access, it can only be joined with a valid JWT.</p>
+<p>When the user first joins, this token needs to be passed by URL like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">demo</span><span class="o">.</span><span class="n">venueless</span><span class="o">.</span><span class="n">events</span><span class="o">/</span><span class="c1">#token=ey...</span>
+</pre></div>
+</div>
+<p>Venueless will then store the token in the local storage of the user’s browser for subsequent access. The token needs
+to use the <code class="docutils literal notranslate"><span class="pre">HS256</span></code> signature scheme and include at least the following keys:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">iss</span></code></dt><dd><p>The issuer identifier for the token, needs to exactly match the configuration of the venueless world. The string
+is arbitrary, but defaults to <code class="docutils literal notranslate"><span class="pre">&quot;any&quot;</span></code> in venueless’ default configuration.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">aud</span></code></dt><dd><p>The audience identifier for the token, needs to exactly match the configuration of the venueless world. The string
+is arbitrary, but defaults to <code class="docutils literal notranslate"><span class="pre">&quot;venueless&quot;</span></code> in venueless’ default configuration.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">exp</span></code></dt><dd><p>The expiration date of the token (UNIX timestamp).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">iat</span></code></dt><dd><p>The creation date of the token (UNIX timestamp).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">uid</span></code></dt><dd><p>An arbitrary string of at most 200 characters that uniquely identifies the user. This needs to be different for each
+user (otherwise all users log in to the same account), and it needs to stay the same for the same person (otherwise
+a new venueless user is created every time the person joins). If you do not have user IDs in your system, you could
+e.g. use a salted hash of email addresses or something similar.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">traits</span></code></dt><dd><p>A one-dimensional array of arbitrary strings of at most 200 characters. Each string is considered one “trait”
+assigned to the person. Traits should not include spaces, commas or <code class="docutils literal notranslate"><span class="pre">|</span></code> characters. These traits are later used
+to map the user to a set of permissions inside venueless. For example, the ticketing system pretix assignes traits
+of the form <code class="docutils literal notranslate"><span class="pre">pretix-event-1234</span></code> with the ID of the event, <code class="docutils literal notranslate"><span class="pre">pretix-item-5678</span></code> with the ID of the product that has
+been bought, and so on. If your system has a concept like “user groups” or “roles”, this would be the place to
+encode them.</p>
+</dd>
+</dl>
+<p>Optionally, you can also pass the following fields:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">profile</span></code></dt><dd><p>A JSON dictionary containing additional information that is used to prefill the user profile. Currently, the two
+keys <code class="docutils literal notranslate"><span class="pre">display_name</span></code> and <code class="docutils literal notranslate"><span class="pre">fields</span></code> are allowed, where <code class="docutils literal notranslate"><span class="pre">display_name</span></code> is a string and <code class="docutils literal notranslate"><span class="pre">fields</span></code> is a mapping
+of venueless field IDs to values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;e5b06da1-ca18-4204-8b68-769ff86220a9&quot;</span><span class="p">:</span> <span class="s2">&quot;@venueless&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pretalx_id</span></code></dt><dd><p>An ID mapping the user to a speaker profile.</p>
+</dd>
+</dl>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Integration documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="iframe.html" class="btn btn-neutral float-right" title="Iframe Guest API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

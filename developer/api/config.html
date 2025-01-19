@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World configuration &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Permission model" href="permissions.html" />
+    <link rel="prev" title="User/Account handling" href="user.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Development setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Internal API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="websocket.html">Websocket connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">User/Account handling</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">World configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#schedule-updates">Schedule updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="permissions.html">Permission model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="world.html">World actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rooms.html">Rooms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chat.html">Chat module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="announcements.html">Announcements module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bbb.html">BigBlueButton module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uploads.html">File uploads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exhibition.html">Exhibition module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="poster.html">Poster module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="polls.html">Polls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="questions.html">Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roulette.html">Roulette module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html">Performance testing and profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Internal API</a></li>
+      <li class="breadcrumb-item active">World configuration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/api/config.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="world-configuration">
+<span id="world-config"></span><h1>World configuration<a class="headerlink" href="#world-configuration" title="Permalink to this heading"></a></h1>
+<p>The world configuration is pushed to the client first as part of the successful authentication response.
+If the world config changes, you will get an update like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;= [&quot;world.updated&quot;, { … }]
+</pre></div>
+</div>
+<p>The body of the configuration is structured like this, filtered to user visibility:
+The first room acts as the landing page.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;world&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Unsere tolle Online-Konferenz&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;permissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;world:view&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;rooms&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;room_1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Plenum&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hier findet die Eröffnungs- und End-Veranstaltung statt&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;picture&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://via.placeholder.com/150&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;permissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;room:view&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;room:chat.read&quot;</span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;modules&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;livestream.native&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;hls_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://s1.live.pretix.eu/test/index.m3u8&quot;</span>
+<span class="w">                    </span><span class="p">},</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;chat.native&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="p">},</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;agenda.pretalx&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;api_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://pretalx.com/conf/online/schedule/export/schedule.json&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nt">&quot;room_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">                    </span><span class="p">},</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;room_2&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Gruppenraum 1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hier findet die Eröffnungs- und End-Veranstaltung statt&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;picture&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://via.placeholder.com/150&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;permissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;room:view&quot;</span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;modules&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;call.bigbluebutton&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span>
+<span class="w">                    </span><span class="nt">&quot;permissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="schedule-updates">
+<h1>Schedule updates<a class="headerlink" href="#schedule-updates" title="Permalink to this heading"></a></h1>
+<p>When venueless is notified about an updated schedule, you will get a
+notification like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;= [&quot;world.schedule.updated&quot;, { … }]
+</pre></div>
+</div>
+<p>The data will be the <code class="docutils literal notranslate"><span class="pre">pretalx</span></code> configuration of the event, so either a
+<code class="docutils literal notranslate"><span class="pre">url</span></code> or a <code class="docutils literal notranslate"><span class="pre">domain</span></code> with an <code class="docutils literal notranslate"><span class="pre">event</span></code>.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="user.html" class="btn btn-neutral float-left" title="User/Account handling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="permissions.html" class="btn btn-neutral float-right" title="Permission model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

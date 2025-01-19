@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Permission model &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="World actions" href="world.html" />
+    <link rel="prev" title="World configuration" href="config.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Development setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Internal API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="websocket.html">Websocket connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">User/Account handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">World configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#schedule-updates">Schedule updates</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Permission model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#user-types">User types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Permissions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#roles">Roles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#explicit-grants">Explicit grants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#implicit-grants-and-traits">Implicit grants and traits</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="world.html">World actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rooms.html">Rooms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chat.html">Chat module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="announcements.html">Announcements module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bbb.html">BigBlueButton module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uploads.html">File uploads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exhibition.html">Exhibition module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="poster.html">Poster module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="polls.html">Polls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="questions.html">Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roulette.html">Roulette module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html">Performance testing and profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Internal API</a></li>
+      <li class="breadcrumb-item active">Permission model</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/api/permissions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="permission-model">
+<span id="permissions"></span><h1>Permission model<a class="headerlink" href="#permission-model" title="Permalink to this heading"></a></h1>
+<section id="user-types">
+<h2>User types<a class="headerlink" href="#user-types" title="Permalink to this heading"></a></h2>
+<p>There are multiple user types:</p>
+<ul class="simple">
+<li><p><strong>Person</strong> - A user account representing a regular attendee (or moderator, or admin) with access to the regular
+Venueless interface.</p></li>
+<li><p><strong>Anonymous user</strong> - A “light-weight” user account representing an attendee of an in-person event with temporary
+access to specific features in specific rooms of the event.</p></li>
+<li><p><strong>Kiosk</strong> – A user account only used internally to enable authentication for a kiosk-type display in an event venue.</p></li>
+</ul>
+<p>The user type is relevant for some of the permission logic (see below), but also for other purposes (will determine if
+a user’s actions are relevant for statistical purposes, if the user shows up in lists, …).</p>
+</section>
+<section id="id1">
+<h2>Permissions<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<p>Permissions are static, hard-coded identifiers that identify specific actions. Currently, the following permissions
+are defined:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">world</span><span class="p">:</span><span class="n">view</span>
+<span class="n">world</span><span class="p">:</span><span class="n">update</span>
+<span class="n">world</span><span class="p">:</span><span class="n">announce</span>
+<span class="n">world</span><span class="p">:</span><span class="n">secrets</span>
+<span class="n">world</span><span class="p">:</span><span class="n">api</span>
+<span class="n">world</span><span class="p">:</span><span class="n">graphs</span>
+<span class="n">world</span><span class="p">:</span><span class="n">rooms</span><span class="o">.</span><span class="n">create</span><span class="o">.</span><span class="n">stage</span>
+<span class="n">world</span><span class="p">:</span><span class="n">rooms</span><span class="o">.</span><span class="n">create</span><span class="o">.</span><span class="n">chat</span>
+<span class="n">world</span><span class="p">:</span><span class="n">rooms</span><span class="o">.</span><span class="n">create</span><span class="o">.</span><span class="n">bbb</span>
+<span class="n">world</span><span class="p">:</span><span class="n">users</span><span class="o">.</span><span class="n">list</span>
+<span class="n">world</span><span class="p">:</span><span class="n">users</span><span class="o">.</span><span class="n">manage</span>
+<span class="n">world</span><span class="p">:</span><span class="n">chat</span><span class="o">.</span><span class="n">direct</span>
+<span class="n">room</span><span class="p">:</span><span class="n">announce</span>
+<span class="n">room</span><span class="p">:</span><span class="n">view</span>
+<span class="n">room</span><span class="p">:</span><span class="n">update</span>
+<span class="n">room</span><span class="p">:</span><span class="n">delete</span>
+<span class="n">room</span><span class="p">:</span><span class="n">chat</span><span class="o">.</span><span class="n">read</span>
+<span class="n">room</span><span class="p">:</span><span class="n">chat</span><span class="o">.</span><span class="n">join</span>
+<span class="n">room</span><span class="p">:</span><span class="n">chat</span><span class="o">.</span><span class="n">send</span>
+<span class="n">room</span><span class="p">:</span><span class="n">invite</span>
+<span class="n">room</span><span class="p">:</span><span class="n">chat</span><span class="o">.</span><span class="n">moderate</span>
+<span class="n">room</span><span class="p">:</span><span class="n">bbb</span><span class="o">.</span><span class="n">join</span>
+<span class="n">room</span><span class="p">:</span><span class="n">bbb</span><span class="o">.</span><span class="n">moderate</span>
+<span class="n">room</span><span class="p">:</span><span class="n">bbb</span><span class="o">.</span><span class="n">recordings</span>
+</pre></div>
+</div>
+<p>These strings are also exposed through the API to tell the client with operations are permitted.</p>
+</section>
+<section id="roles">
+<h2>Roles<a class="headerlink" href="#roles" title="Permalink to this heading"></a></h2>
+<p>Roles represent a set of permissions and are defined individually for every world. As an example, these are just some
+of the roles that are defined by default in a new world:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;roles&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;attendee&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;world:view&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;viewer&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;world:view&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;room:view&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;room:chat.read&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;participant&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;world:view&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;room:view&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;room:chat.read&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;room:bbb.join&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;room:chat.send&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;room:chat.join&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;room_creator&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;world:rooms.create&quot;</span>
+  <span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Roles are not exposed to the frontend currently.</p>
+</section>
+<section id="explicit-grants">
+<h2>Explicit grants<a class="headerlink" href="#explicit-grants" title="Permalink to this heading"></a></h2>
+<p>A role can be granted to a user explicitly, either on the world as a whole or on a specific room.
+Currently, this feature is mostly used to implement private rooms and invitations, but it could be the basis of more
+dynamic permission assignments in the future. Example grants look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">User</span> <span class="mi">1234</span> <span class="ow">is</span> <span class="n">granted</span>
+  <span class="o">-</span> <span class="n">role</span> <span class="n">room_creator</span> <span class="n">on</span> <span class="n">private</span> <span class="n">room</span> <span class="mi">1</span><span class="p">,</span> <span class="n">because</span> <span class="n">they</span> <span class="n">created</span> <span class="n">it</span>
+  <span class="o">-</span> <span class="n">role</span> <span class="n">participant</span> <span class="n">on</span> <span class="n">private</span> <span class="n">room</span> <span class="mi">1</span><span class="p">,</span> <span class="n">because</span> <span class="n">they</span><span class="s1">&#39;ve been invited</span>
+<span class="n">User</span> <span class="mi">4345</span> <span class="ow">is</span> <span class="n">granted</span>
+  <span class="o">-</span> <span class="n">role</span> <span class="n">speaker</span> <span class="n">on</span> <span class="n">workshop</span> <span class="n">room</span> <span class="mi">1</span><span class="p">,</span> <span class="n">because</span> <span class="n">they</span><span class="s1">&#39;ve been granted the role by an admin</span>
+<span class="n">User</span> <span class="mi">7890</span> <span class="ow">is</span> <span class="n">granted</span>
+  <span class="o">-</span> <span class="n">role</span> <span class="n">moderator</span> <span class="n">on</span> <span class="n">the</span> <span class="n">world</span><span class="p">,</span> <span class="n">because</span> <span class="n">they</span><span class="s1">&#39;ve been granted the role by an admin</span>
+</pre></div>
+</div>
+</section>
+<section id="implicit-grants-and-traits">
+<h2>Implicit grants and traits<a class="headerlink" href="#implicit-grants-and-traits" title="Permalink to this heading"></a></h2>
+<p>Traits are arbitrary tokens that are contained in a user’s authentication information. For example, if a user
+authenticates to venueless through a ticketing system, they might have a trait for every product category they paid for.</p>
+<p>Both the world as well as any room can define <em>implicit grants</em> based on those traits. For example if anyone with
+<strong>both</strong> the <code class="docutils literal notranslate"><span class="pre">pretix-product-1234</span></code> and the <code class="docutils literal notranslate"><span class="pre">pretix-product-5678</span></code> should get the role <code class="docutils literal notranslate"><span class="pre">participant</span></code> in a room,
+the configuration would look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;trait_grants&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;participant&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pretix-product-1234&quot;</span><span class="p">,</span> <span class="s2">&quot;pretix-product-5678&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the configuration frontend, this would be shown as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pretix</span><span class="o">-</span><span class="n">product</span><span class="o">-</span><span class="mi">1234</span><span class="p">,</span> <span class="n">pretix</span><span class="o">-</span><span class="n">product</span><span class="o">-</span><span class="mi">5678</span>
+</pre></div>
+</div>
+<p>It’s also possible to have “OR”-type grants:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;trait_grants&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;participant&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pretix-event-foo&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;pretix-product-1234&quot;</span><span class="p">,</span> <span class="s2">&quot;pretix-product-5678&quot;</span><span class="p">]]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the configuration frontend, this would be shown as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pretix</span><span class="o">-</span><span class="n">event</span><span class="o">-</span><span class="n">foo</span><span class="p">,</span> <span class="n">pretix</span><span class="o">-</span><span class="n">product</span><span class="o">-</span><span class="mi">1234</span><span class="o">|</span><span class="n">pretix</span><span class="o">-</span><span class="n">product</span><span class="o">-</span><span class="mi">5678</span>
+</pre></div>
+</div>
+<p>The “empty” grant applies to <em>all</em> users, regardless of their traits:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;trait_grants&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;participant&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>However, one exception is made here: The “empty” grant will <strong>not</strong> be respected for users with a user type other than
+“person”.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="config.html" class="btn btn-neutral float-left" title="World configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="world.html" class="btn btn-neutral float-right" title="World actions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

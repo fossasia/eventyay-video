@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Webapp Configuration &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Administrator documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer/index.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Webapp Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/admin/webapp-config.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="webapp-configuration">
+<h1>Webapp Configuration<a class="headerlink" href="#webapp-configuration" title="Permalink to this heading"></a></h1>
+<p>The webapp can be statically configured by defining <code class="code docutils literal notranslate"><span class="pre">window.venueless</span></code> before startup.
+For example, add the following to the <code class="code docutils literal notranslate"><span class="pre">index.html</span></code> you are serving:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nb">window</span><span class="p">.</span><span class="nx">venueless</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;api&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;socket&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;wss://sample.demo.venueless.org/ws/world/sample/&quot;</span><span class="p">},</span><span class="w"> </span><span class="s2">&quot;features&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[]}&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<section id="full-configuration">
+<h2>Full configuration<a class="headerlink" href="#full-configuration" title="Permalink to this heading"></a></h2>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;api&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;base&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;https://sample.demo.venueless.org/api/world/sample/&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;socket&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;wss://sample.demo.venueless.org/ws/world/sample/&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;upload&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;https://sample.demo.venueless.org/storage/upload/&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;features&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="c1">// enable experimental features,</span>
+<span class="w">        </span><span class="s2">&quot;locale&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// DEPRECTATED, alias of defaultLocale</span>
+<span class="w">        </span><span class="s2">&quot;defaultLocale&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;en&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;locales&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;de&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;pt_BR&quot;</span><span class="p">],</span><span class="w"> </span><span class="c1">// keep this empty to disable user-choosable locale. Order of this array is dropdown order</span>
+<span class="w">        </span><span class="s2">&quot;date_locale&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;en-ie&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;timetravelTo&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2020-08-26T06:49:28.975Z&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// forces local time to always be this (for schedule demo purposes ONLY)</span>
+<span class="w">        </span><span class="c1">// if no token is found in URL hash redirect to given authentication URL.</span>
+<span class="w">        </span><span class="c1">// used together with an external server which generates JW tokens based e.g. on user login and password</span>
+<span class="w">        </span><span class="s2">&quot;externalAuthUrl&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;https://example.com/auth&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;theme&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;logo&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="s2">&quot;url&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;/eventyay-video-logo.svg&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="s2">&quot;fitToWidth&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="c1">// optional</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="s2">&quot;colors&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="s2">&quot;primary&quot;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#673ab7&#39;</span><span class="p">,</span><span class="w"> </span><span class="c1">// hightlight color, should be high contrast on white background</span>
+<span class="w">                        </span><span class="s2">&quot;sidebar&quot;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#180044&#39;</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="s2">&quot;streamOfflineImage&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;/some-large-image.svg&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// image shown instead of &quot;Stream offline&quot;</span>
+<span class="w">                </span><span class="c1">// override texts in the ui</span>
+<span class="w">                </span><span class="c1">// see webapp/src/locales for full list of keys</span>
+<span class="w">                </span><span class="c1">// DO NOT use this to completely translate the ui</span>
+<span class="w">                </span><span class="s2">&quot;textOverwrites&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="s2">&quot;ProfilePrompt:headline:text&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;’ello Guv!&quot;</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="s2">&quot;identicons&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="s2">&quot;style&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;identiheart&quot;</span><span class="w"> </span><span class="c1">// the identicon renderer, one of: identiheart, initials</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;videoPlayer&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;hls.js&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="c1">// https://github.com/video-dev/hls.js/blob/master/docs/API.md#fine-tuning</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="presentation-mode">
+<h2>Presentation Mode<a class="headerlink" href="#presentation-mode" title="Permalink to this heading"></a></h2>
+<p>To enter presentation mode, append <cite>/presentation</cite> to a room url.
+This shows ONLY the content of the currently pinned question (and updates if anything changes).</p>
+<p>You can style presenation mode via custom css:</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="o">//</span><span class="w"> </span><span class="nt">add</span><span class="w"> </span><span class="nt">a</span><span class="w"> </span><span class="nt">background</span>
+<span class="p">#</span><span class="nn">presentation-mode</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nb">url</span><span class="p">(</span><span class="s1">&#39;YOUR_URL_HERE&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">background-size</span><span class="p">:</span><span class="w"> </span><span class="kc">cover</span><span class="p">;</span>
+<span class="w">        </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="n">A_COLOR_THAT_MATCHES_YOUR_BACKGROUND</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="experimental-features">
+<h2>Experimental Features<a class="headerlink" href="#experimental-features" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>schedule-control</p></li>
+<li><p>roulette</p></li>
+<li><p>muxdata</p></li>
+<li><p>zoom</p></li>
+<li><p>janus</p></li>
+<li><p>page.landing</p></li>
+<li><p>iframe-player</p></li>
+<li><p>polls</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

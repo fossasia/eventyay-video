@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Development setup &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Internal API" href="api/index.html" />
+    <link rel="prev" title="Developer documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Development setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-tests">Running tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-style">Code style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#non-docker-development-setup">Non-docker development setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/index.html">Internal API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance testing and profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Developer documentation</a></li>
+      <li class="breadcrumb-item active">Development setup</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/developer/setup.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="development-setup">
+<h1>Development setup<a class="headerlink" href="#development-setup" title="Permalink to this heading"></a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<p>A venueless installation currently contains four components:</p>
+<ul class="simple">
+<li><p>A frontend web application with our user interface</p></li>
+<li><p>A server application exposing our API</p></li>
+<li><p>A PostgreSQL database server</p></li>
+<li><p>A redis database server</p></li>
+</ul>
+<p>While you can execute them all independently, our recommended development setup uses <strong>docker-compose</strong> to make sure
+everyone works with the same setup and to make it easy to run all these components. So the only prerequisites for
+development on your machine are:</p>
+<ul class="simple">
+<li><p>Docker</p></li>
+<li><p>docker-compose</p></li>
+</ul>
+<p>To get started, you can use the following command to create the docker containers and start them up:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">--</span><span class="n">build</span>
+</pre></div>
+</div>
+<p>Our server application will now run on your computer on port 8375, and our web application on port 8880. Both of them
+are configured to automatically restart whenever you change the code, so you can now pick your favorite text editor
+and get started.</p>
+<p>To make things more interesting, you should import a sample configuration with some basic event data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">exec</span> <span class="n">server</span> <span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">import_config</span> <span class="n">sample</span><span class="o">/</span><span class="n">worlds</span><span class="o">/</span><span class="n">sample</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Then, you can visit <a class="reference external" href="http://localhost:8880/">http://localhost:8880/</a> in your browser to access the event as a guest user.</p>
+</section>
+<section id="running-tests">
+<h2>Running tests<a class="headerlink" href="#running-tests" title="Permalink to this heading"></a></h2>
+<p>Our server component comes with an extensive test suite. After you made some changes, you should give it a run and see
+if everything still works:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">exec</span> <span class="n">server</span> <span class="n">pytest</span>
+</pre></div>
+</div>
+</section>
+<section id="code-style">
+<h2>Code style<a class="headerlink" href="#code-style" title="Permalink to this heading"></a></h2>
+<p>For our server component, we enforce a specific code style to make things more consistent and diffs easier to read.
+Any pull requests you send us will automatically be checked against these rules.</p>
+<p>To check locally, it is convenient to have a local Python environment (such as a virtual environemnt) in which you
+can install the dependencies of the server component:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(venueless) $ cd server
+(venueless) $ pip install -r requirements.txt
+</pre></div>
+</div>
+<p>To auto-format the code according to the code style and to check for linter issues, you can run the following
+commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(venueless) $ black venueless tests
+(venueless) $ isort -rc venueless tests
+(venueless) $ flake8 venueless tests
+</pre></div>
+</div>
+<p>To automatically check before commits, add a script like the following to <code class="docutils literal notranslate"><span class="pre">.git/hooks/pre-commit</span></code> and apply <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">.git/hooks/pre-commit</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+source ~/.virtualenvs/venueless/bin/activate
+cd server
+for file in $(git diff --cached --name-only | grep -E &#39;\.py$&#39; | grep -Ev &quot;venueless/celery_app\.py|venueless/settings\.py&quot;)
+do
+  echo Scanning $file
+  git show &quot;:$file&quot; | black -q --check - || { echo &quot;Black failed.&quot;; exit 1; } # we only want to lint the staged changes, not any un-staged changes
+  git show &quot;:$file&quot; | flake8 - --stdin-display-name=&quot;$file&quot; || exit 1 # we only want to lint the staged changes, not any un-staged changes
+  git show &quot;:$file&quot; | isort -df --check-only - | grep ERROR &amp;&amp; exit 1 || true
+done
+</pre></div>
+</div>
+</section>
+<section id="non-docker-development-setup">
+<h2>Non-docker development setup<a class="headerlink" href="#non-docker-development-setup" title="Permalink to this heading"></a></h2>
+<p>If you prefer to run the components independently, you can do so as well. Here is a brief overview of how to set up on Linux OS.</p>
+<ul>
+<li><p>Create a Python environment, activate it, and install the dependencies:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Activate Python virtual environemnt with your preferred method.</span>
+<span class="c1"># Go to &quot;server&quot; directory.</span>
+<span class="nb">cd</span><span class="w"> </span>server
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</li>
+<li><p>Create a PostgreSQL user with the same username as your Linux user:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo -u postgres createuser -s $USER
+</pre></div>
+</div>
+</li>
+<li><p>Create a PostgreSQL database named <code class="docutils literal notranslate"><span class="pre">eventyay-video</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">createdb</span> <span class="n">eventyay</span><span class="o">-</span><span class="n">video</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create a config file named <em>venueless.cfg</em> in the <em>server</em> directory with the following content:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[database]</span>
+<span class="na">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">postgresql</span>
+<span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">eventyay-video</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run migrations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create your superuser:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run the development server:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Then you can access the admin page at <a class="reference external" href="http://localhost:8000/control/">http://localhost:8000/control/</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Developer documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api/index.html" class="btn btn-neutral float-right" title="Internal API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

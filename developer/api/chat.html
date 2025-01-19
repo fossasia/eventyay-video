@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat module &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Announcements module" href="announcements.html" />
+    <link rel="prev" title="Rooms" href="rooms.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Development setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Internal API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="websocket.html">Websocket connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">User/Account handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">World configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#schedule-updates">Schedule updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="permissions.html">Permission model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="world.html">World actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rooms.html">Rooms</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Chat module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#channels">Channels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#membership-and-subscription">Membership and subscription</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#channel-list">Channel list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#direct-messages">Direct messages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#events">Events</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#read-unread-status">Read/unread status</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="announcements.html">Announcements module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bbb.html">BigBlueButton module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uploads.html">File uploads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exhibition.html">Exhibition module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="poster.html">Poster module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="polls.html">Polls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="questions.html">Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roulette.html">Roulette module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html">Performance testing and profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Internal API</a></li>
+      <li class="breadcrumb-item active">Chat module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/api/chat.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="chat-module">
+<h1>Chat module<a class="headerlink" href="#chat-module" title="Permalink to this heading"></a></h1>
+<section id="channels">
+<h2>Channels<a class="headerlink" href="#channels" title="Permalink to this heading"></a></h2>
+<p>Everything around chat happens in a <strong>channel</strong>. Currently, we have two types of channels:</p>
+<ul class="simple">
+<li><p>Channels tied to a room. These channels inherit their permission configuration from the room. User’s can join and leave them at will.</p></li>
+<li><p>Direct message channels. Their set of members is immutable, it is not possible to join them or add additional users after their creation.</p></li>
+</ul>
+</section>
+<section id="membership-and-subscription">
+<h2>Membership and subscription<a class="headerlink" href="#membership-and-subscription" title="Permalink to this heading"></a></h2>
+<p>There’s two concepts that need to be viewed separately:</p>
+<ul class="simple">
+<li><p><strong>Membership</strong> is an relationship between an <strong>user</strong> and a channel. Membership of a channel is publicly visible.</p></li>
+<li><p><strong>Subscription</strong> is an relationship between a <strong>client</strong> and a channel. Subscription is not publicly visible.</p></li>
+</ul>
+<p>You can be a member without being subscribed, for example when you joined a chat room and then closed your browser.
+You can also be subscribed without being a member, for example when reading a public chat without actively
+participating.</p>
+<p>In some channels, membership is <strong>volatile</strong>. This means that members automatically <em>leave</em> the channel if they no
+longer have any subscribed clients.</p>
+<p>Every user can either be a member of a channel or not, while a user can have multiple subscriptions to a channel, e.g.
+if they use the application in multiple browser tabs.</p>
+<p>To become a member, a client can push a <strong>join</strong> message:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;chat.join&quot;, 1234, {&quot;channel&quot;: &quot;room_0&quot;}]
+&lt;- [&quot;success&quot;, 1234, {&quot;state&quot;: {…}, &quot;next_event_id&quot;: 54321, &quot;members&quot;: []}]
+</pre></div>
+</div>
+<p>A join means that the user and their chosen <code class="docutils literal notranslate"><span class="pre">profile</span></code> will be visible to other users.
+Messages can only be sent to chats that have been joined. A join action is <strong>implicitly also a subscribe</strong> action.
+Joins are idempotent, joining a channel that the user is already part of will not return an error.</p>
+<p>The room can be left the same way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;chat.leave&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{}]</span>
+</pre></div>
+</div>
+<p>The leave action is <strong>implicitly also an unsubscribe</strong> action.</p>
+<p>If you don’t want to join or leave, you can explicitly subscribe and unsubscribe:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;chat.subscribe&quot;, 1234, {&quot;channel&quot;: &quot;room_0&quot;}]
+&lt;- [&quot;success&quot;, 1234, {&quot;state&quot;: {…}, &quot;next_event_id&quot;: 54321, &quot;members&quot;: []}]
+=&gt; [&quot;chat.unsubscribe&quot;, 1234, {&quot;channel&quot;: &quot;room_0&quot;}]
+&lt;- [&quot;success&quot;, 1234, {}]
+</pre></div>
+</div>
+<p>If you close the websocket, an unsubscribe will be performed automatically.</p>
+</section>
+<section id="channel-list">
+<h2>Channel list<a class="headerlink" href="#channel-list" title="Permalink to this heading"></a></h2>
+<p>After a join or leave, your current membership list of non-volatile channels will be broadcasted to all clients of that user for synchronization:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;=</span> <span class="p">[</span><span class="s2">&quot;chat.channels&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;channels&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;notification_pointer&quot;</span><span class="p">:</span> <span class="mi">12345</span><span class="p">}]}]</span>
+</pre></div>
+</div>
+<p>During authentication, you receive the same list in the <code class="docutils literal notranslate"><span class="pre">chat.channels</span></code> key of the authentication responses.
+For direct message channels, there will be an additional key <code class="docutils literal notranslate"><span class="pre">members</span></code> with the user objects of the other people
+in the channel, such that the frontend can label the direct message channel with their user names. This key is entirely
+missing for room-based channels.</p>
+</section>
+<section id="direct-messages">
+<h2>Direct messages<a class="headerlink" href="#direct-messages" title="Permalink to this heading"></a></h2>
+<p>To start a direct conversation with one or more other users, send a message like this. You do not need
+to include your own user ID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;chat.direct.create&quot;, 1234, {&quot;users&quot;: [&quot;other_user_id&quot;]}]
+&lt;- [&quot;success&quot;, 1234, {&quot;id&quot;: &quot;12345&quot;, &quot;state&quot;: {…}, &quot;next_event_id&quot;: 54321, &quot;members&quot;: […]}]
+</pre></div>
+</div>
+<p>A new channel will be created for this set of users or an existing one will be re-used if it is already
+there. With this command, you will also be directly subscribed to the channel and therefore receive the
+same keys in the response as with the <code class="docutils literal notranslate"><span class="pre">chat.subscribe</span></code> command. All your other clients as well as all
+connected clients of the other users receive a regular channel list update.</p>
+<p>You can pass a <code class="docutils literal notranslate"><span class="pre">&quot;hide&quot;:</span> <span class="pre">false</span></code> property if you want the chat window to open up for all members immediately instead of
+with the first message.</p>
+<p>You will receive error code <code class="docutils literal notranslate"><span class="pre">chat.denied</span></code> if either you do not have the <code class="docutils literal notranslate"><span class="pre">world:chat.direct</span></code> permission, or one of
+user IDs you passed does not exist, or any of the users blocked any of the other users.</p>
+<p>You can use the regular <code class="docutils literal notranslate"><span class="pre">chat.leave</span></code> command to hide a conversation from your channel list. You will technically still
+be a member and it will automatically reappear in your channel list if new messages are received.</p>
+</section>
+<section id="events">
+<h2>Events<a class="headerlink" href="#events" title="Permalink to this heading"></a></h2>
+<p>Everything that happens within chat, is an <em>event</em>. For example, if a user sends a message, you will receive an event
+like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;= [&quot;chat.event&quot;, {&quot;channel&quot;: &quot;room_0&quot;, &quot;event_type&quot;: &quot;channel.message&quot;, &quot;content&quot;: {&quot;type&quot;: &quot;text&quot;, &quot;body&quot;: &quot;Hello world&quot;}, &quot;sender&quot;: &quot;user_todo&quot;, &quot;users&quot;: {&quot;id1&quot;: {…}}, &quot;event_id&quot;: 4}]
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">users</span></code> will only be sent if the server believes the client does not already know any user profiles required to render
+this message since the client is expected to cache user profiles. You can also use <code class="docutils literal notranslate"><span class="pre">user.fetch</span></code> to fetch missing profiles.</p>
+<p>The different event types are described below. After you joined a channel, the first event you see will be a membership
+event announcing your join. If you want to fetch previous events, you can do so with the <code class="docutils literal notranslate"><span class="pre">chat.fetch</span></code> command. As
+a base point, you can use the <code class="docutils literal notranslate"><span class="pre">next_event_id</span></code> from the reply to <code class="docutils literal notranslate"><span class="pre">chat.subscribe</span></code> or <code class="docutils literal notranslate"><span class="pre">chat.leave</span></code>. This is built
+in a way that if events happen <em>while</em> you join, you might see the same event <em>twice</em>, but you will not miss any events:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;chat.fetch&quot;, 1234, {&quot;channel&quot;: &quot;room_0&quot;, &quot;count&quot;: 30, &quot;before_id&quot;: 54321}]
+&lt;- [&quot;success&quot;, 1234, {&quot;results&quot;: […], &quot;users&quot;: {&quot;user_id&quot;: {…}, …}}]
+</pre></div>
+</div>
+<p>In volatile chat rooms, <code class="docutils literal notranslate"><span class="pre">chat.fetch</span></code> will skip membership messages (joins/leaves).</p>
+<p>To send a simple text message:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;chat.send&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;event_type&quot;</span><span class="p">:</span> <span class="s2">&quot;channel.message&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello world&quot;</span><span class="p">}}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;event_type&quot;</span><span class="p">:</span> <span class="s2">&quot;channel.message&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello world&quot;</span><span class="p">},</span> <span class="s2">&quot;sender&quot;</span><span class="p">:</span> <span class="s2">&quot;user_todo&quot;</span><span class="p">,</span> <span class="s2">&quot;event_id&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}}]</span>
+</pre></div>
+</div>
+<p>All clients in the room will get a broadcast (see above). Currently, you will get the broadcast as well, so you should
+not show the chat message twice, but you also shouldn’t rely on getting the broadcast since it might be removed in
+the future as a performance optimization.</p>
+<p>You can edit a user’s own message by sending an update like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;chat.send&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;event_type&quot;</span><span class="p">:</span> <span class="s2">&quot;channel.message&quot;</span><span class="p">,</span> <span class="s2">&quot;replaces&quot;</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello world&quot;</span><span class="p">}}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;event_type&quot;</span><span class="p">:</span> <span class="s2">&quot;channel.message&quot;</span><span class="p">,</span> <span class="s2">&quot;replaces&quot;</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello world&quot;</span><span class="p">},</span> <span class="s2">&quot;sender&quot;</span><span class="p">:</span> <span class="s2">&quot;user_todo&quot;</span><span class="p">,</span> <span class="s2">&quot;event_id&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}}]</span>
+</pre></div>
+</div>
+<p>As with message sending, you’ll get both the success and the broadcast. The broadcast looks the same as a new message,
+only that it includes the <code class="docutils literal notranslate"><span class="pre">&quot;replaces&quot;</span></code> key.</p>
+<p>To react to an existing event, this exchange occurs (the <code class="docutils literal notranslate"><span class="pre">delete</span></code> key is optional):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;chat.react&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="mi">12345678</span><span class="p">,</span> <span class="s2">&quot;reaction&quot;</span><span class="p">:</span> <span class="s2">&quot;😈&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="s2">&quot;chat.reaction&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">}}]</span>
+<span class="o">&lt;=</span> <span class="p">[</span><span class="s2">&quot;chat.event.reaction&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span> <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="mi">123456</span><span class="p">,</span> <span class="o">...</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>If you’re trying to send a direct message to a user who blocked you, or to a channel you have no permission sending to,
+or to edit/delete a message you may not modify, you will receive an error with code <code class="docutils literal notranslate"><span class="pre">chat.denied</span></code>. If your body is
+invalid, you will receive one of the following error codes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">chat.empty</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chat.unsupported_event_type</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chat.unsupported_content_type</span></code></p></li>
+</ul>
+<section id="event-types">
+<h3>Event types<a class="headerlink" href="#event-types" title="Permalink to this heading"></a></h3>
+<p>The only relevant data structure in the chat are “events”, that are being passed back and forth between client and
+server. All events have the following properties (plus additional ones depending on event type):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">channel</span></code> (string)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">event_type</span></code> (string)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sender</span></code> (string, user ID, optional)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">content</span></code> (type and value depending on <code class="docutils literal notranslate"><span class="pre">event_type</span></code>)</p></li>
+</ul>
+<p>Currently, the following values for <code class="docutils literal notranslate"><span class="pre">event_type</span></code> are defined:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">channel.message</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">channel.member</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">channel.poll</span></code></p></li>
+</ul>
+<p>Optional fields include:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">replaces</span></code>, only valid on <code class="docutils literal notranslate"><span class="pre">event_type:</span> <span class="pre">channel.message</span></code>, indicates that the current message supersedes a previous one.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preview_card</span></code>, sent in an update to <code class="docutils literal notranslate"><span class="pre">event_type:</span> <span class="pre">channel.message</span></code>, if a link is included and we were able to
+extract some kind of preview data. These fields may be included (all are optional):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>url: Extracted from og:url, falling back to the original URL</p></li>
+<li><p>title: Extracted from og:title, falling back to &lt;title&gt;</p></li>
+<li><p>description: Extracted from og:description, falling back to description</p></li>
+<li><p>format: Extracted from twitter:card, one of “summary”, “summary_large_image”, “app”, or “player”</p></li>
+<li><p>image: a URL, extracted and cached from og:image</p></li>
+<li><p>video: a video URL, extracted from og:video</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<section id="channel-message">
+<h4><code class="docutils literal notranslate"><span class="pre">channel.message</span></code><a class="headerlink" href="#channel-message" title="Permalink to this heading"></a></h4>
+<p>Event type <code class="docutils literal notranslate"><span class="pre">channel.message</span></code> represents a message sent from a user to the chat room. It has the following properties
+inside the <code class="docutils literal notranslate"><span class="pre">content</span></code> property:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: Content Type (string)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">body</span></code>: Content (depending on <code class="docutils literal notranslate"><span class="pre">type</span></code>)</p></li>
+</ul>
+<p>Currently, the following types are defined:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">text</span></code>: A plain text message. <code class="docutils literal notranslate"><span class="pre">body</span></code> is a string with the message.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">files</span></code>: A message containing one or multiple files. <code class="docutils literal notranslate"><span class="pre">files</span></code> contains a list of files, each with an <code class="docutils literal notranslate"><span class="pre">url</span></code>, a
+<code class="docutils literal notranslate"><span class="pre">name</span></code>, and a <code class="docutils literal notranslate"><span class="pre">mimeType</span></code>. Additionally, an optional <code class="docutils literal notranslate"><span class="pre">body</span></code> text can be given.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deleted</span></code>: Any message that was removed by the user or a moderator.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">call</span></code>: A audio/video call that can be joined. <code class="docutils literal notranslate"><span class="pre">body</span></code> is a dictionary that should be empty when you send such a
+message. If you receive such a message, there will be an <code class="docutils literal notranslate"><span class="pre">id</span></code> property with the call ID which you can use to fetch
+the BigBlueButton call URL. Currently only supported in direct messages.</p></li>
+</ul>
+</section>
+<section id="channel-member">
+<h4><code class="docutils literal notranslate"><span class="pre">channel.member</span></code><a class="headerlink" href="#channel-member" title="Permalink to this heading"></a></h4>
+<p>This message type is used:</p>
+<ul class="simple">
+<li><p>When a user joins a channel.
+If the user has no <code class="docutils literal notranslate"><span class="pre">profile</span></code> yet, an error with the code <code class="docutils literal notranslate"><span class="pre">channel.join.missing_profile</span></code> is returned.</p></li>
+<li><p>When a user leaves a channel</p></li>
+<li><p>When a user is kicked/banned</p></li>
+</ul>
+<p>When a user joins or leaves a channel, an event is sent to all current subscribers of the channel. It contains the
+following properties inside the <code class="docutils literal notranslate"><span class="pre">content</span></code> property:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">membership</span></code>: “join” or “leave” or “ban”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">user</span></code>: A dictionary of user data of the user concerned (i.e. the user joining or leaving or being banned)</p></li>
+</ul>
+</section>
+<section id="channel-poll">
+<h4><code class="docutils literal notranslate"><span class="pre">channel.poll</span></code><a class="headerlink" href="#channel-poll" title="Permalink to this heading"></a></h4>
+<p>This poll type is used when a poll is opened. It has two fields, <code class="docutils literal notranslate"><span class="pre">poll_id</span></code> and <code class="docutils literal notranslate"><span class="pre">state</span></code>.</p>
+</section>
+</section>
+</section>
+<section id="read-unread-status">
+<h2>Read/unread status<a class="headerlink" href="#read-unread-status" title="Permalink to this heading"></a></h2>
+<p>During authentication, the backend sends you two chat-related keys in the authentication response:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;chat.channels&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;room_0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;notification_pointer&quot;</span><span class="p">:</span> <span class="mi">1234</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;room_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;notification_pointer&quot;</span><span class="p">:</span> <span class="mi">1337</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">],</span>
+<span class="s2">&quot;chat.read_pointers&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;room_0&quot;</span><span class="p">:</span> <span class="mi">1234</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>This tells you that the user has an active, non-volatile membership in two channels (<code class="docutils literal notranslate"><span class="pre">room_0</span></code> and <code class="docutils literal notranslate"><span class="pre">room_1</span></code>) and the
+event IDs of the last events that happened in these two channels (“notification pointer”. Additionally, it tells you
+that the user has read all messages the first room (the read pointer is equal to the notification pointer), while
+they haven’t read any message in the second room.</p>
+<p>Once the user has read the new messages in <code class="docutils literal notranslate"><span class="pre">room_2</span></code>, you can confirm this to the server like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;chat.mark_read&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;room_2&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1337</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="p">{}}]</span>
+</pre></div>
+</div>
+<p>All other connected clients of the same user get an updated list of read pointers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;=</span> <span class="p">[</span><span class="s2">&quot;chat.read_pointers&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room_0&quot;</span><span class="p">:</span> <span class="mi">1234</span><span class="p">,</span> <span class="s2">&quot;room_2&quot;</span><span class="p">:</span> <span class="mi">1337</span><span class="p">}}]</span>
+</pre></div>
+</div>
+<p>The client should use the pointers to <em>update</em> the local state, but may not rely on all channels to be included in the
+list, even though the backend implementation always sends all channels.</p>
+<p>If, in the meantime, a new message is written in the first room, you will receive a broadcast that includes the new
+notification pointer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;=</span> <span class="p">[</span><span class="s2">&quot;chat.notification_pointers&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;room_0&quot;</span><span class="p">:</span> <span class="mi">1400</span><span class="p">}}]</span>
+</pre></div>
+</div>
+<p>Important notes:</p>
+<ul class="simple">
+<li><p>Again, the message may not contain all channels that you are a member of, only those with a changed value.</p></li>
+<li><p>Whenever the notification pointer in the client’s known state is larger than the read pointer, the channel should be
+indicated to the user as containing unread messages.</p></li>
+<li><p>You won’t receive a notification pointer update with every message. If the server knows the notification pointer
+already is larger than your read pointer, it may skip the update since it does not change the user-visible result.</p></li>
+<li><p>The server may or may not omit these updates for non-content messages, such as leave and join messages.</p></li>
+<li><p>The server may or may not omit these updates for channels you are currently subscribed to, since you receive these
+events anyways.</p></li>
+<li><p>The client should ignore notification pointers with lower values than the last known notification pointers.</p></li>
+<li><p>These broadcasts are <strong>not</strong> send for volatile memberships.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rooms.html" class="btn btn-neutral float-left" title="Rooms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="announcements.html" class="btn btn-neutral float-right" title="Announcements module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User/Account handling &mdash; venueless  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="World configuration" href="config.html" />
+    <link rel="prev" title="Websocket connection" href="websocket.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../integration/index.html">Integration documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Administrator documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">Development setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Internal API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="websocket.html">Websocket connection</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">User/Account handling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#logging-in">Logging in</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#user-objects">User objects</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#change-user-info">Change user info</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#receiving-info-on-another-user">Receiving info on another user</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#profile-updates">Profile updates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fetching-a-list-of-users">Fetching a list of users</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#searching-users">Searching users</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#managing-users">Managing users</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blocking-users">Blocking users</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#connecting-a-social-media-account">Connecting a social media account</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">World configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#schedule-updates">Schedule updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="permissions.html">Permission model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="world.html">World actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rooms.html">Rooms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chat.html">Chat module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="announcements.html">Announcements module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bbb.html">BigBlueButton module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="uploads.html">File uploads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exhibition.html">Exhibition module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="poster.html">Poster module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="polls.html">Polls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="questions.html">Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roulette.html">Roulette module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../performance.html">Performance testing and profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">venueless</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Developer documentation</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Internal API</a></li>
+      <li class="breadcrumb-item active">User/Account handling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/developer/api/user.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="user-account-handling">
+<h1>User/Account handling<a class="headerlink" href="#user-account-handling" title="Permalink to this heading"></a></h1>
+<p>Users can be authenticated in two ways:</p>
+<ul class="simple">
+<li><p>With a <code class="docutils literal notranslate"><span class="pre">client_id</span></code> that uniquely represents a browser. This is usually used as a form of guest access for events
+that do not require prior registration.</p></li>
+<li><p>With a <code class="docutils literal notranslate"><span class="pre">token</span></code> that has been created by an external system (such as an event registartion system) that identifies
+and grants specific rights.</p></li>
+</ul>
+<section id="logging-in">
+<h2>Logging in<a class="headerlink" href="#logging-in" title="Permalink to this heading"></a></h2>
+<p>The first message you send should be an authentication request. Before you do so, you
+will also not get any messages from the server, except for an error with the code
+<code class="docutils literal notranslate"><span class="pre">world.unknown_world</span></code> if you connected to an invalid websocket endpoint or possibly
+a <code class="docutils literal notranslate"><span class="pre">connection.reload</span></code> message if your page load interferes with an update of the
+client codebase.</p>
+<p>Send client-specific ID, receive everything that’s already known about the user:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;authenticate&quot;, {&quot;client_id&quot;: &quot;UUID4&quot;}]
+&lt;- [&quot;authenticated&quot;, {&quot;user.config&quot;: {…}, &quot;world.config&quot;: {…}, &quot;chat.channels&quot;: [], &quot;chat.read_pointers&quot;: {}}]
+</pre></div>
+</div>
+<p>With a token, it works just the same way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;authenticate&quot;, {&quot;token&quot;: &quot;JWTTOKEN&quot;}]
+&lt;- [&quot;authenticated&quot;, {&quot;user.config&quot;: {…}, &quot;world.config&quot;: {…}, &quot;chat.channels&quot;: [], &quot;chat.read_pointers&quot;: {}}]
+</pre></div>
+</div>
+<p>There is the special case of an “anonymous user” who was invited to join the Q&amp;A or polls of a specific room.
+An anonymous user always has access to one room only. We therefore recommend to store the <code class="docutils literal notranslate"><span class="pre">client_id</span></code> in the frontend
+only for that room:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;authenticate&quot;, {&quot;client_id&quot;: &quot;UUID4&quot;, &quot;invite_token&quot;: &quot;a2C2j5&quot;}]
+&lt;- [&quot;authenticated&quot;, {&quot;user.config&quot;: {…}, &quot;world.config&quot;: {…}, &quot;chat.channels&quot;: [], &quot;chat.read_pointers&quot;: {}}]
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">chat.channels</span></code> contains a list of <strong>non-volatile</strong> chat rooms the user is a member of. See chat module
+documentation for membership semantics.</p>
+<p>If authentication fails, you receive an error instead:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;authenticate&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;UUID4&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;auth.invalid_token&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>The following error codes are currently used during authentication:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">auth.missing_id_or_token</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">auth.invalid_token</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">auth.missing_token</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">auth.expired_token</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">auth.denied</span></code></p></li>
+</ul>
+</section>
+<section id="user-objects">
+<h2>User objects<a class="headerlink" href="#user-objects" title="Permalink to this heading"></a></h2>
+<p>User objects currently contain the following properties:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">profile</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pretalx_id</span></code> (string) Only set on speakers added by pretalx or other scheduling tools</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">badges</span></code> list of user-visible badges to show for this user (i.e. “orga team member”)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">moderation_state</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;silenced&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;banned&quot;</span></code>). Only set on <em>other</em> users’ profiles if you’re allowed
+to perform silencing and banning.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inactive</span></code> set to <code class="docutils literal notranslate"><span class="pre">true</span></code> if the user hasn’t logged in in a while</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">token_id</span></code> (external ID) Only set on users’ profiles if you have admin permissions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deleted</span></code> (boolean) Set to <code class="docutils literal notranslate"><span class="pre">true</span></code> if the user has been soft-deleted</p></li>
+</ul>
+</section>
+<section id="change-user-info">
+<h2>Change user info<a class="headerlink" href="#change-user-info" title="Permalink to this heading"></a></h2>
+<p>You can change a user’s profile using the <code class="docutils literal notranslate"><span class="pre">user.update</span></code> call:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;user.update&quot;, 123, {&quot;profile&quot;: {…}, &quot;client_state&quot;: {}}]
+&lt;- [&quot;success&quot;, 123, {}]
+</pre></div>
+</div>
+</section>
+<section id="receiving-info-on-another-user">
+<h2>Receiving info on another user<a class="headerlink" href="#receiving-info-on-another-user" title="Permalink to this heading"></a></h2>
+<p>You can fetch the profile for a specific user by their ID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;user.fetch&quot;, 123, {&quot;id&quot;: &quot;1234&quot;}]
+&lt;- [&quot;success&quot;, 123, {&quot;id&quot;: &quot;1234&quot;, &quot;profile&quot;: {…}}]
+</pre></div>
+</div>
+<p>If the user is unknown, error code <code class="docutils literal notranslate"><span class="pre">user.not_found</span></code> is returned.</p>
+<p>You can also fetch multiple profiles at once:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;user.fetch&quot;, 123, {&quot;ids&quot;: [&quot;1234&quot;, &quot;5679&quot;]}]
+&lt;- [&quot;success&quot;, 123, {&quot;1234&quot;: {&quot;id&quot;: &quot;1234&quot;, &quot;profile&quot;: {…}}, &quot;5679&quot;: {…}}]
+</pre></div>
+</div>
+<p>If one of the user does not exist, it will not be part of the response, but there will be no error message.
+The maximum number of users that can be fetched in one go is 100.</p>
+<p>Instead of IDs, you can also pass a set of <code class="docutils literal notranslate"><span class="pre">pretalx_id</span></code> values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;user.fetch&quot;, 123, {&quot;pretalx_ids&quot;: [&quot;DKJ2E&quot;, &quot;24&quot;]}]
+&lt;- [&quot;success&quot;, 123, {&quot;DKJ2E&quot;: {&quot;id&quot;: &quot;1234&quot;, &quot;pretalx_id&quot;: &quot;DKJ2E&quot;, &quot;profile&quot;: {…}}, &quot;5679&quot;: {…}}]
+</pre></div>
+</div>
+</section>
+<section id="profile-updates">
+<h2>Profile updates<a class="headerlink" href="#profile-updates" title="Permalink to this heading"></a></h2>
+<p>If your user data changes, you will receive a broadcast with your new profile. This is e.g. important if your profile
+is changed from a different connection:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;= [&quot;user.updated&quot;, {&quot;id&quot;: &quot;1234&quot;, &quot;profile&quot;: {…}, &quot;client_state&quot;: {…}}]
+</pre></div>
+</div>
+</section>
+<section id="fetching-a-list-of-users">
+<h2>Fetching a list of users<a class="headerlink" href="#fetching-a-list-of-users" title="Permalink to this heading"></a></h2>
+<p>If you have sufficient permissions, you can fetch a list of all users like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;user.list&quot;, 123, {}]
+&lt;- [&quot;success&quot;, 123, {&quot;1234&quot;: {&quot;id&quot;: &quot;1234&quot;, &quot;profile&quot;: {…}}, &quot;5679&quot;: {…}}]
+</pre></div>
+</div>
+<p>By default, you only get users of the type <code class="docutils literal notranslate"><span class="pre">&quot;person&quot;</span></code> , but you can also get other types like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;user.list&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;kiosk&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Pagination will be implemented on this endpoint in the future.</p>
+</div>
+</section>
+<section id="searching-users">
+<h2>Searching users<a class="headerlink" href="#searching-users" title="Permalink to this heading"></a></h2>
+<p>You can search all users to get a 1-based paginated list like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;user.list.search&quot;, 123, {&quot;search_term&quot;: &quot;&quot;, &quot;badge&quot;: null, &quot;page&quot;: 1}]
+&lt;- [&quot;success&quot;, 123, {&quot;results&quot;: [{&quot;id&quot;: &quot;1234&quot;, &quot;profile&quot;: {…}}, &quot;5679&quot;: {…}], &quot;isLastPage&quot;: true}]
+</pre></div>
+</div>
+<p>The size of the pages can be configured in the world config with <code class="docutils literal notranslate"><span class="pre">user_list.page_size</span></code>. The default is 20.
+An empty list will be returned if <code class="docutils literal notranslate"><span class="pre">search_term</span></code> is shorter than <code class="docutils literal notranslate"><span class="pre">user_list.search_min_chars</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">user_list.search_min_chars</span></code> is set to 0, which is also the default, an empty search term will return a paginated
+list of all users.
+If you set <code class="docutils literal notranslate"><span class="pre">badge</span></code>, only users with that badge will be retunred.
+Invalid page numbers return an empty list.
+If there are no more results to be fetched the <code class="docutils literal notranslate"><span class="pre">isLastPage</span></code> will be set to true.</p>
+</section>
+<section id="managing-users">
+<h2>Managing users<a class="headerlink" href="#managing-users" title="Permalink to this heading"></a></h2>
+<p>With sufficient permissions, you can ban or silence a user. A banned user will be locked out from the system completely,
+a silenced user can still read everything but cannot join video calls and cannot send chat messages.</p>
+<p>To ban a user, send:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;user.ban&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;1234&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{}]</span>
+</pre></div>
+</div>
+<p>To silence a user, send:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;user.silence&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;1234&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{}]</span>
+</pre></div>
+</div>
+<p>Trying to silence a banned user will be ignored.</p>
+<p>To fully reinstantiate either a banned or silenced user, send:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;user.reactivate&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;1234&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{}]</span>
+</pre></div>
+</div>
+</section>
+<section id="blocking-users">
+<h2>Blocking users<a class="headerlink" href="#blocking-users" title="Permalink to this heading"></a></h2>
+<p>Everyone can block other users. Blocking currently means the other users cannot start new direct messages to you. If
+they already have an open direct message channel with you, they cannot send any new messages to that channel.</p>
+<p>To block a user, send:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;user.block&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;1234&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{}]</span>
+</pre></div>
+</div>
+<p>To unblock a user, send:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;user.unblock&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;1234&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{}]</span>
+</pre></div>
+</div>
+<p>To get a list of blocked users, send:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=&gt; [&quot;user.list.blocked&quot;, 123, {}]
+&lt;- [&quot;success&quot;, 123, [{&quot;id&quot;: &quot;1234&quot;, &quot;profile&quot;: {…}}]]
+</pre></div>
+</div>
+</section>
+<section id="connecting-a-social-media-account">
+<h2>Connecting a social media account<a class="headerlink" href="#connecting-a-social-media-account" title="Permalink to this heading"></a></h2>
+<p>Users can connect a social media account if the feature is active for the world.</p>
+<p>To start, send:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;user.social.connect&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;twitter&quot;</span><span class="p">,</span> <span class="s2">&quot;return_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://blafasel.venueless.events/preferences&quot;</span><span class="p">}]</span>
+<span class="o">&lt;-</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://foo.venueless.events/social/twitter/start?token=…&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>Then, redirect the user to the given URL. After the authentication was successful (or failed), the user will be returned
+to the given URL. The return URL must be absolute</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="websocket.html" class="btn btn-neutral float-left" title="Websocket connection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="config.html" class="btn btn-neutral float-right" title="World configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, venueless project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
