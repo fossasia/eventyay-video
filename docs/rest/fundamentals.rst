@@ -1,7 +1,7 @@
 Basic concepts
 ==============
 
-This page describes basic concepts and definition that you need to know to interact with venueless' public REST API,
+This page describes basic concepts and definition that you need to know to interact with eventyay-video' public REST API,
 such as authentication, pagination and similar definitions.
 
 .. _`rest-auth`:
@@ -22,13 +22,13 @@ Accessing the API requires that your JWT token is granted at least the ``world.a
 Pagination
 ----------
 
-Most lists of objects returned by venueless' API will be paginated. The response will take the form of:
+Most lists of objects returned by eventyay-video' API will be paginated. The response will take the form of:
 
 .. sourcecode:: javascript
 
     {
         "count": 117,
-        "next": "https://world.venueless.org/api/v1/organizers/?page=2",
+        "next": "https://world.eventyay-video.org/api/v1/organizers/?page=2",
         "previous": null,
         "results": […],
     }

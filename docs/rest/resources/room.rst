@@ -57,7 +57,7 @@ Endpoints
               }
             ],
             "permission_config": {},
-            "domain": "sample.venueless.events"
+            "domain": "sample.eventyay-video.events"
           }
         ]
       }
@@ -95,7 +95,7 @@ Endpoints
           }
         ],
         "permission_config": {},
-        "domain": "sample.venueless.events"
+        "domain": "sample.eventyay-video.events"
       }
 
    :statuscode 200: no error
@@ -123,7 +123,7 @@ Endpoints
           }
         ],
         "permission_config": {},
-        "domain": "sample.venueless.events"
+        "domain": "sample.eventyay-video.events"
       }
 
    **Example response**:
@@ -144,7 +144,7 @@ Endpoints
           }
         ],
         "permission_config": {},
-        "domain": "sample.venueless.events"
+        "domain": "sample.eventyay-video.events"
       }
 
    :statuscode 200: no error
@@ -186,7 +186,7 @@ Endpoints
           }
         ],
         "permission_config": {},
-        "domain": "sample.venueless.events"
+        "domain": "sample.eventyay-video.events"
       }
 
    :statuscode 200: no error

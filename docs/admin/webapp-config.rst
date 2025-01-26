@@ -1,12 +1,12 @@
 Webapp Configuration
 ====================
 
-The webapp can be statically configured by defining :code:`window.venueless` before startup.
+The webapp can be statically configured by defining :code:`window.eventyay` before startup.
 For example, add the following to the :code:`index.html` you are serving:
 
 .. code-block:: html
 
-	<script>window.venueless={"api": {"socket": "wss://sample.demo.venueless.org/ws/world/sample/"}, "features": []}</script>
+	<script>window.eventyay={"api": {"socket": "wss://sample.demo.eventyay-video.org/ws/world/sample/"}, "features": []}</script>
 
 Full configuration
 ------------------
@@ -15,9 +15,9 @@ Full configuration
 
 	{
 		"api": {
-			"base": "https://sample.demo.venueless.org/api/world/sample/",
-			"socket": "wss://sample.demo.venueless.org/ws/world/sample/",
-			"upload": "https://sample.demo.venueless.org/storage/upload/"
+			"base": "https://sample.demo.eventyay-video.org/api/world/sample/",
+			"socket": "wss://sample.demo.eventyay-video.org/ws/world/sample/",
+			"upload": "https://sample.demo.eventyay-video.org/storage/upload/"
 		},
 		"features": [] // enable experimental features,
 		"locale": "en", // DEPRECTATED, alias of defaultLocale

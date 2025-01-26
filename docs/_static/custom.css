@@ -21,3 +21,43 @@ a:hover {
         white-space: normal;
     }
 }
+
+/* Frontpage */
+.wy-sectionbox {
+    width: 50%;
+    float: left;
+    min-height: 70px;
+}
+.wy-sectionbox .wy-icon {
+    float: left;
+    font-size: 48px;
+    width: 70px;
+    text-align: center;
+}
+.wy-icon a {
+    text-decoration: none;
+}
+
+.wy-sectionbox .wy-text {
+    margin-left: 70px;
+}
+
+@media screen and (max-width: 480px) {
+    .wy-sectionbox {
+        width: 100%;
+        float: none;
+    }
+}
+
+.wy-clearfix {
+    *zoom: 1;
+}
+
+.wy-clearfix:before, .wy-clearfix:after {
+    display: table;
+    content: "";
+}
+
+.wy-clearfix:after {
+    clear: both;
+}

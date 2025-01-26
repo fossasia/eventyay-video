@@ -1,7 +1,7 @@
 Developer documentation
 =======================
 
-Welcome to our developer documentation! Here, we document everything around developing on venueless.
+Welcome to our developer documentation! Here, we document everything around developing on eventyay-video.
 
 .. toctree::
    :maxdepth: 2
