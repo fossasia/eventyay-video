@@ -19,7 +19,7 @@ prompt.c-channel-browser(@close="$emit('close')", :scrollable="false")
 			.no-results(v-if="search && searchedChannels.length === 0") {{ $t('ChannelBrowser:search:empty') }}
 </template>
 <script>
-import {mapGetters, mapState} from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import Prompt from 'components/Prompt'
 import fuzzysearch from 'lib/fuzzysearch'
 
@@ -37,7 +37,7 @@ export default {
 		channels() {
 			return this.rooms
 				.filter(room => room.modules.length === 1 && room.modules[0].type === 'chat.native')
-				.map(room => ({room, channelJoined: this.joinedChannels.some(channel => channel.id === room.modules[0].channel_id)}))
+				.map(room => ({ room, channelJoined: this.joinedChannels.some(channel => channel.id === room.modules[0].channel_id) }))
 		},
 		searchedChannels() {
 			if (!this.search) return this.channels

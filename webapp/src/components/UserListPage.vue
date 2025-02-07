@@ -101,22 +101,22 @@ export default {
 			this.loading = true
 			this.userAction = null
 			this.blockedUsers = (await api.call('user.list.blocked')).users
-			this.selectedUser = await api.call('user.fetch', {id: this.selectedUser.id})
+			this.selectedUser = await api.call('user.fetch', { id: this.selectedUser.id })
 			this.loading = false
 		},
 		async selectUser(user) {
 			this.loading = true
 			this.toggleView = !this.toggleView
 			this.selectedUser = user
-			this.exhibitors = (await api.call('exhibition.get.staffed_by_user', {user_id: user.id})).exhibitors
+			this.exhibitors = (await api.call('exhibition.get.staffed_by_user', { user_id: user.id })).exhibitors
 			this.loading = false
 		},
 		async openDM() {
-			await this.$store.dispatch('chat/openDirectMessage', {users: [this.selectedUser]})
+			await this.$store.dispatch('chat/openDirectMessage', { users: [this.selectedUser] })
 		},
 		async startCall() {
-			const channel = await this.$store.dispatch('chat/openDirectMessage', {users: [this.selectedUser]})
-			await this.$store.dispatch('chat/startCall', {channel})
+			const channel = await this.$store.dispatch('chat/openDirectMessage', { users: [this.selectedUser] })
+			await this.$store.dispatch('chat/startCall', { channel })
 		}
 	}
 }

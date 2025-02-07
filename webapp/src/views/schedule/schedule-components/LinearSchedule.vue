@@ -1,6 +1,6 @@
 <template lang="pug">
 .c-linear-schedule(v-scrollbar.y="")
-	.bucket(v-for="({date, sessions}, index) of sessionBuckets")
+	.bucket(v-for="({ date, sessions }, index) of sessionBuckets")
 		.bucket-label(:ref="getBucketName(date)", :data-date="date.format()")
 			.day(v-if="index === 0 || date.clone().startOf('day').diff(sessionBuckets[index - 1].date.clone().startOf('day'), 'day') > 0")  {{ date.format('dddd DD. MMMM') }}
 			.time {{ date.format('LT') }}
@@ -133,7 +133,7 @@ export default {
 		if (this.scrollParent) {
 			this.scrollParent.scrollTop = scrollTop
 		} else {
-			window.scroll({top: scrollTop + this.getOffsetTop()})
+			window.scroll({ top: scrollTop + this.getOffsetTop() })
 		}
 	},
 	methods: {
@@ -158,7 +158,7 @@ export default {
 			if (this.scrollParent) {
 				this.scrollParent.scrollTop = scrollTop
 			} else {
-				window.scroll({top: scrollTop})
+				window.scroll({ top: scrollTop })
 			}
 		},
 		onIntersect(results) {

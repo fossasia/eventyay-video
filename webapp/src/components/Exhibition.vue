@@ -23,7 +23,7 @@ export default {
 	},
 	computed: {},
 	async created() {
-		this.exhibitors = (await api.call('exhibition.list', {room: this.room.id})).exhibitors
+		this.exhibitors = (await api.call('exhibition.list', { room: this.room.id })).exhibitors
 	},
 	mounted() {
 		this.$nextTick(() => {

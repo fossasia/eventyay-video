@@ -15,7 +15,7 @@ prompt.c-av-device-prompt(@close="$emit('close')")
 import Prompt from 'components/Prompt'
 
 export default {
-	components: {Prompt},
+	components: { Prompt },
 	props: {},
 	data() {
 		return {
@@ -88,7 +88,7 @@ export default {
 			}
 			const constraints = {
 				audio: {},
-				video: {deviceId: this.videoInput ? {exact: this.videoInput} : undefined},
+				video: { deviceId: this.videoInput ? { exact: this.videoInput } : undefined },
 			}
 			navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
 				this.stream = stream

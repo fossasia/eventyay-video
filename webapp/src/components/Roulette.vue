@@ -26,10 +26,10 @@
 import AVDevicePrompt from 'components/AVDevicePrompt'
 import JanusVideoroom from 'components/janus/JanusVideoroom'
 import SoundMeter from 'lib/webrtc/soundmeter'
-import {mapActions, mapMutations, mapState} from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
-	components: {AVDevicePrompt, JanusVideoroom},
+	components: { AVDevicePrompt, JanusVideoroom },
 	props: {
 		room: {
 			type: Object,
@@ -104,13 +104,13 @@ export default {
 				window.clearInterval(this.soundMeterInterval)
 			}
 			this.stopCall()
-			this.startRequesting({room: this.room})
+			this.startRequesting({ room: this.room })
 			this.hasPreviousCall = true
 		},
 		startVideo() {
 			const constraints = {
-				audio: {deviceId: localStorage.audioInput ? {exact: localStorage.audioInput} : undefined},
-				video: {deviceId: localStorage.videoInput ? {exact: localStorage.videoInput} : undefined},
+				audio: { deviceId: localStorage.audioInput ? { exact: localStorage.audioInput } : undefined },
+				video: { deviceId: localStorage.videoInput ? { exact: localStorage.videoInput } : undefined },
 			}
 			navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
 				this.stream = stream

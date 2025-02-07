@@ -1,5 +1,5 @@
 <template lang="pug">
-#standalone-app(:class="{fullscreen, 'themed-bg': themedBackground}", :style="[style, themeVariables]")
+#standalone-app(:class="{ fullscreen, 'themed-bg': themedBackground }", :style="[style, themeVariables]")
 	.fatal-indicator.mdi.mdi-alert-octagon(v-if="fatalError || fatalConnectionError", :title="errorMessage")
 	.content(v-else-if="world")
 		router-view(:room="room", :config="config")

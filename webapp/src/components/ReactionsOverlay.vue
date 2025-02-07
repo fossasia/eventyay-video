@@ -76,8 +76,8 @@ export default {
 			element.style[this.direction === 'vertical' ? 'left' : 'top'] = `calc(${startingPosition * 100}% - 12px)`
 			const axis = this.direction === 'vertical' ? 'Y' : 'X'
 			const animation = element.animate([
-				{opacity: 1, transform: `translate${axis}(0px)`},
-				{opacity: 0, transform: `translate${axis}(-${targetPosition}px)`}
+				{ opacity: 1, transform: `translate${axis}(0px)` },
+				{ opacity: 0, transform: `translate${axis}(-${targetPosition}px)` }
 			], {
 				duration: 1200 + 500 * Math.random()
 			})
