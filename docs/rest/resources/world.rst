@@ -56,7 +56,7 @@ Endpoints
             "room.delete": ["admin"],
             "chat.moderate": ["admin"],
         },
-        "domain": "sample.venueless.events"
+        "domain": "sample.eventyay-video.events"
       }
 
    :statuscode 200: no error
@@ -102,7 +102,7 @@ Endpoints
             "room.delete": ["admin"],
             "chat.moderate": ["admin"],
         },
-        "domain": "sample.venueless.events"
+        "domain": "sample.eventyay-video.events"
       }
 
    :statuscode 200: no error
@@ -112,7 +112,7 @@ Endpoints
 
 .. http:post:: /api/v1/worlds/(world_id)/delete_user
 
-   Deletes a given user by ID. You can either supply a ``user_id`` with Venueless' internal ID value, or a ``token_id``
+   Deletes a given user by ID. You can either supply a ``user_id`` with eventyay-video' internal ID value, or a ``token_id``
    with the ID from a JWT authorization.
 
    **Example request**:
