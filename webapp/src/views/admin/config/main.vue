@@ -30,8 +30,8 @@
 			bunt-checkbox(v-model="config.bbb_defaults.bbb_disable_cam", label="Disable camera for non-moderators", name="bbb_disable_cam")
 			bunt-checkbox(v-model="config.bbb_defaults.bbb_disable_chat", label="Disable public chat for non-moderators", name="bbb_disable_chat")
 			h2 Settings for stages
-			bunt-input-outline-container(label="hls.js config", :class="{error: $v.hlsConfig.$invalid}")
-				textarea(slot-scope="{focus, blur}", @focus="focus", @blur="blur", v-model="hlsConfig")
+			bunt-input-outline-container(label="hls.js config", :class="{ error: $v.hlsConfig.$invalid }")
+				textarea(slot-scope="{ focus, blur }", @focus="focus", @blur="blur", v-model="hlsConfig")
 			.json-error-message {{ $v.hlsConfig.$params.isJson.message }}
 	.ui-form-actions
 		bunt-button.btn-save(@click="save", :loading="saving", :error-message="error") Save

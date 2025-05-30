@@ -8,7 +8,7 @@ import { mapState, mapGetters } from 'vuex'
 import { Session } from '@pretalx/schedule'
 
 export default {
-	components: {Session},
+	components: { Session },
 	props: {
 		room: Object
 	},

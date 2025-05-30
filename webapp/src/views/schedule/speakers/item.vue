@@ -83,7 +83,7 @@ export default {
 			flex-direction: column
 			align-items: center
 			> *
-				width: @css{min(920px, 100%)}
+				width: @css{ min(920px, 100%) }
 	.speaker
 		display: flex
 		flex-direction: column

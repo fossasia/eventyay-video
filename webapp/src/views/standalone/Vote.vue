@@ -21,12 +21,12 @@ export default {
 	},
 	async created() {
 		if (!linkCache || linkCache.room !== this.room) {
-			const { url } = await api.call('room.invite.anonymous.link', {room: this.room.id})
+			const { url } = await api.call('room.invite.anonymous.link', { room: this.room.id })
 			linkCache = {
 				room: this.room,
 				url,
 				shortUrl: url.replace(/^https?:\/\//, ''),
-				qrcode: await QRCode.toString(url, {type: 'svg'})
+				qrcode: await QRCode.toString(url, { type: 'svg' })
 			}
 		}
 	}

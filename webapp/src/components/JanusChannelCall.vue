@@ -6,7 +6,7 @@
 import JanusVideoroom from 'components/janus/JanusVideoroom'
 
 export default {
-	components: {JanusVideoroom},
+	components: { JanusVideoroom },
 	props: {
 		call: {
 			type: Object,

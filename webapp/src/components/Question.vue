@@ -1,5 +1,5 @@
 <template lang="pug">
-.c-question(:class="{queued: question.state === 'mod_queue', 'has-voted': question.voted, pinned: question.is_pinned, archived: question.state === 'archived', managing: isManaging}")
+.c-question(:class="{ queued: question.state === 'mod_queue', 'has-voted': question.voted, pinned: question.is_pinned, archived: question.state === 'archived', managing: isManaging }")
 	.moderation-block(v-if="question.state === 'mod_queue'")
 		bunt-icon-button(:disabled="!isManaging", :tooltip="isManaging ? $t('Question:moderation-approve-button:label') : $t('Question:attendee-awaiting-approval:label')", tooltip-placement="right", :tooltip-fixed="true", @click="doAction('approve')") {{ isManaging ? 'eye-check' : 'eye-off' }}
 	.votes(v-else, @click="vote")
@@ -8,7 +8,7 @@
 		| {{ $t('Question:vote-count:label') }}
 	.content {{ question.content }}
 	menu-dropdown(v-if="isManaging && hasPermission('room:question.moderate')", v-model="showModerationMenu", strategy="fixed")
-		template(v-slot:button="{toggle}")
+		template(v-slot:button="{ toggle }")
 			bunt-icon-button#btn-menu-toggle(@click="toggle") dots-vertical
 		template(v-slot:menu)
 			.approve-question(v-if="question.state === 'mod_queue'", @click="doAction('approve')") {{ $t('Question:moderation-menu:approve-question:label') }}

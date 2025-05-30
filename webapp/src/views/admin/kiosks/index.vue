@@ -3,7 +3,7 @@
 	.header
 		.actions
 			h2 Kiosks
-			bunt-link-button.btn-create(:to="{name: 'admin:kiosks:new'}") Create a new kiosk
+			bunt-link-button.btn-create(:to="{ name: 'admin:kiosks:new' }") Create a new kiosk
 		bunt-input.search(name="search", placeholder="Search kiosks", icon="search", v-model="search")
 	.kiosks-list
 		.header
@@ -37,7 +37,7 @@ export default {
 		}
 	},
 	async created() {
-		this.kiosks = (await api.call('user.list', {type: 'kiosk'})).results
+		this.kiosks = (await api.call('user.list', { type: 'kiosk' })).results
 	}
 }
 </script>

@@ -7,7 +7,7 @@
 			.exhibitor-label {{ $t("Exhibitors:exhibitor:label") }}
 			.actions
 					bunt-button.btn-create(v-if="hasPermission('world:rooms.create.exhibition')", @click="$router.push({name: 'exhibitors:exhibitor', params: {exhibitorId: ''}})") {{ $t('Exhibitors:create:label') }}
-		RecycleScroller.tbody.bunt-scrollbar(v-if="exhibitors", :items="exhibitors", :item-size="48", v-slot="{item: exhibitor}", v-scrollbar.y="")
+		RecycleScroller.tbody.bunt-scrollbar(v-if="exhibitors", :items="exhibitors", :item-size="48", v-slot="{ item: exhibitor }", v-scrollbar.y="")
 			router-link.exhibitor(:to="{name: 'exhibitors:exhibitor', params: {exhibitorId: exhibitor.id}}").table-row
 				.name {{ exhibitor.name }}
 		bunt-progress-circular(v-else, size="huge", :page="true")

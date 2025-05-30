@@ -3,7 +3,7 @@
 	.error(v-if="error") We could not fetch the current configuration.
 	template(v-else-if="config")
 		.ui-page-header
-			bunt-icon-button(@click="$router.push({name: 'admin:rooms:index'})") arrow_left
+			bunt-icon-button(@click="$router.push({ name: 'admin:rooms:index' })") arrow_left
 			h1 {{ inferredType ? inferredType.name : 'Mystery Room' }} :
 				span.room-name(v-html="$emojify(config.name)")
 			.actions
@@ -50,7 +50,7 @@ export default {
 	},
 	async created() {
 		try {
-			this.config = await api.call('room.config.get', {room: this.roomId})
+			this.config = await api.call('room.config.get', { room: this.roomId })
 		} catch (error) {
 			this.error = error
 			console.error(error)
@@ -62,8 +62,8 @@ export default {
 			this.deleting = true
 			this.deleteError = null
 			try {
-				await api.call('room.delete', {room: this.config.id})
-				this.$router.replace({name: 'admin:rooms:index'})
+				await api.call('room.delete', { room: this.config.id })
+				this.$router.replace({ name: 'admin:rooms:index' })
 			} catch (error) {
 				this.deleteError = this.$t(`error:${error.code}`)
 			}

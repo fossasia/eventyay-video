@@ -1,7 +1,7 @@
 <template lang="pug">
-a.c-linear-schedule-session(:class="{faved}", :style="style", :href="link", @click="onSessionLinkClick($event, session)", :target="linkTarget")
+a.c-linear-schedule-session(:class="{ faved }", :style="style", :href="link", @click="onSessionLinkClick($event, session)", :target="linkTarget")
 	.time-box
-		.start(:class="{'has-ampm': hasAmPm}")
+		.start(:class="{ 'has-ampm': hasAmPm }")
 			.time {{ startTime.time }}
 			.ampm(v-if="startTime.ampm") {{ startTime.ampm }}
 		.duration {{ getPrettyDuration(session.start, session.end) }}
@@ -22,7 +22,7 @@ a.c-linear-schedule-session(:class="{faved}", :style="style", :href="link", @cli
 				path(d="M10.2426 17H15C15.5523 17 16 16.5523 16 16V14.0233C15.9996 14.0079 15.9996 13.9924 16 13.9769V11.2426L18 9.2426V13.2792L22 14.6126V7.38742L18.7828 8.45982L21.9451 5.29754L22.6838 5.05132C23.3313 4.83547 24 5.31744 24 6V16C24 16.6826 23.3313 17.1645 22.6838 16.9487L18 15.3874V16C18 17.6569 16.6569 19 15 19H8.24264L10.2426 17z", fill="#758CA3")
 		.tags-box
 			.tags(v-for="tag_item of session.tags")
-				.tag-item(:style="{'background-color': tag_item.color, 'color': getContrastColor(tag_item.color)}") {{ tag_item.tag }}
+				.tag-item(:style="{ 'background-color': tag_item.color, 'color': getContrastColor(tag_item.color) }") {{ tag_item.tag }}
 		.abstract(v-if="showAbstract", v-html="abstract")
 		.bottom-info
 			.track(v-if="session.track") {{ getLocalizedString(session.track.name) }}
@@ -69,7 +69,7 @@ export default {
 		linkTarget: { default: '_self' },
 		generateSessionLinkUrl: {
 			default() {
-				return ({eventUrl, session}) => `${eventUrl}talk/${session.id}/`
+				return ({ eventUrl, session }) => `${eventUrl}talk/${session.id}/`
 			}
 		},
 		onSessionLinkClick: {
@@ -86,7 +86,7 @@ export default {
 	},
 	computed: {
 		link() {
-			return this.generateSessionLinkUrl({eventUrl: this.eventUrl, session: this.session})
+			return this.generateSessionLinkUrl({ eventUrl: this.eventUrl, session: this.session })
 		},
 		style() {
 			return {

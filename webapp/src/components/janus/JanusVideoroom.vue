@@ -11,7 +11,7 @@
 	.users(v-show="connectionState == 'connected'", ref="container", :style="gridStyle", v-resize-observer="onResize")
 
 		.me.feed
-			.video-container(:style="{boxShadow: size != 'tiny' ? `0 0 0px 4px ${primaryColor.alpha(soundLevels.ourVideo * 20)}` : 'none'}", id="janus_ourVideo")
+			.video-container(:style="{ boxShadow: size != 'tiny' ? `0 0 0px 4px ${primaryColor.alpha(soundLevels.ourVideo * 20)}` : 'none' }", id="janus_ourVideo")
 				video(v-show="publishingWithVideo && publishingState !== 'unpublished'", ref="ourVideo", autoplay, playsinline, muted="muted")
 			.publishing-state(v-if="publishingState !== 'published'")
 				bunt-progress-circular(v-if="publishingState == 'publishing'", size="huge", :page="true")
@@ -28,8 +28,8 @@
 			.mute-indicator(v-if="knownMuteState")
 				.bunt-icon.mdi.mdi-microphone-off
 
-		.peer.feed(v-for="(f, idx) in feeds", :key="f.rfid", :style="{width: layout.width, height: layout.height}")
-			.video-container(v-show="f.rfattached", :style="{boxShadow: size != 'tiny' ? `0 0 0px 4px ${primaryColor.alpha(soundLevels[f.rfid] * 20)}` : 'none'}", :id="'janus_' + f.rfid")
+		.peer.feed(v-for="(f, idx) in feeds", :key="f.rfid", :style="{ width: layout.width, height: layout.height }")
+			.video-container(v-show="f.rfattached", :style="{ boxShadow: size != 'tiny' ? `0 0 0px 4px ${primaryColor.alpha(soundLevels[f.rfid] * 20)}` : 'none' }", :id="'janus_' + f.rfid")
 				video(ref="peerVideo", autoplay, playsinline)
 			.subscribing-state(v-if="!f.rfattached")
 				bunt-progress-circular(size="huge", :page="true")
@@ -64,18 +64,18 @@
 					bunt-button(type="submit") {{ $t('JanusVideoroom:tool-screenshare:start') }}
 </template>
 <script>
-import {Janus} from 'janus-gateway'
-import {mapState} from 'vuex'
+import { Janus } from 'janus-gateway'
+import { mapState } from 'vuex'
 import api from 'lib/api'
 import ChatUserCard from 'components/ChatUserCard'
 import Avatar from 'components/Avatar'
 import AVDevicePrompt from 'components/AVDevicePrompt'
 import FeedbackPrompt from 'components/FeedbackPrompt'
 import Prompt from 'components/Prompt'
-import {createPopper} from '@popperjs/core'
+import { createPopper } from '@popperjs/core'
 import SoundMeter from 'lib/webrtc/soundmeter'
 import Color from 'color'
-import {colors} from 'theme'
+import { colors } from 'theme'
 import { v4 as uuid } from 'uuid'
 import adapter from 'webrtc-adapter'
 
@@ -127,7 +127,7 @@ const log = (source, level, message) => {
 }
 
 export default {
-	components: {Avatar, AVDevicePrompt, ChatUserCard, FeedbackPrompt, Prompt},
+	components: { Avatar, AVDevicePrompt, ChatUserCard, FeedbackPrompt, Prompt },
 	props: {
 		server: {
 			type: String,
@@ -269,7 +269,7 @@ export default {
 			return LOG_ENTRIES
 		},
 		cleanup() {
-			this.janus.destroy({cleanupHandles: true})
+			this.janus.destroy({ cleanupHandles: true })
 			this.connectionState = 'disconnected'
 			this.publishingState = 'unpublished'
 			this.screensharingState = 'unpublished'
@@ -360,7 +360,7 @@ export default {
 								id: this.sessionId + '_' + uuid(),
 								display: 'venueless user', // we abuse janus' display name field for the venueless user id
 							}
-							this.screensharePluginHandle.send({message: register})
+							this.screensharePluginHandle.send({ message: register })
 						},
 						error: (error) => {
 							log('venueless', 'error', '  -- Error attaching plugin...', error)
@@ -421,7 +421,7 @@ export default {
 							}
 							if (jsep) {
 								log('venueless', 'debug', 'Handling SDP as well...', jsep)
-								this.screensharePluginHandle.handleRemoteJsep({jsep: jsep})
+								this.screensharePluginHandle.handleRemoteJsep({ jsep: jsep })
 								var audio = msg.audio_codec
 								if (this.ourScreenShareStream && this.ourScreenShareStream.getAudioTracks() && this.ourScreenShareStream.getAudioTracks().length > 0 &&
 									!audio) {
@@ -493,7 +493,7 @@ export default {
 
 			if (this.videoRequested) {
 				if (localStorage.videoInput) {
-					media.video = {deviceId: localStorage.videoInput, width: 1280, height: 720}
+					media.video = { deviceId: localStorage.videoInput, width: 1280, height: 720 }
 				} else {
 					media.video = 'hires'
 				}
@@ -508,7 +508,7 @@ export default {
 			}
 
 			if (localStorage.audioInput) {
-				media.audio = {deviceId: localStorage.audioInput}
+				media.audio = { deviceId: localStorage.audioInput }
 			}
 			if (localStorage.audioInput !== this.audioInput) {
 				media.replaceAudio = true
@@ -525,8 +525,8 @@ export default {
 					simulcast: false,
 					simulcast2: false,
 					success: (jsep) => {
-						const publish = {request: 'configure', audio: true, video: this.publishingWithVideo, bitrate: this.upstreamBitrate}
-						this.mainPluginHandle.send({message: publish, jsep: jsep})
+						const publish = { request: 'configure', audio: true, video: this.publishingWithVideo, bitrate: this.upstreamBitrate }
+						this.mainPluginHandle.send({ message: publish, jsep: jsep })
 					},
 					error: (error) => {
 						if (this.publishingWithVideo) {
@@ -543,7 +543,7 @@ export default {
 			// TODO: framerate? default of 3 is pretty low
 			// TODO: currently, the "local" screenshare stream isn't handled specially, but also shown as a remote feed. This
 			// should probably be changed, since this causes an echo when a tab is shared with audio
-			const media = {audioRecv: false, videoRecv: false, audioSend: false, videoSend: true, video: 'screen', captureDesktopAudio: true}
+			const media = { audioRecv: false, videoRecv: false, audioSend: false, videoSend: true, video: 'screen', captureDesktopAudio: true }
 
 			this.showScreensharePrompt = false
 			this.screensharingState = 'publishing'
@@ -552,8 +552,8 @@ export default {
 					media: media,
 					success: (jsep) => {
 						log('venueless', 'debug', 'Got publisher SDP!', jsep)
-						var publish = {request: 'configure', audio: true, video: true}
-						this.screensharePluginHandle.send({message: publish, jsep: jsep})
+						var publish = { request: 'configure', audio: true, video: true }
+						this.screensharePluginHandle.send({ message: publish, jsep: jsep })
 					},
 					error: (error) => {
 						log('venueless', 'error', 'WebRTC error:', error)
@@ -594,7 +594,7 @@ export default {
 						subscribe.offer_video = false
 					}
 					remoteFeed.videoCodec = video
-					remoteFeed.send({message: subscribe})
+					remoteFeed.send({ message: subscribe })
 				},
 				error: (error) => {
 					log('venueless', 'error', '  -- Error attaching plugin...', error)
@@ -642,11 +642,11 @@ export default {
 							jsep: jsep,
 							// Add data:true here if you want to subscribe to datachannels as well
 							// (obviously only works if the publisher offered them in the first place)
-							media: {audioSend: false, videoSend: false},	// We want recvonly audio/video
+							media: { audioSend: false, videoSend: false },	// We want recvonly audio/video
 							success: (jsep) => {
 								log('venueless', 'debug', 'Got SDP!', jsep)
-								var body = {request: 'start', room: this.roomId}
-								remoteFeed.send({message: body, jsep: jsep})
+								var body = { request: 'start', room: this.roomId }
+								remoteFeed.send({ message: body, jsep: jsep })
 							},
 							error: (error) => {
 								log('venueless', 'error', 'WebRTC error:', error)
@@ -709,7 +709,7 @@ export default {
 							token: this.token,
 							display: 'venueless user', // we abuse janus' display name field for the venueless user id
 						}
-						this.mainPluginHandle.send({message: register})
+						this.mainPluginHandle.send({ message: register })
 					},
 					error: (error) => {
 						this.connectionState = 'failed'
@@ -821,7 +821,7 @@ export default {
 						}
 						if (jsep) {
 							log('venueless', 'debug', 'Handling SDP as well...', jsep)
-							this.mainPluginHandle.handleRemoteJsep({jsep: jsep})
+							this.mainPluginHandle.handleRemoteJsep({ jsep: jsep })
 							// Check if any of the media we wanted to publish has
 							// been rejected (e.g., wrong or unsupported codec)
 							var audio = msg.audio_codec
@@ -845,8 +845,8 @@ export default {
 							if (newUpstreamBitrate !== this.upstreamBitrate) {
 								this.upstreamBitrate = newUpstreamBitrate
 								log('venueless', 'info', 'Received slowLink on outgoing video, reducing bitrate to ' + this.upstreamBitrate)
-								const publish = {request: 'configure', audio: true, video: this.publishingWithVideo, bitrate: this.upstreamBitrate}
-								this.mainPluginHandle.send({message: publish})
+								const publish = { request: 'configure', audio: true, video: this.publishingWithVideo, bitrate: this.upstreamBitrate }
+								this.mainPluginHandle.send({ message: publish })
 								this.upstreamSlowLinkCount = 0
 							} else {
 								if (this.upstreamSlowLinkCount > 5) {
@@ -941,7 +941,7 @@ export default {
 			})
 		},
 		async fetchUser(feed) {
-			feed.venueless_user = await api.call('januscall.identify', {id: feed.rfid})
+			feed.venueless_user = await api.call('januscall.identify', { id: feed.rfid })
 			const rfindex = this.feeds.findIndex((rf) => rf.rfid === feed.rfid)
 			this.$set(this.feeds, rfindex, feed) // force reactivity
 		},

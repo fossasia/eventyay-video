@@ -8,7 +8,7 @@ import api from 'lib/api'
 import JanusConference from 'components/janus/JanusConference'
 
 export default {
-	components: {JanusConference},
+	components: { JanusConference },
 	props: {
 		room: {
 			type: Object,
@@ -41,7 +41,7 @@ export default {
 		this.loading = true
 		this.error = null
 		try {
-			const {server, roomId, token, sessionId, iceServers} = await api.call('januscall.room_url', {room: this.room.id})
+			const { server, roomId, token, sessionId, iceServers } = await api.call('januscall.room_url', { room: this.room.id })
 			if (!this.$el || this._isDestroyed) return
 			this.roomId = roomId
 			this.token = token

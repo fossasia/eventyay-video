@@ -9,12 +9,12 @@
 			markdown-content.description(:markdown="talk.description")
 			.downloads(v-if="talk.resources && talk.resources.length > 0")
 				h2 {{ $t("schedule/talks:downloads-headline:text") }}
-				a.download(v-for="{resource, description} of talk.resources", :href="getAbsoluteResourceUrl(resource)", target="_blank")
+				a.download(v-for="{ resource, description } of talk.resources", :href="getAbsoluteResourceUrl(resource)", target="_blank")
 					.mdi(:class="`mdi-${getIconByFileEnding(resource)}`")
 					.filename {{ description }}
 			bunt-link-button.btn-create.router-link.stage(v-if="getRoomIdByName(roomName)", :to="{name: 'room', params: {roomId: getRoomIdByName(roomName)}}") Join room
 		.speakers(v-if="talk.speakers.length > 0")
-			.header {{ $t('schedule/talks/item:speakers:header', {count: talk.speakers.length})}}
+			.header {{ $t('schedule/talks/item:speakers:header', { count: talk.speakers.length }) }}
 			.speakers-list
 				.speaker(v-for="speaker of talk.speakers")
 					img.avatar(v-if="speaker.avatar", :src="speaker.avatar")
@@ -31,7 +31,7 @@ import MarkdownContent from 'components/MarkdownContent'
 import { getIconByFileEnding } from 'lib/filetypes'
 
 export default {
-	components: {MarkdownContent},
+	components: { MarkdownContent },
 	props: {
 		talkId: String
 	},

@@ -1,9 +1,9 @@
 <template lang="pug">
 .c-timezone-changer
-	bunt-button(:class="{active: localTimezone === userTimezone}", @click="$store.dispatch('updateUserTimezone', localTimezone)")
+	bunt-button(:class="{ active: localTimezone === userTimezone }", @click="$store.dispatch('updateUserTimezone', localTimezone)")
 		.zone-type local
 		.timezone-label {{ localTimezoneLabel }}
-	bunt-button(:class="{active: eventTimezone === userTimezone}", @click="$store.dispatch('updateUserTimezone', eventTimezone)")
+	bunt-button(:class="{ active: eventTimezone === userTimezone }", @click="$store.dispatch('updateUserTimezone', eventTimezone)")
 		.zone-type event
 		.timezone-label {{ eventTimezoneLabel }}
 </template>

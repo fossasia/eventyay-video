@@ -3,7 +3,7 @@
 	.error(v-if="error") We could not fetch the current configuration.
 	template(v-else-if="kiosk")
 		.ui-page-header
-			bunt-icon-button(@click="$router.push({name: 'admin:kiosks:index'})") arrow_left
+			bunt-icon-button(@click="$router.push({ name: 'admin:kiosks:index' })") arrow_left
 			h1 {{ kiosk.profile.display_name }}
 			.actions
 				bunt-button.btn-delete-kiosk(@click="showDeletePrompt = true") delete
@@ -91,7 +91,7 @@ export default {
 	},
 	async created() {
 		try {
-			this.kiosk = await api.call('user.kiosk.fetch', {id: this.kioskId})
+			this.kiosk = await api.call('user.kiosk.fetch', { id: this.kioskId })
 			if (!this.kiosk.profile.show_reactions) this.$set(this.kiosk.profile, 'show_reactions', true)
 			if (!this.kiosk.profile.slides) this.$set(this.kiosk.profile, 'slides', {
 				pinned_poll: true,
@@ -128,8 +128,8 @@ export default {
 			this.deleting = true
 			this.deleteError = null
 			try {
-				await api.call('user.delete', {id: this.kiosk.id})
-				this.$router.replace({name: 'admin:kiosks:index'})
+				await api.call('user.delete', { id: this.kiosk.id })
+				this.$router.replace({ name: 'admin:kiosks:index' })
 			} catch (error) {
 				this.deleteError = this.$t(`error:${error.code}`)
 			}

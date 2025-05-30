@@ -3,7 +3,7 @@
 	.scroll-content(ref="content", @scroll="onScroll")
 		slot
 	template(v-for="dim of Object.keys(dimensions)")
-		div(:class="[`scrollbar-rail-${dim}`, {active: draggingDimension === dim}]", @pointerdown="onPointerdown(dim, $event)")
+		div(:class="[`scrollbar-rail-${dim}`, { active: draggingDimension === dim }]", @pointerdown="onPointerdown(dim, $event)")
 			.scrollbar-thumb(:ref="`thumb-${dim}`", :style="thumbStyles[dim]")
 </template>
 <script>
