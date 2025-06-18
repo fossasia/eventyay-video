@@ -1,5 +1,5 @@
 <template lang="pug">
-#app(:class="{'has-background-room': backgroundRoom, 'override-sidebar-collapse': overrideSidebarCollapse}", :style="[themeVariables, browserhackStyle, mediaConstraintsStyle]", :key="`${userLocale}-${userTimezone}`")
+#app(:class="{'has-background-room': backgroundRoom, 'override-sidebar-collapse': overrideSidebarCollapse, 'sidebar-collapsed': sidebarCollapsed}", :style="[themeVariables, browserhackStyle, mediaConstraintsStyle]", :key="`${userLocale}-${userTimezone}`")
 	.fatal-connection-error(v-if="fatalConnectionError")
 		template(v-if="fatalConnectionError.code === 'world.unknown_world'")
 			.mdi.mdi-help-circle
@@ -21,7 +21,7 @@
 		app-bar(v-if="$mq.below['l']", @toggleSidebar="toggleSidebar")
 		transition(name="backdrop")
 			.sidebar-backdrop(v-if="$mq.below['l'] && showSidebar && !overrideSidebarCollapse", @pointerup="showSidebar = false")
-		rooms-sidebar(:show="$mq.above['l'] || showSidebar || overrideSidebarCollapse", @close="showSidebar = false")
+		rooms-sidebar(:show="$mq.above['l'] || showSidebar || overrideSidebarCollapse", @close="showSidebar = false", :collapsed="sidebarCollapsed", @toggle-collapsed="toggleSidebarCollapsed")
 		router-view(:key="!$route.path.startsWith('/admin') ? $route.fullPath : null", :role="roomHasMedia ? '' : 'main'")
 		//- defining keys like this keeps the playing dom element alive for uninterupted transitions
 		media-source(v-if="roomHasMedia && user.profile.greeted", ref="primaryMediaSource", :room="room", :key="room.id", role="main")
@@ -59,7 +59,8 @@ export default {
 			themeVariables,
 			backgroundRoom: null,
 			showSidebar: false,
-			windowHeight: null
+			windowHeight: null,
+			sidebarCollapsed: false
 		}
 	},
 	computed: {
@@ -102,7 +103,8 @@ export default {
 			const style = {
 				'--chatbar-width': hasChatbar ? '380px' : '0px',
 				'--mobile-media-height': this.stageStreamCollapsed ? '56px' : hasChatbar ? 'min(56.25vw, 40vh)' : (hasStageTools ? 'calc(var(--vh100) - 48px - 2 * 56px)' : 'calc(var(--vh100) - 48px - 56px)'),
-				'--has-stagetools': hasStageTools ? '1' : '0'
+				'--has-stagetools': hasStageTools ? '1' : '0',
+				'--sidebar-width': this.sidebarCollapsed ? '60px' : '280px'
 			}
 			if (this.mediaSourcePlaceholderRect) {
 				Object.assign(style, {
@@ -152,6 +154,9 @@ export default {
 		},
 		toggleSidebar() {
 			this.showSidebar = !this.showSidebar
+		},
+		toggleSidebarCollapsed() {
+			this.sidebarCollapsed = !this.sidebarCollapsed
 		},
 		clearTokenAndReload() {
 			localStorage.removeItem('token')
@@ -221,6 +226,11 @@ export default {
 	grid-template-areas: "rooms-sidebar main"
 	--sidebar-width: 280px
 	--pretalx-clr-primary: var(--clr-primary)
+	transition: grid-template-columns 0.3s ease
+	
+	&.sidebar-collapsed
+		--sidebar-width: 60px
+		
 	.c-app-bar
 		grid-area: app-bar
 	.c-rooms-sidebar

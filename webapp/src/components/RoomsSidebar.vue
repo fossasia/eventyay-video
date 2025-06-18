@@ -1,22 +1,24 @@
 <template lang="pug">
 transition(name="sidebar")
-	.c-rooms-sidebar(v-show="show && !snapBack", :style="style", role="navigation", @pointerdown="onPointerdown", @pointermove="onPointermove", @pointerup="onPointerup", @pointercancel="onPointercancel")
-		router-link.logo(:to="{name: 'home'}", v-if="$mq.above['m']", :class="{'fit-to-width': theme.logo.fitToWidth}")
-			img(:src="theme.logo.url", :alt="world.title")
-		bunt-icon-button#btn-close-sidebar(v-else, @click="$emit('close')") menu
+	.c-rooms-sidebar(v-show="show && !snapBack", :class="{collapsed}", :style="style", role="navigation", @pointerdown="onPointerdown", @pointermove="onPointermove", @pointerup="onPointerup", @pointercancel="onPointercancel")
+		.sidebar-header
+			router-link.logo(:to="{name: 'home'}", v-if="$mq.above['m'] && !collapsed", :class="{'fit-to-width': theme.logo.fitToWidth}")
+				img(:src="theme.logo.url", :alt="world.title")
+			bunt-icon-button#btn-close-sidebar(v-else-if="$mq.below['l']", @click="$emit('close')") menu
+			bunt-icon-button#btn-toggle-sidebar(v-if="$mq.above['l']", @click="$emit('toggle-collapsed')", :data-tooltip="collapsed ? 'Expand sidebar' : 'Collapse sidebar'") {{ collapsed ? 'menu' : 'chevron-left' }}
 		scrollbars(y)
 			.global-links(role="group", aria-label="pages")
-				router-link.room(v-if="roomsByType.page.includes(rooms[0])", :to="{name: 'home'}", v-html="$emojify(rooms[0].name)")
-				router-link.room(:to="{name: 'schedule'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ $t('RoomsSidebar:schedule:label') }}
-				router-link.room(:to="{name: 'schedule:sessions'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ $t('RoomsSidebar:session:label') }}
-				router-link.room(:to="{name: 'schedule:speakers'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ $t('RoomsSidebar:speaker:label') }}
-				router-link.room(v-for="page of roomsByType.page", v-if="page !== rooms[0]", :to="{name: 'room', params: {roomId: page.id}}", v-html="$emojify(page.name)")
+				router-link.room(v-if="roomsByType.page.includes(rooms[0])", :to="{name: 'home'}", v-html="!collapsed ? $emojify(rooms[0].name) : ''")
+				router-link.room(:to="{name: 'schedule'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ !collapsed ? $t('RoomsSidebar:schedule:label') : '' }}
+				router-link.room(:to="{name: 'schedule:sessions'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ !collapsed ? $t('RoomsSidebar:session:label') : '' }}
+				router-link.room(:to="{name: 'schedule:speakers'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ !collapsed ? $t('RoomsSidebar:speaker:label') : '' }}
+				router-link.room(v-for="page of roomsByType.page", v-if="page !== rooms[0]", :to="{name: 'room', params: {roomId: page.id}}", v-html="!collapsed ? $emojify(page.name) : ''")
 			.group-title#stages-title(v-if="roomsByType.stage.length || hasPermission('world:rooms.create.stage')")
-				span {{ $t('RoomsSidebar:stages-headline:text') }}
-				bunt-icon-button(v-if="hasPermission('world:rooms.create.stage')", @click="showStageCreationPrompt = true") plus
+				span {{ !collapsed ? $t('RoomsSidebar:stages-headline:text') : '' }}
+				bunt-icon-button(v-if="hasPermission('world:rooms.create.stage') && !collapsed", @click="showStageCreationPrompt = true") plus
 			.stages(role="group", aria-describedby="stages-title")
 				router-link.stage(v-for="stage, index of roomsByType.stage", :to="stage.room === rooms[0] ? {name: 'home'} : {name: 'room', params: {roomId: stage.room.id}}", :class="{active: stage.room.id === $route.params.roomId, session: stage.session, live: stage.session && stage.room.schedule_data, 'has-image': stage.image, 'starts-with-emoji': startsWithEmoji(stage.room.name)}")
-					template(v-if="stage.session")
+					template(v-if="stage.session && !collapsed")
 						img.preview(v-if="stage.image", :src="stage.image")
 						.info
 							.title {{ $localize(stage.session.title) }}
@@ -27,51 +29,51 @@ transition(name="sidebar")
 									.notifications(v-if="stage.notifications") {{ stage.notifications }}
 					template(v-else)
 						.room-icon(aria-hidden="true")
-						.name(v-html="$emojify(stage.room.name)")
-						.buffer
-						template(v-if="stage.room.users")
+						.name(v-if="!collapsed", v-html="$emojify(stage.room.name)")
+						.buffer(v-if="!collapsed")
+						template(v-if="stage.room.users && !collapsed")
 							.room-attendee
 								i.mdi.mdi-account-group.icon-viewer
 								.name(v-html="stage.room.users")
 						.notifications(v-if="stage.notifications") {{ stage.notifications }}
 			.group-title#chats-title(v-if="roomsByType.videoChat.length || roomsByType.textChat.length || hasPermission('world:rooms.create.chat') || hasPermission('world:rooms.create.bbb')")
-				span {{ $t('RoomsSidebar:channels-headline:text') }}
-				.buffer
-				bunt-icon-button(v-if="hasPermission('world:rooms.create.chat') || hasPermission('world:rooms.create.bbb')", tooltip="Create Channel", :tooltip-fixed="true", @click="showChatCreationPrompt = true") plus
-				bunt-icon-button(v-if="worldHasTextChannels", tooltip="Browse all channels", :tooltip-fixed="true", @click="showChannelBrowser = true") compass-outline
+				span {{ !collapsed ? $t('RoomsSidebar:channels-headline:text') : '' }}
+				.buffer(v-if="!collapsed")
+				bunt-icon-button(v-if="hasPermission('world:rooms.create.chat') || hasPermission('world:rooms.create.bbb')", tooltip="Create Channel", :tooltip-fixed="true", @click="showChatCreationPrompt = true", v-show="!collapsed") plus
+				bunt-icon-button(v-if="worldHasTextChannels", tooltip="Browse all channels", :tooltip-fixed="true", @click="showChannelBrowser = true", v-show="!collapsed") compass-outline
 			.chats(role="group", aria-describedby="chats-title")
 				router-link.video-chat(v-for="chat of roomsByType.videoChat", :to="chat === rooms[0] ? {name: 'home'} : {name: 'room', params: {roomId: chat.id}}", :class="{active: chat.id === $route.params.roomId, 'starts-with-emoji': startsWithEmoji(chat.name)}")
 					.room-icon(aria-hidden="true")
-					.name(v-html="$emojify(chat.name)")
+					.name(v-if="!collapsed", v-html="$emojify(chat.name)")
 					i.bunt-icon.activity-icon.mdi(v-if="chat.users === 'many' || chat.users === 'few'", :class="{'mdi-account-group': (chat.users === 'many'), 'mdi-account-multiple': (chat.users === 'few')}", v-tooltip.bottom.fixed="{text: $t('RoomsSidebar:users-tooltip:' + chat.users)}", :aria-label="$t('RoomsSidebar:users-tooltip:' + chat.users)")
 				router-link.text-chat(v-for="chat of roomsByType.textChat", :to="chat.room === rooms[0] ? {name: 'home'} : {name: 'room', params: {roomId: chat.room.id}}", :class="{unread: hasUnreadMessages(chat.room.modules[0].channel_id), 'starts-with-emoji': startsWithEmoji(chat.room.name)}")
 					.room-icon(aria-hidden="true")
-					.name(v-html="$emojify(chat.room.name)")
+					.name(v-if="!collapsed", v-html="$emojify(chat.room.name)")
 					.notifications(v-if="chat.notifications") {{ chat.notifications }}
-					bunt-icon-button(@click.prevent.stop="$store.dispatch('chat/leaveChannel', {channelId: chat.room.modules[0].channel_id})") close
-				bunt-button#btn-browse-channels-trailing(v-if="worldHasTextChannels", @click="showChannelBrowser = true") {{ $t('RoomsSidebar:browse-channels-button:label') }}
+					bunt-icon-button(@click.prevent.stop="$store.dispatch('chat/leaveChannel', {channelId: chat.room.modules[0].channel_id})", v-show="!collapsed") close
+				bunt-button#btn-browse-channels-trailing(v-if="worldHasTextChannels && !collapsed", @click="showChannelBrowser = true") {{ $t('RoomsSidebar:browse-channels-button:label') }}
 			.group-title#dm-title(v-if="directMessageChannels.length || hasPermission('world:chat.direct')")
-				span {{ $t('RoomsSidebar:direct-messages-headline:text') }}
-				bunt-icon-button(v-if="hasPermission('world:chat.direct')", tooltip="open a direct message", :tooltip-fixed="true", @click="showDMCreationPrompt = true") plus
+				span {{ !collapsed ? $t('RoomsSidebar:direct-messages-headline:text') : '' }}
+				bunt-icon-button(v-if="hasPermission('world:chat.direct')", tooltip="open a direct message", :tooltip-fixed="true", @click="showDMCreationPrompt = true", v-show="!collapsed") plus
 			.direct-messages(role="group", aria-describedby="dm-title")
 				router-link.direct-message(v-for="channel of directMessageChannels", :to="{name: 'channel', params: {channelId: channel.id}}", :class="{unread: hasUnreadMessages(channel.id)}")
 					i.bunt-icon.mdi(v-if="call && call.channel === channel.id", aria-hidden="true").mdi-phone
-					.name {{ getDMChannelName(channel) }}
+					.name(v-if="!collapsed") {{ getDMChannelName(channel) }}
 					.notifications(v-if="channel.notifications") {{ channel.notifications }}
-					bunt-icon-button(tooltip="remove", :tooltip-fixed="true", @click.prevent.stop="$store.dispatch('chat/leaveChannel', {channelId: channel.id})") close
+					bunt-icon-button(tooltip="remove", :tooltip-fixed="true", @click.prevent.stop="$store.dispatch('chat/leaveChannel', {channelId: channel.id})", v-show="!collapsed") close
 			.buffer
 			template(v-if="worldHasExhibition && (staffedExhibitions.length > 0 || hasPermission('world:rooms.create.exhibition'))")
-				.group-title {{ $t('RoomsSidebar:exhibitions-headline:text') }}
-				.admin
+				.group-title {{ !collapsed ? $t('RoomsSidebar:exhibitions-headline:text') : '' }}
+				.admin(v-if="!collapsed")
 					router-link(:to="{name: 'exhibitors'}") {{ $t('RoomsSidebar:exhibitions-manage:label') }}
 					router-link(:to="{name: 'contactRequests'}") {{ $t('RoomsSidebar:exhibitions-requests:label') }}
 			template(v-if="worldHasPosters && hasPermission('world:rooms.create.poster')")
-				.group-title {{ $t('RoomsSidebar:posters-headline:text') }}
-				.admin
+				.group-title {{ !collapsed ? $t('RoomsSidebar:posters-headline:text') : '' }}
+				.admin(v-if="!collapsed")
 					router-link(:to="{name: 'posters'}") {{ $t('RoomsSidebar:posters-manage:label') }}
 			template(v-if="hasPermission('world:users.list') || hasPermission('world:update') || hasPermission('world:announce') || hasPermission('room:update')")
-				.group-title {{ $t('RoomsSidebar:admin-headline:text') }}
-				.admin
+				.group-title {{ !collapsed ? $t('RoomsSidebar:admin-headline:text') : '' }}
+				.admin(v-if="!collapsed")
 					router-link.room(:to="{name: 'admin:announcements'}", v-if="hasPermission('world:announce')") {{ $t('RoomsSidebar:admin-announcements:label') }}
 					router-link.room(:to="{name: 'admin:users'}", v-if="hasPermission('world:users.list')") {{ $t('RoomsSidebar:admin-users:label') }}
 					router-link.room(:to="{name: 'admin:rooms:index'}", v-if="hasPermission('room:update')") {{ $t('RoomsSidebar:admin-rooms:label') }}
@@ -79,7 +81,7 @@ transition(name="sidebar")
 					router-link.room(:to="{name: 'admin:config'}", v-if="hasPermission('world:update')") {{ $t('RoomsSidebar:admin-config:label') }}
 		router-link.profile(:to="{name: 'preferences'}")
 			avatar(:user="user", :size="36")
-			.display-name {{ user.profile.display_name }}
+			.display-name(v-if="!collapsed") {{ user.profile.display_name }}
 			.mdi.mdi-cog
 		transition(name="prompt")
 			channel-browser(v-if="showChannelBrowser", @close="showChannelBrowser = false", @createChannel="showChannelBrowser = false, showChatCreationPrompt = true")
@@ -100,7 +102,11 @@ import CreateDmPrompt from 'components/CreateDmPrompt'
 export default {
 	components: { Avatar, ChannelBrowser, CreateStagePrompt, CreateChatPrompt, CreateDmPrompt },
 	props: {
-		show: Boolean
+		show: Boolean,
+		collapsed: {
+			type: Boolean,
+			default: false
+		}
 	},
 	data() {
 		return {
@@ -231,6 +237,186 @@ export default {
 	flex-direction: column
 	min-height: 0
 	max-height: var(--vh100)
+	transition: width 0.3s ease
+	
+	&.collapsed
+		width: 60px
+		overflow: hidden
+		
+		.sidebar-header
+			justify-content: center
+			
+		.global-links
+			> *
+				justify-content: center
+				padding: 0 8px
+				text-align: center
+				font-size: 0
+				position: relative
+				
+				&::before
+					content: ''
+					display: inline-block
+					width: 32px
+					height: 32px
+					background-color: var(--clr-primary)
+					border-radius: 6px
+					display: flex
+					align-items: center
+					justify-content: center
+					margin: 2px 0
+					transition: all 0.2s ease
+					
+				&.router-link-active::before
+					background-color: var(--clr-primary)
+					box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+					
+				&:hover::before
+					background-color: var(--clr-primary)
+					box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25)
+					transform: scale(1.02)
+					
+				// Generic page icon for any link without specific icon
+				&::before
+					content: '\F0218'
+					font-family: "Material Design Icons"
+					font-size: 18px
+					line-height: 32px
+					color: white
+					
+				// Home icon
+				&[href="/"]::before
+					content: '\F0A45'
+					font-family: "Material Design Icons"
+					font-size: 18px
+					line-height: 32px
+					color: white
+					
+				// Schedule icon
+				&[href*="/schedule"]::before
+					content: '\F0ED8'  // Calendar icon from Material Design Icons
+					font-family: "Material Design Icons"
+					font-size: 18px
+					line-height: 32px
+					color: white
+
+					
+				// Sessions icon
+				&[href*="/sessions"]::before
+					content: '\F0F21'
+					font-family: "Material Design Icons"
+					font-size: 18px
+					line-height: 32px
+					color: white
+					
+				// Speakers icon
+				&[href*="/speakers"]::before
+					content: '\F050F'
+					font-family: "Material Design Icons"
+					font-size: 18px
+					line-height: 32px
+					color: white
+					
+				&.router-link-active::before
+					color: white
+					background-color: var(--clr-primary)
+					box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+			
+		.stages, .chats, .direct-messages, .admin
+			> *
+				justify-content: center
+				padding: 0 8px
+				text-align: center
+				
+				.room-icon, .icon-viewer
+					margin: 0
+					width: 32px
+					height: 32px
+					background-color: var(--clr-primary)
+					border-radius: 6px
+					display: flex
+					align-items: center
+					justify-content: center
+					margin: 2px 0
+					transition: all 0.2s ease
+					
+					&::before
+						font-size: 18px
+						line-height: 32px
+						color: white
+						
+				&.router-link-active, &.active
+					.room-icon, .icon-viewer
+						background-color: var(--clr-primary)
+						box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3)
+						transform: scale(1.05)
+						
+				&:hover
+					.room-icon, .icon-viewer
+						background-color: var(--clr-primary)
+						box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25)
+						transform: scale(1.02)
+						
+				.notifications
+					position: absolute
+					top: 2px
+					right: 2px
+					margin: 0
+					
+				&.stage.session
+					height: 36px
+					padding: 0 8px
+					
+					img.preview
+						display: none
+						
+		.group-title
+			display: none
+			
+		.profile
+			justify-content: center
+			padding: 8px 4px
+	
+	.sidebar-header
+		display: flex
+		align-items: center
+		padding: 8px
+		border-bottom: 1px solid var(--clr-sidebar-hover-bg)
+		
+		#btn-toggle-sidebar
+			icon-button-style(color: white, style: clear)
+			margin-left: auto
+			background-color: var(--clr-primary)
+			border-radius: 6px
+			width: 32px
+			height: 32px
+			transition: all 0.2s ease
+			position: relative
+			
+			&:hover
+				background-color: var(--clr-primary)
+				box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25)
+				transform: scale(1.02)
+				
+			&::after
+				content: attr(data-tooltip)
+				position: absolute
+				left: 50%
+				top: -40px
+				transform: translateX(-50%)
+				background-color: rgba(0, 0, 0, 0.8)
+				color: white
+				padding: 4px 8px
+				border-radius: 4px
+				font-size: 12px
+				white-space: nowrap
+				opacity: 0
+				pointer-events: none
+				transition: opacity 0.2s ease
+				z-index: 1000
+				
+			&:hover::after
+				opacity: 1
 	.logo
 		font-size: 18px
 		text-align: center
@@ -331,26 +517,6 @@ export default {
 
 			&.starts-with-emoji
 				padding: 0 18px
-				// .room-icon
-				// 	position: absolute
-				// 	width: 18px
-				// 	height: @width
-				// 	left: 18px
-				// 	background-color: var(--clr-sidebar)
-				// 	border-radius: 50%
-				// 	&::before
-				// 		display: block
-				// 		height: 18px
-				// 		width: 18px
-				// 		line-height: @height
-				// 		font-size: 14px
-				// 		margin: 0 auto
-				// .room-icon
-				// 	width: 10px
-				// .name
-				// 	background-color: var(--clr-sidebar)
-				// 	padding-left: 3px
-				// 	border-radius: 18px
 				.room-icon
 					display: none
 			&.unread
@@ -526,4 +692,11 @@ export default {
 			transition: transform .2s
 		&.sidebar-enter, &.sidebar-leave-to
 			transform: translateX(calc(-1 * var(--sidebar-width)))
+			
+		&.collapsed
+			width: 60px
+			transform: none
+			
+			&.sidebar-enter, &.sidebar-leave-to
+				transform: translateX(-60px)
 </style>
