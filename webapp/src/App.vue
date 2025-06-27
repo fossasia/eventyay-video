@@ -183,9 +183,7 @@ export default {
 			const isExclusive = module => module.type === 'call.bigbluebutton' || module.type === 'call.zoom'
 			if (!this.$mq.above.m) return // no background rooms for mobile
 			if (this.call) return // When a DM call is running, we never want background media
-
 			const newRoomHasMedia = newRoom && newRoom.modules && newRoom.modules.some(module => mediaModules.includes(module.type))
-
 			if (oldRoom &&
 				this.rooms.includes(oldRoom) &&
 				!this.backgroundRoom &&
