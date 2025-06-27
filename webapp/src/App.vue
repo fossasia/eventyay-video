@@ -184,7 +184,7 @@ export default {
 			if (!this.$mq.above.m) return // no background rooms for mobile
 			if (this.call) return // When a DM call is running, we never want background media
 
-			const newRoomHasMedia = newRoom && newRoom.modules && newRoom.modules.some(module => ['livestream.native', 'livestream.youtube', 'livestream.iframe', 'call.bigbluebutton', 'call.janus', 'call.zoom'].includes(module.type))
+			const newRoomHasMedia = newRoom && newRoom.modules && newRoom.modules.some(module => mediaModules.includes(module.type))
 
 			if (oldRoom &&
 				this.rooms.includes(oldRoom) &&
