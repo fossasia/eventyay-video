@@ -5,7 +5,18 @@ transition(name="sidebar")
 			router-link.logo(:to="{name: 'home'}", v-if="$mq.above['m'] && !collapsed", :class="{'fit-to-width': theme.logo.fitToWidth}")
 				img(:src="theme.logo.url", :alt="world.title")
 			bunt-icon-button#btn-close-sidebar(v-else-if="$mq.below['l']", @click="$emit('close')") menu
-			bunt-icon-button#btn-toggle-sidebar(v-if="$mq.above['l']", @click="$emit('toggle-collapsed')", :data-tooltip="collapsed ? 'Expand sidebar' : 'Collapse sidebar'") {{ collapsed ? 'menu' : 'chevron-left' }}
+			span.toggle-btn-wrapper
+				bunt-icon-button#btn-toggle-sidebar(
+					v-if="$mq.above['l']"
+					@click="$emit('toggle-collapsed')"
+					@mouseenter="showToggleTooltip = true"
+					@mouseleave="showToggleTooltip = false"
+					@focus="showToggleTooltip = true"
+					@blur="showToggleTooltip = false"
+				) {{ collapsed ? 'menu' : 'chevron-left' }}
+				teleport(to="body")
+					div.sidebar-toggle-tooltip(v-if="showToggleTooltip", :style="toggleTooltipStyle")
+						| {{ collapsed ? 'Expand sidebar' : 'Collapse sidebar' }}
 		scrollbars(y)
 			.global-links(role="group", aria-label="pages")
 				router-link.room(v-if="roomsByType.page.includes(rooms[0])", :to="{name: 'home'}", v-html="!collapsed ? $emojify(rooms[0].name) : ''")
@@ -82,7 +93,7 @@ transition(name="sidebar")
 		router-link.profile(:to="{name: 'preferences'}")
 			avatar(:user="user", :size="36")
 			.display-name(v-if="!collapsed") {{ user.profile.display_name }}
-			.mdi.mdi-cog
+			.mdi.mdi-cog(v-if="!collapsed")
 		transition(name="prompt")
 			channel-browser(v-if="showChannelBrowser", @close="showChannelBrowser = false", @createChannel="showChannelBrowser = false, showChatCreationPrompt = true")
 			create-stage-prompt(v-else-if="showStageCreationPrompt", @close="showStageCreationPrompt = false")
@@ -117,7 +128,8 @@ export default {
 			showChannelBrowser: false,
 			showStageCreationPrompt: false,
 			showChatCreationPrompt: false,
-			showDMCreationPrompt: false
+			showDMCreationPrompt: false,
+			showToggleTooltip: false
 		}
 	},
 	computed: {
@@ -131,6 +143,16 @@ export default {
 			if (this.pointerMovementX === 0) return
 			return {
 				transform: `translateX(${this.pointerMovementX}px)`
+			}
+		},
+		toggleTooltipStyle() {
+			// Find the toggle button and position the tooltip above it, centered
+			const btn = document.getElementById('btn-toggle-sidebar')
+			if (!btn) return {}
+			const rect = btn.getBoundingClientRect()
+			return {
+				left: rect.left + rect.width / 2 + 'px',
+				top: rect.top - 10 + 'px'
 			}
 		},
 		roomsByType() {
@@ -238,8 +260,13 @@ export default {
 	min-height: 0
 	max-height: var(--vh100)
 	transition: width 0.3s ease
+	overflow: visible // Ensure tooltips can overflow the sidebar
+	z-index: 1100 // Raise z-index so tooltips appear above other UI
 	
 	&.collapsed
+		overflow: visible // Allow tooltips to overflow in collapsed state
+		z-index: 1200 // Ensure collapsed sidebar is above other UI for tooltips
+		
 		width: 60px
 		overflow: hidden
 		
@@ -375,13 +402,14 @@ export default {
 			
 		.profile
 			justify-content: center
-			padding: 8px 4px
+			padding: 8px
 	
 	.sidebar-header
 		display: flex
 		align-items: center
 		padding: 8px
 		border-bottom: 1px solid var(--clr-sidebar-hover-bg)
+		position: relative 
 		
 		#btn-toggle-sidebar
 			icon-button-style(color: white, style: clear)
@@ -392,48 +420,13 @@ export default {
 			height: 32px
 			transition: all 0.2s ease
 			position: relative
+			z-index: 1200 
 			
 			&:hover
 				background-color: var(--clr-primary)
 				box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25)
 				transform: scale(1.02)
 				
-			&::after
-				content: attr(data-tooltip)
-				position: absolute
-				left: 50%
-				top: -40px
-				transform: translateX(-50%)
-				background-color: rgba(0, 0, 0, 0.8)
-				color: white
-				padding: 4px 8px
-				border-radius: 4px
-				font-size: 12px
-				white-space: nowrap
-				opacity: 0
-				pointer-events: none
-				transition: opacity 0.2s ease
-				z-index: 1000
-				
-			&:hover::after
-				opacity: 1
-	.logo
-		font-size: 18px
-		text-align: center
-		margin: 0 16px
-		height: 56px
-		img
-			height: 100%
-			max-width: 100%
-			object-fit: contain
-		&.fit-to-width
-			height: auto
-			margin: 0
-			img
-				height: auto
-	#btn-close-sidebar
-		margin: 8px
-		icon-button-style(color: var(--clr-sidebar-text-primary), style: clear)
 	> .c-scrollbars
 		flex: auto
 		.scroll-content
@@ -573,7 +566,6 @@ export default {
 					height: 36px
 					width: @height
 					border-radius: 50%
-					margin-right: 4px
 				.info
 					flex: auto
 					display: flex
@@ -657,7 +649,8 @@ export default {
 		flex: auto
 	> .profile
 		display: flex
-		padding: 8px
+		padding: 16px 8px  
+		margin-top: 16px   
 		align-items: center
 		cursor: pointer
 		color: var(--clr-sidebar-text-primary)
@@ -682,14 +675,14 @@ export default {
 		position: fixed
 		left: 0
 		top: 0
-		z-index: 901
+		z-index: 1000
 		width: var(--sidebar-width)
 		height: var(--vh100)
 		touch-action: pan-y
 		> .c-scrollbars .scroll-content
 			touch-action: pan-y
 		&.sidebar-enter-active, &.sidebar-leave-active
-			transition: transform .2s
+			transition: transform .3s ease  
 		&.sidebar-enter, &.sidebar-leave-to
 			transform: translateX(calc(-1 * var(--sidebar-width)))
 			
@@ -699,4 +692,29 @@ export default {
 			
 			&.sidebar-enter, &.sidebar-leave-to
 				transform: translateX(-60px)
+
+.c-rooms-sidebar.collapsed
+	.global-links > *::before,
+	.stages > * .room-icon::before,
+	.chats > * .room-icon::before,
+	.direct-messages > * .room-icon::before,
+	.admin > * .room-icon::before
+		font-size: 26px !important
+		line-height: 40px !important
+		width: 40px !important
+		height: 40px !important
+	.global-links > *,
+	.stages > *,
+	.chats > *,
+	.direct-messages > *,
+	.admin > *
+		margin-bottom: 12px !important 
+		&:last-child
+			margin-bottom: 0 !important
+		// Increase icon container size
+		&::before, .room-icon, .icon-viewer
+			width: 40px !important
+			height: 40px !important
+			min-width: 40px !important
+			min-height: 40px !important
 </style>

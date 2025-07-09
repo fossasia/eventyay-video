@@ -20,7 +20,7 @@
 	template(v-else-if="world")
 		app-bar(v-if="$mq.below['l']", @toggleSidebar="toggleSidebar")
 		transition(name="backdrop")
-			.sidebar-backdrop(v-if="$mq.below['l'] && showSidebar && !overrideSidebarCollapse", @pointerup="showSidebar = false")
+			.sidebar-backdrop(v-if="$mq.below['l'] && showSidebar && !overrideSidebarCollapse", @pointerdown.self="showSidebar = false")
 		rooms-sidebar(:show="$mq.above['l'] || showSidebar || overrideSidebarCollapse", @close="showSidebar = false", :collapsed="sidebarCollapsed", @toggle-collapsed="toggleSidebarCollapsed")
 		router-view(:key="!$route.path.startsWith('/admin') ? $route.fullPath : null", :role="roomHasMedia ? '' : 'main'")
 		//- defining keys like this keeps the playing dom element alive for uninterupted transitions
@@ -126,9 +126,6 @@ export default {
 		rooms: 'roomListChange',
 		room: 'roomChange',
 		call: 'callChange',
-		$route() {
-			this.showSidebar = false
-		},
 		stageStreamCollapsed: {
 			handler() {
 				this.$store.commit('updateStageStreamCollapsed', this.stageStreamCollapsed)
