@@ -104,7 +104,7 @@ export default {
 				'--chatbar-width': hasChatbar ? '380px' : '0px',
 				'--mobile-media-height': this.stageStreamCollapsed ? '56px' : hasChatbar ? 'min(56.25vw, 40vh)' : (hasStageTools ? 'calc(var(--vh100) - 48px - 2 * 56px)' : 'calc(var(--vh100) - 48px - 56px)'),
 				'--has-stagetools': hasStageTools ? '1' : '0',
-				'--sidebar-width': this.sidebarCollapsed ? '60px' : '280px'
+				'--sidebar-width': this.sidebarCollapsed ? '80px' : '280px'
 			}
 			if (this.mediaSourcePlaceholderRect) {
 				Object.assign(style, {

@@ -19,11 +19,21 @@ transition(name="sidebar")
 						| {{ collapsed ? 'Expand sidebar' : 'Collapse sidebar' }}
 		scrollbars(y)
 			.global-links(role="group", aria-label="pages")
-				router-link.room(v-if="roomsByType.page.includes(rooms[0])", :to="{name: 'home'}", v-html="!collapsed ? $emojify(rooms[0].name) : ''")
-				router-link.room(:to="{name: 'schedule'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ !collapsed ? $t('RoomsSidebar:schedule:label') : '' }}
-				router-link.room(:to="{name: 'schedule:sessions'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ !collapsed ? $t('RoomsSidebar:session:label') : '' }}
-				router-link.room(:to="{name: 'schedule:speakers'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ !collapsed ? $t('RoomsSidebar:speaker:label') : '' }}
-				router-link.room(v-for="page of roomsByType.page", v-if="page !== rooms[0]", :to="{name: 'room', params: {roomId: page.id}}", v-html="!collapsed ? $emojify(page.name) : ''")
+				router-link.room(v-if="roomsByType.page.includes(rooms[0])", :to="{name: 'home'}")
+					span.sidebar-icon.mdi.mdi-home
+					span(v-if="!collapsed", v-html="$emojify(rooms[0].name)")
+				router-link.room(:to="{name: 'schedule'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)")
+					span.sidebar-icon.mdi.mdi-calendar
+					span(v-if="!collapsed") {{ $t('RoomsSidebar:schedule:label') }}
+				router-link.room(:to="{name: 'schedule:sessions'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)")
+					span.sidebar-icon.mdi.mdi-calendar-multiple
+					span(v-if="!collapsed") {{ $t('RoomsSidebar:session:label') }}
+				router-link.room(:to="{name: 'schedule:speakers'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)")
+					span.sidebar-icon.mdi.mdi-account-multiple
+					span(v-if="!collapsed") {{ $t('RoomsSidebar:speaker:label') }}
+				router-link.room(v-for="page of roomsByType.page", v-if="page !== rooms[0]", :to="{name: 'room', params: {roomId: page.id}}")
+					span.sidebar-icon.mdi.mdi-file-document
+					span(v-if="!collapsed", v-html="$emojify(page.name)")
 			.group-title#stages-title(v-if="roomsByType.stage.length || hasPermission('world:rooms.create.stage')")
 				span {{ !collapsed ? $t('RoomsSidebar:stages-headline:text') : '' }}
 				bunt-icon-button(v-if="hasPermission('world:rooms.create.stage') && !collapsed", @click="showStageCreationPrompt = true") plus
@@ -72,24 +82,41 @@ transition(name="sidebar")
 					.name(v-if="!collapsed") {{ getDMChannelName(channel) }}
 					.notifications(v-if="channel.notifications") {{ channel.notifications }}
 					bunt-icon-button(tooltip="remove", :tooltip-fixed="true", @click.prevent.stop="$store.dispatch('chat/leaveChannel', {channelId: channel.id})", v-show="!collapsed") close
+			.section-spacer(v-if="worldHasExhibition || worldHasPosters || hasPermission('world:users.list') || hasPermission('world:update') || hasPermission('world:announce') || hasPermission('room:update')")
 			.buffer
 			template(v-if="worldHasExhibition && (staffedExhibitions.length > 0 || hasPermission('world:rooms.create.exhibition'))")
 				.group-title {{ !collapsed ? $t('RoomsSidebar:exhibitions-headline:text') : '' }}
 				.admin(v-if="!collapsed")
-					router-link(:to="{name: 'exhibitors'}") {{ $t('RoomsSidebar:exhibitions-manage:label') }}
-					router-link(:to="{name: 'contactRequests'}") {{ $t('RoomsSidebar:exhibitions-requests:label') }}
+					router-link(:to="{name: 'exhibitors'}")
+						span.sidebar-icon.mdi.mdi-store
+						span {{ $t('RoomsSidebar:exhibitions-manage:label') }}
+					router-link(:to="{name: 'contactRequests'}")
+						span.sidebar-icon.mdi.mdi-message-text
+						span {{ $t('RoomsSidebar:exhibitions-requests:label') }}
 			template(v-if="worldHasPosters && hasPermission('world:rooms.create.poster')")
 				.group-title {{ !collapsed ? $t('RoomsSidebar:posters-headline:text') : '' }}
 				.admin(v-if="!collapsed")
-					router-link(:to="{name: 'posters'}") {{ $t('RoomsSidebar:posters-manage:label') }}
+					router-link(:to="{name: 'posters'}")
+						span.sidebar-icon.mdi.mdi-file-document-multiple
+						span {{ $t('RoomsSidebar:posters-manage:label') }}
 			template(v-if="hasPermission('world:users.list') || hasPermission('world:update') || hasPermission('world:announce') || hasPermission('room:update')")
 				.group-title {{ !collapsed ? $t('RoomsSidebar:admin-headline:text') : '' }}
 				.admin(v-if="!collapsed")
-					router-link.room(:to="{name: 'admin:announcements'}", v-if="hasPermission('world:announce')") {{ $t('RoomsSidebar:admin-announcements:label') }}
-					router-link.room(:to="{name: 'admin:users'}", v-if="hasPermission('world:users.list')") {{ $t('RoomsSidebar:admin-users:label') }}
-					router-link.room(:to="{name: 'admin:rooms:index'}", v-if="hasPermission('room:update')") {{ $t('RoomsSidebar:admin-rooms:label') }}
-					router-link.room(:to="{name: 'admin:kiosks:index'}", v-if="hasPermission('world:users.manage')") {{ $t('RoomsSidebar:admin-kiosks:label') }}
-					router-link.room(:to="{name: 'admin:config'}", v-if="hasPermission('world:update')") {{ $t('RoomsSidebar:admin-config:label') }}
+					router-link.room(:to="{name: 'admin:announcements'}", v-if="hasPermission('world:announce')")
+						span.sidebar-icon.mdi.mdi-bullhorn
+						span {{ $t('RoomsSidebar:admin-announcements:label') }}
+					router-link.room(:to="{name: 'admin:users'}", v-if="hasPermission('world:users.list')")
+						span.sidebar-icon.mdi.mdi-account-group
+						span {{ $t('RoomsSidebar:admin-users:label') }}
+					router-link.room(:to="{name: 'admin:rooms:index'}", v-if="hasPermission('room:update')")
+						span.sidebar-icon.mdi.mdi-door-open
+						span {{ $t('RoomsSidebar:admin-rooms:label') }}
+					router-link.room(:to="{name: 'admin:kiosks:index'}", v-if="hasPermission('world:users.manage')")
+						span.sidebar-icon.mdi.mdi-monitor
+						span {{ $t('RoomsSidebar:admin-kiosks:label') }}
+					router-link.room(:to="{name: 'admin:config'}", v-if="hasPermission('world:update')")
+						span.sidebar-icon.mdi.mdi-cog
+						span {{ $t('RoomsSidebar:admin-config:label') }}
 		router-link.profile(:to="{name: 'preferences'}")
 			avatar(:user="user", :size="36")
 			.display-name(v-if="!collapsed") {{ user.profile.display_name }}
@@ -267,7 +294,7 @@ export default {
 		overflow: visible // Allow tooltips to overflow in collapsed state
 		z-index: 1200 // Ensure collapsed sidebar is above other UI for tooltips
 		
-		width: 60px
+		width: 80px
 		overflow: hidden
 		
 		.sidebar-header
@@ -280,106 +307,70 @@ export default {
 				text-align: center
 				font-size: 0
 				position: relative
+				margin-bottom: 8px
+				background-color: transparent !important
 				
-				&::before
-					content: ''
-					display: inline-block
-					width: 32px
-					height: 32px
-					background-color: var(--clr-primary)
-					border-radius: 6px
-					display: flex
+				&:last-child
+					margin-bottom: 0
+				
+				.sidebar-icon
+					display: inline-flex
 					align-items: center
 					justify-content: center
-					margin: 2px 0
+					width: 40px
+					height: 40px
+					font-size: 22px
+					color: white
+					background-color: var(--clr-primary)
+					border-radius: 8px
+					margin: 4px 0
 					transition: all 0.2s ease
 					
-				&.router-link-active::before
+				&.router-link-active .sidebar-icon
 					background-color: var(--clr-primary)
 					box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
 					
-				&:hover::before
+				&:hover .sidebar-icon
 					background-color: var(--clr-primary)
 					box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25)
 					transform: scale(1.02)
-					
-				// Generic page icon for any link without specific icon
-				&::before
-					content: '\F0218'
-					font-family: "Material Design Icons"
-					font-size: 18px
-					line-height: 32px
-					color: white
-					
-				// Home icon
-				&[href="/"]::before
-					content: '\F0A45'
-					font-family: "Material Design Icons"
-					font-size: 18px
-					line-height: 32px
-					color: white
-					
-				// Schedule icon
-				&[href*="/schedule"]::before
-					content: '\F0ED8'  // Calendar icon from Material Design Icons
-					font-family: "Material Design Icons"
-					font-size: 18px
-					line-height: 32px
-					color: white
-
-					
-				// Sessions icon
-				&[href*="/sessions"]::before
-					content: '\F0F21'
-					font-family: "Material Design Icons"
-					font-size: 18px
-					line-height: 32px
-					color: white
-					
-				// Speakers icon
-				&[href*="/speakers"]::before
-					content: '\F050F'
-					font-family: "Material Design Icons"
-					font-size: 18px
-					line-height: 32px
-					color: white
-					
-				&.router-link-active::before
-					color: white
-					background-color: var(--clr-primary)
-					box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
 			
 		.stages, .chats, .direct-messages, .admin
 			> *
 				justify-content: center
 				padding: 0 8px
 				text-align: center
+				margin-bottom: 8px
+				background-color: transparent !important
 				
-				.room-icon, .icon-viewer
+				&:last-child
+					margin-bottom: 0
+				
+				.room-icon, .icon-viewer, .sidebar-icon
 					margin: 0
-					width: 32px
-					height: 32px
+					width: 40px
+					height: 40px
 					background-color: var(--clr-primary)
-					border-radius: 6px
+					border-radius: 8px
 					display: flex
 					align-items: center
 					justify-content: center
-					margin: 2px 0
+					margin: 4px 0
 					transition: all 0.2s ease
 					
 					&::before
-						font-size: 18px
-						line-height: 32px
+						font-size: 22px
+						line-height: 40px
 						color: white
 						
 				&.router-link-active, &.active
-					.room-icon, .icon-viewer
+					.room-icon, .icon-viewer, .sidebar-icon
 						background-color: var(--clr-primary)
 						box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3)
 						transform: scale(1.05)
 						
 				&:hover
-					.room-icon, .icon-viewer
+					.room-icon, .icon-viewer, .sidebar-icon
 						background-color: var(--clr-primary)
 						box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25)
 						transform: scale(1.02)
@@ -400,6 +391,18 @@ export default {
 		.group-title
 			display: none
 			
+		// Add spacing between sections in collapsed state
+		.stages
+			margin-bottom: 12px
+		.chats
+			margin-bottom: 12px
+		.direct-messages
+			margin-bottom: 12px
+		.admin
+			margin-bottom: 12px
+		.section-spacer
+			height: 64px
+			flex: none
 		.profile
 			justify-content: center
 			padding: 8px
@@ -415,9 +418,9 @@ export default {
 			icon-button-style(color: white, style: clear)
 			margin-left: auto
 			background-color: var(--clr-primary)
-			border-radius: 6px
-			width: 32px
-			height: 32px
+			border-radius: 8px
+			width: 40px
+			height: 40px
 			transition: all 0.2s ease
 			position: relative
 			z-index: 1200 
@@ -462,6 +465,18 @@ export default {
 		display: flex
 		justify-content: space-between
 		align-items: center
+		
+		// Add extra spacing for sections that need visual separation
+		&#stages-title
+			margin-top: 16px
+		&#chats-title
+			margin-top: 16px
+		&#dm-title
+			margin-top: 16px
+		
+		// Add spacing for exhibition and admin sections
+		&:not(#stages-title):not(#chats-title):not(#dm-title)
+			margin-top: 32px
 		.bunt-icon-button
 			margin: -4px 0
 			icon-button-style(color: var(--clr-sidebar-text-primary), style: clear)
@@ -647,6 +662,9 @@ export default {
 				color: var(--clr-sidebar-text-primary)
 	.buffer
 		flex: auto
+	.section-spacer
+		height: 32px
+		flex: none
 	> .profile
 		display: flex
 		padding: 16px 8px  
@@ -687,11 +705,11 @@ export default {
 			transform: translateX(calc(-1 * var(--sidebar-width)))
 			
 		&.collapsed
-			width: 60px
+			width: 80px
 			transform: none
 			
 			&.sidebar-enter, &.sidebar-leave-to
-				transform: translateX(-60px)
+				transform: translateX(-80px)
 
 .c-rooms-sidebar.collapsed
 	.global-links > *::before,
@@ -711,10 +729,15 @@ export default {
 		margin-bottom: 12px !important 
 		&:last-child
 			margin-bottom: 0 !important
+		// Remove selection background in collapsed state
+		&.router-link-active, &.active, &.router-link-exact-active
+			background-color: transparent !important
 		// Increase icon container size
 		&::before, .room-icon, .icon-viewer
 			width: 40px !important
 			height: 40px !important
 			min-width: 40px !important
 			min-height: 40px !important
+	.section-spacer
+		height: 64px !important
 </style>
