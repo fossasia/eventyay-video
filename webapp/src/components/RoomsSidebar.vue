@@ -12,7 +12,7 @@ transition(name="sidebar")
 					@mouseenter="showToggleTooltip = true"
 					@mouseleave="showToggleTooltip = false"
 					@focus="showToggleTooltip = true"
-					@blur="showToggleTooltip = false"
+					@blur="showToggleTooltip = true"
 				) {{ collapsed ? 'menu' : 'chevron-left' }}
 				teleport(to="body")
 					div.sidebar-toggle-tooltip(v-if="showToggleTooltip", :style="toggleTooltipStyle")
@@ -326,7 +326,7 @@ export default {
 					margin: 4px 0
 					transition: all 0.2s ease
 					
-				&.router-link-active .sidebar-icon
+				&.router-link-exact-active .sidebar-icon
 					background-color: var(--clr-primary)
 					box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
 					
@@ -363,7 +363,7 @@ export default {
 						line-height: 40px
 						color: white
 						
-				&.router-link-active, &.active
+				&.router-link-exact-active, &.active
 					.room-icon, .icon-viewer, .sidebar-icon
 						background-color: var(--clr-primary)
 						box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3)
@@ -411,7 +411,6 @@ export default {
 		display: flex
 		align-items: center
 		padding: 8px
-		border-bottom: 1px solid var(--clr-sidebar-hover-bg)
 		position: relative 
 		
 		#btn-toggle-sidebar
@@ -740,4 +739,26 @@ export default {
 			min-height: 40px !important
 	.section-spacer
 		height: 64px !important
+	// Make all icons black when active in collapsed state
+	.global-links > *.router-link-exact-active .sidebar-icon,
+	.stages > *.router-link-exact-active .room-icon,
+	.stages > *.active .room-icon,
+	.chats > *.router-link-exact-active .room-icon,
+	.chats > *.active .room-icon,
+	.direct-messages > *.router-link-exact-active .room-icon,
+	.direct-messages > *.active .room-icon,
+	.admin > *.router-link-exact-active .room-icon,
+	.admin > *.active .room-icon
+		color: #000 !important
+	// For Material Design Icons using ::before
+	.global-links > *.router-link-exact-active .sidebar-icon::before,
+	.stages > *.router-link-exact-active .room-icon::before,
+	.stages > *.active .room-icon::before,
+	.chats > *.router-link-exact-active .room-icon::before,
+	.chats > *.active .room-icon::before,
+	.direct-messages > *.router-link-exact-active .room-icon::before,
+	.direct-messages > *.active .room-icon::before,
+	.admin > *.router-link-exact-active .room-icon::before,
+	.admin > *.active .room-icon::before
+		color: #000 !important
 </style>
