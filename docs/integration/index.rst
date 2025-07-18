@@ -1,7 +1,7 @@
 Integration documentation
 =========================
 
-Welcome to our integration documentation! Here, we document everything around integrating venueless with other systems.
+Welcome to our integration documentation! Here, we document everything around integrating eventyay-video with other systems.
 
 .. toctree::
    :maxdepth: 2

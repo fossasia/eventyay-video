@@ -1,7 +1,7 @@
 Administrator documentation
 ===========================
 
-Welcome to our administrator documentation! Here, we document everything around deploying venueless to production.
+Welcome to our administrator documentation! Here, we document everything around deploying eventyay-video to production.
 
 .. toctree::
    :maxdepth: 2

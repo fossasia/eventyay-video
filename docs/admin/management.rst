@@ -1,10 +1,10 @@
 Management commands
 ===================
 
-This reference describes management commands supported by the venueless server.
+This reference describes management commands supported by the eventyay-video server.
 Generally, to run any command with our recommended Docker-based setup, you use a command line like this::
 
-    $ docker exec -it venueless.service venueless <COMMAND> <ARGS>
+    $ docker exec -it eventyay-video.service eventyay-video <COMMAND> <ARGS>
 
 We will not repeat the first part of that in the examples on this page. In the development setup, it looks like this
 instead::
@@ -25,8 +25,8 @@ Database management
 ``migrate``
 """""""""""
 
-The ``migrate`` command updates the database tables to conform to what venueless expects.  As migrate touches the
-database, you should have a backup of the state before the command run. Running migrate if venueless has no pending
+The ``migrate`` command updates the database tables to conform to what eventyay-video expects.  As migrate touches the
+database, you should have a backup of the state before the command run. Running migrate if eventyay-video has no pending
 database changes is harmless. It will result in no changes to the database.
 
 If migrations touch upon large populated tables, they may run for some time. The release notes will include a warning
@@ -37,7 +37,7 @@ if an upgrade can trigger this behaviour.
 ``showmigrations``
 """"""""""""""""""
 
-If you ran into trouble during ``migrate``, run ``showmigrations``. It will show you the current state of all venueless
+If you ran into trouble during ``migrate``, run ``showmigrations``. It will show you the current state of all eventyay-video
 migrations. It may be useful debug output to include in bug reports about database problems.
 
 World management
@@ -46,34 +46,34 @@ World management
 ``create_world``
 """"""""""""""""
 
-The interactive ``create_world`` command allows you to create an empty venueless world from scratch::
+The interactive ``create_world`` command allows you to create an empty eventyay-video world from scratch::
 
     > create_world
     Enter the internal ID for the new world (alphanumeric): myevent2020
     Enter the title for the new world: My Event 2020
-    Enter the domain of the new world (e.g. myevent.example.org): venueless.mydomain.com
+    Enter the domain of the new world (e.g. myevent.example.org): eventyay-video.mydomain.com
     World created.
-    Default API keys: [{'issuer': 'any', 'audience': 'venueless', 'secret': 'zvB7hI28vbrI7KtsRnJ1TZBSN3DvYdoy9VoJGLI1ouHQP5VtRG3U6AgKJ9YOqKNU'}]
+    Default API keys: [{'issuer': 'any', 'audience': 'eventyay-video', 'secret': 'zvB7hI28vbrI7KtsRnJ1TZBSN3DvYdoy9VoJGLI1ouHQP5VtRG3U6AgKJ9YOqKNU'}]
 
 ``clone_world``
 """"""""""""""""
 
-The interactive ``clone_world`` command allows you to create a venueless world while copying all settings and rooms
+The interactive ``clone_world`` command allows you to create a eventyay-video world while copying all settings and rooms
 (but not users and user-generated content) from an existing one::
 
     > clone_world myevent2019
     Enter the internal ID for the new world (alphanumeric): myevent2020
     Enter the title for the new world: My Event 2020
-    Enter the domain of the new world (e.g. myevent.example.org): venueless.mydomain.com
+    Enter the domain of the new world (e.g. myevent.example.org): eventyay-video.mydomain.com
     World cloned.
 
 ``generate_token``
 """"""""""""""""""
 
-The ``generate_token`` command allows you to create a valid access token to a venueless world::
+The ``generate_token`` command allows you to create a valid access token to a eventyay-video world::
 
     > generate_token myevent2019 --trait moderator --trait speaker --days 90
-    https://venueless.mydomain.com/#token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9…
+    https://eventyay-video.mydomain.com/#token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9…
 
 ``list_worlds``
 """""""""""""""
@@ -106,8 +106,8 @@ system maintenance.
 
 Shows a list of connection labels and their estimated number of current connections. The estimated number might be
 significantly higher than expected if connections where dropped without a cleanup, and old connection labels might
-be lingering around for a couple of seconds. Connection labels are composed by the git commit ID of the venueless
-build and the environment (read from the ``VENUELESS_ENVIRONMENT`` environment variable, ``unknown``) by default.
+be lingering around for a couple of seconds. Connection labels are composed by the git commit ID of the eventyay-video
+build and the environment (read from the ``EVENTYAY_VIDEO_ENVIRONMENT`` environment variable, ``unknown``) by default.
 Sample output::
 
     > connections list
@@ -149,5 +149,5 @@ Debugging
 ``shell_plus``
 """"""""""""""
 
-The ``shell_plus`` command opens a shell with the venueless configuration and environment. All database models and some
+The ``shell_plus`` command opens a shell with the eventyay-video configuration and environment. All database models and some
 more useful modules will be imported automatically.

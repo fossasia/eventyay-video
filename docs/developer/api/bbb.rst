@@ -1,7 +1,7 @@
 BigBlueButton module
 ====================
 
-To enable video calls, we integrate the BigBlueButton (BBB) software. venueless implements simple load balancing across
+To enable video calls, we integrate the BigBlueButton (BBB) software. eventyay-video implements simple load balancing across
 multiple BBB servers, which is why the frontend always needs to convert a room or call ID into an actual meeting
 URL explicitly.
 
