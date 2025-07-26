@@ -150,7 +150,7 @@ class Room(VersionedModel):
     name = models.CharField(max_length=300)
     description = models.TextField(null=True, blank=True)
     picture = models.FileField(null=True, blank=True)
-    sorting_priority = models.IntegerField(default=0)
+    sorting_priority = models.PositiveIntegerField(null=True, blank=True)
     import_id = models.CharField(max_length=100, null=True, blank=True)
     pretalx_id = models.IntegerField(default=0)
     schedule_data = JSONField(null=True, blank=True)
@@ -159,7 +159,7 @@ class Room(VersionedModel):
     objects = RoomQuerySet.as_manager()
 
     class Meta:
-        ordering = ("sorting_priority", "name")
+        ordering = ("sorting_priority",)
 
 
 class Reaction(models.Model):

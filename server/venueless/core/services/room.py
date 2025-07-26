@@ -109,24 +109,23 @@ def delete_room(world, room, by_user):
 @database_sync_to_async
 @atomic
 def reorder_rooms(world, id_list, by_user):
-    def key(r):
-        try:
-            return id_list.index(str(r.id)), r.sorting_priority, r.name
-        except Exception:
-            return sys.maxsize, r.sorting_priority, r.name
-
-    all_rooms = list(
-        world.rooms.filter(deleted=False).only("id", "name", "sorting_priority")
-    )
-    all_rooms.sort(key=key)
+    # Create a mapping of room IDs to index positions
+    position_map = {room_id: index for index, room_id in enumerate(id_list)}
+    
+    # Get all active rooms for this world
+    rooms = Room.objects.filter(world=world, deleted=False)
+    
+    # Update sorting_priority based on position in id_list
     to_update = []
-
-    for i, r in enumerate(all_rooms):
-        if i + 1 != r.sorting_priority:
-            r.sorting_priority = i + 1
-            to_update.append(r)
-
-    Room.objects.bulk_update(to_update, fields=["sorting_priority"])
+    for room in rooms:
+        new_position = position_map.get(str(room.id))
+        if new_position is not None and room.sorting_priority != new_position:
+            room.sorting_priority = new_position
+            to_update.append(room)
+    
+    # Bulk update changed rooms
+    if to_update:
+        Room.objects.bulk_update(to_update, fields=["sorting_priority"])
 
     AuditLog.objects.create(
         world_id=world.id,
