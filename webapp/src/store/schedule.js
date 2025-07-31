@@ -23,7 +23,8 @@ export default {
 			if (!rootState.world.pretalx.domain.endsWith('/')) {
 				rootState.world.pretalx.domain += '/'
 			}
-			return rootState.world.pretalx.domain + rootState.world.pretalx.event + '/schedule/widget/v2.json'
+			const url = new URL(`${rootState.world.pretalx.event}/schedule/widgets/schedule.json`, rootState.world.pretalx.domain)
+			return url.toString()
 		},
 		pretalxApiBaseUrl(state, getters, rootState) {
 			if (!rootState.world.pretalx?.domain || !rootState.world.pretalx?.event) return
