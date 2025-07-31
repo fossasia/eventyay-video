@@ -16,14 +16,18 @@ export default {
 			return rootState.user?.client_state?.schedule?.favs || []
 		},
 		pretalxScheduleUrl(state, getters, rootState) {
-			if (rootState.world.pretalx?.url) {
-				return rootState.world.pretalx.url
+			if (!rootState.world.pretalx) {
+				return ''
 			}
-			if (!rootState.world.pretalx?.domain || !rootState.world.pretalx?.event) return
-			if (!rootState.world.pretalx.domain.endsWith('/')) {
-				rootState.world.pretalx.domain += '/'
+			const pretalx = rootState.world.pretalx
+			if (pretalx.url) {
+				return pretalx.url
 			}
-			const url = new URL(`${rootState.world.pretalx.event}/schedule/widgets/schedule.json`, rootState.world.pretalx.domain)
+			if (!pretalx.domain || !pretalx.event) return ''
+			if (!pretalx.domain.endsWith('/')) {
+				pretalx.domain += '/'
+			}
+			const url = new URL(`${pretalx.event}/schedule/widgets/schedule.json`, pretalx.domain)
 			return url.toString()
 		},
 		pretalxApiBaseUrl(state, getters, rootState) {
