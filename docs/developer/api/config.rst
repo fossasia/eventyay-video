@@ -66,7 +66,7 @@ The first room acts as the landing page.
 Schedule updates
 ================
 
-When venueless is notified about an updated schedule, you will get a
+When eventyay-video is notified about an updated schedule, you will get a
 notification like this::
 
     <= ["world.schedule.updated", { … }]

@@ -1,0 +1,10 @@
+{% extends "!footer.html" %}
+{%- block contentinfo %}
+{{ super }}
+<div class="footer">
+    <p>
+        &copy; {{ copyright | safe }}
+    </p>
+</div>
+{% endblock %}
+
