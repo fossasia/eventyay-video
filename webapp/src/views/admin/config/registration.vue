@@ -113,7 +113,7 @@ export default {
 	},
 	methods: {
 		addField() {
-			this.config.profile_fields.push({id: uuid(), label: '', type: 'text', searchable: false})
+			this.config.profile_fields.push({ id: uuid(), label: '', type: 'text', searchable: false })
 		},
 		removeField(field) {
 			this.$delete(this.config.profile_fields, field)

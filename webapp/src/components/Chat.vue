@@ -9,7 +9,7 @@
 					chat-message(:message="message", :previousMessage="filteredTimeline[index - 1]", :nextMessage="filteredTimeline[index + 1]", :mode="mode", :key="message.event_id", @showUserCard="showUserCard")
 			.warning(v-if="mergedWarning")
 				.content
-					ChatContent(:content="$t('Chat:warning:missed-users', {count: mergedWarning.missed_users.length, missedUsers: mergedWarning.missed_users})", @clickMention="showUserCard")
+					ChatContent(:content="$t('Chat:warning:missed-users', { count: mergedWarning.missed_users.length, missedUsers: mergedWarning.missed_users })", @clickMention="showUserCard")
 				bunt-icon-button(@click="$store.dispatch('chat/dismissWarnings')") close
 			.chat-input
 				.no-permission(v-if="room && !room.permissions.includes('room:chat.join')") {{ $t('Chat:permission-block:room:chat.join') }}
@@ -102,7 +102,7 @@ export default {
 		connected(value) {
 			if (value) {
 				// resubscribe
-				this.$store.dispatch('chat/subscribe', {channel: this.module.channel_id, config: this.module.config})
+				this.$store.dispatch('chat/subscribe', { channel: this.module.channel_id, config: this.module.config })
 			}
 		},
 		async filteredTimeline() {
@@ -115,7 +115,7 @@ export default {
 		}
 	},
 	created() {
-		this.$store.dispatch('chat/subscribe', {channel: this.module.channel_id, config: this.module.config})
+		this.$store.dispatch('chat/subscribe', { channel: this.module.channel_id, config: this.module.config })
 	},
 	beforeDestroy() {
 		this.$store.dispatch('chat/unsubscribe')
@@ -140,7 +140,7 @@ export default {
 			this.$store.dispatch('chat/join')
 		},
 		send(content) {
-			this.$store.dispatch('chat/sendMessage', {content})
+			this.$store.dispatch('chat/sendMessage', { content })
 		},
 		async showUserCard(event, user, placement = 'left-start') {
 			console.log(user.id)

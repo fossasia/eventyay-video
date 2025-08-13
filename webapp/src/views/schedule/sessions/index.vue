@@ -7,7 +7,7 @@
 					span {{item.title}}
 					app-dropdown-content(className="schedule")
 						app-dropdown-item(v-for="track in item.data", :key="track.value")
-							.checkbox-line(:style="{'--track-color': track.color}")
+							.checkbox-line(:style="{ '--track-color': track.color }")
 								bunt-checkbox.checkbox-text(type="checkbox", :label="track.label", name="track_room_views", v-model="track.selected", :value="track.value") {{ getTrackName(track) }}
 			bunt-button.bunt-ripple-ink(v-if="favs",
 				icon="star"
@@ -17,7 +17,7 @@
 			bunt-button.bunt-ripple-ink(@click="resetAllFiltered", icon="filter-off")
 
 			template(v-if="!inEventTimezone")
-				bunt-select.timezone-item(name="timezone", :options="[{id: schedule.timezone, label: schedule.timezone}, {id: userTimezone, label: userTimezone}]", v-model="currentTimezone", @blur="saveTimezone")
+				bunt-select.timezone-item(name="timezone", :options="[{ id: schedule.timezone, label: schedule.timezone }, { id: userTimezone, label: userTimezone }]", v-model="currentTimezone", @blur="saveTimezone")
 			template(v-else)
 				div.timezone-label.timezone-item.bunt-tab-header-item {{ schedule.timezone }}
 
@@ -191,15 +191,11 @@ export default {
 			filter.tracks.data = this.filterItemsByLanguage(this?.schedule?.tracks)
 			return filter
 		},
-		inEventTimezone () {
+		inEventTimezone() {
 			if (!this.schedule?.talks?.length) return false
 			const example = this.schedule.talks[0].start
 			return moment.tz(example, this.userTimezone).format('Z') === moment.tz(example, this.schedule.timezone).format('Z')
 		},
-	},
-	async created () {
-		this.userTimezone = moment.tz.guess()
-		this.currentTimezone = localStorage.getItem(`userTimezone`)
 	},
 	watch: {
 		tracksFilter: {
@@ -211,6 +207,10 @@ export default {
 			deep: true
 		}
 	},
+	async created() {
+		this.userTimezone = moment.tz.guess()
+		this.currentTimezone = localStorage.getItem('userTimezone')
+	},
 	methods: {
 		changeDay(day) {
 			if (day.isSame(this.currentDay)) return
@@ -219,7 +219,7 @@ export default {
 		changeDayByScroll(day) {
 			this.currentDay = day
 			const tabEl = this.$refs.tabs.$refs.tabElements.find(el => el.id === day.toISOString())
-			// TODO smooth scroll, seems to not work with chrome {behavior: 'smooth', block: 'center', inline: 'center'}
+			// TODO smooth scroll, seems to not work with chrome { behavior: 'smooth', block: 'center', inline: 'center' }
 			tabEl?.$el.scrollIntoView()
 		},
 		getTrackName(track) {
@@ -241,7 +241,7 @@ export default {
 			if (this.filter.type === 'fav') {
 				this.$store.dispatch('schedule/filter', {})
 			} else {
-				this.$store.dispatch('schedule/filter', {type: 'fav'})
+				this.$store.dispatch('schedule/filter', { type: 'fav' })
 			}
 		},
 		async makeExport() {
@@ -258,7 +258,7 @@ export default {
 				}).then(response => response.json())
 				var a = document.createElement('a')
 				document.body.appendChild(a)
-				const blob = new Blob([result], {type: 'octet/stream'})
+				const blob = new Blob([result], { type: 'octet/stream' })
 				const downloadUrl = window.URL.createObjectURL(blob)
 				a.href = downloadUrl
 				a.download = 'schedule-' + this.selectedExporter.id + '.' + this.selectedExporter.id.replace('my', '')
@@ -288,8 +288,8 @@ export default {
 		resetOnlyFavs() {
 			this.onlyFavs = false
 		},
-		saveTimezone () {
-			localStorage.setItem(`userTimezone`, this.currentTimezone)
+		saveTimezone() {
+			localStorage.setItem('userTimezone', this.currentTimezone)
 		},
 	}
 }

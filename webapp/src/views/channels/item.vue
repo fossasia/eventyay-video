@@ -1,15 +1,15 @@
 <template lang="pug">
-.c-channel(:class="{'has-call': hasCall}")
+.c-channel(:class="{ 'has-call': hasCall }")
 	.ui-page-header
 		h2
-			span.user(v-for="(u, key) in otherUsers", :class="{deleted: u.deleted}")
+			span.user(v-for="(u, key) in otherUsers", :class="{ deleted: u.deleted }")
 				span(v-if="key !== 0") {{ ', ' }}
 				.online-status(v-if="!u.deleted", :class="onlineStatus[u.id] ? 'online' : (onlineStatus[u.id] === false ? 'offline' : 'unknown')", v-tooltip="onlineStatus[u.id] ? $t('UserAction:state.online:tooltip') : (onlineStatus[u.id] === false ? $t('UserAction:state.offline:tooltip') : '')")
 				span {{ u.deleted ? $t('User:label:deleted') : u.profile.display_name }}
 		bunt-icon-button(@click="startCall", tooltip="start video call", tooltipPlacement="left") phone_outline
 	.main
 		media-source-placeholder.channel-call(v-if="hasCall")
-		chat(:mode="hasCall ? 'compact' : 'standalone'", :module="{channel_id: channelId}", :showUserlist="false")
+		chat(:mode="hasCall ? 'compact' : 'standalone'", :module="{ channel_id: channelId }", :showUserlist="false")
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -52,10 +52,10 @@ export default {
 	methods: {
 		startCall() {
 			const channel = this.channel
-			this.$store.dispatch('chat/startCall', {channel})
+			this.$store.dispatch('chat/startCall', { channel })
 		},
 		async pollOnlineStatus() {
-			this.onlineStatus = (await api.call('user.online_status', {ids: this.otherUsers.map(u => u.id)}))
+			this.onlineStatus = (await api.call('user.online_status', { ids: this.otherUsers.map(u => u.id) }))
 			this.pollOnlineStatusStatusTimeout = window.setTimeout(this.pollOnlineStatus, 20000)
 		}
 	}

@@ -6,7 +6,7 @@ prompt.c-create-dm-prompt(:scrollable="false", @close="$emit('close')")
 		user-select(:button-label="$t('CreateDMPrompt:create-button:label')", @selected="create", :exclude="[this.user.id]")
 </template>
 <script>
-import {mapGetters, mapState} from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import Prompt from 'components/Prompt'
 import UserSelect from 'components/UserSelect'
 
@@ -24,7 +24,7 @@ export default {
 	methods: {
 		async create(users) {
 			// TODO error handling, progress
-			await this.$store.dispatch('chat/openDirectMessage', {users: users})
+			await this.$store.dispatch('chat/openDirectMessage', { users: users })
 			this.$emit('close')
 		}
 	}

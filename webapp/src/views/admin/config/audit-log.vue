@@ -9,7 +9,7 @@
 			.user User
 			.type Action type
 			.data Data
-		RecycleScroller.tbody.bunt-scrollbar(v-if="filteredEntries", :items="filteredEntries", :item-size="48", v-slot="{item: entry}", v-scrollbar.y="")
+		RecycleScroller.tbody.bunt-scrollbar(v-if="filteredEntries", :items="filteredEntries", :item-size="48", v-slot="{ item: entry }", v-scrollbar.y="")
 			div.logentry.table-row(@click.prevent="detailsPrompt = entry")
 				.timestamp {{ moment(entry.timestamp).format('L LT') }}
 				.user

@@ -46,7 +46,7 @@ export default {
 				const request = api.uploadFile(imageBlob, 'avatar.png')
 				request.addEventListener('load', (event) => {
 					const response = JSON.parse(request.responseText)
-					output.avatar = {url: response.url}
+					output.avatar = { url: response.url }
 					this.$emit('change', output)
 				})
 			} catch (e) {

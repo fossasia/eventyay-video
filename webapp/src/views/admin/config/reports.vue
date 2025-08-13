@@ -23,13 +23,13 @@
 		bunt-button.btn-generate(@click="run('attendee_session_list', {})", :error="task == 'attendee_session_list' && error") Generate XLSX per session
 		h3 Chat history
 		bunt-select(v-model="channel", label="Room", name="channel", :options="channels", option-label="name")
-		bunt-button.btn-generate(@click="run('chat_history', {channel})", :disabled="!channel", :error="task == 'chat_history' && error") Generate XLSX
+		bunt-button.btn-generate(@click="run('chat_history', { channel })", :disabled="!channel", :error="task == 'chat_history' && error") Generate XLSX
 		h3 Questions
 		bunt-select(v-model="questionRoom", label="Room", name="questionRoom", :options="questionRooms", option-label="name")
-		bunt-button.btn-generate(@click="run('question_history', {room: questionRoom})", :disabled="!questionRoom", :error="task == 'question_history' && error") Generate XLSX
+		bunt-button.btn-generate(@click="run('question_history', { room: questionRoom })", :disabled="!questionRoom", :error="task == 'question_history' && error") Generate XLSX
 		h3 Polls
 		bunt-select(v-model="pollRoom", label="Room", name="pollRoom", :options="pollRooms", option-label="name")
-		bunt-button.btn-generate(@click="run('poll_history', {room: pollRoom})", :disabled="!pollRoom", :error="task == 'poll_history' && error") Generate XLSX
+		bunt-button.btn-generate(@click="run('poll_history', { room: pollRoom })", :disabled="!pollRoom", :error="task == 'poll_history' && error") Generate XLSX
 	transition(name="prompt")
 		prompt.report-result-prompt(v-if="running || result", @close="clear")
 			.content
@@ -44,7 +44,7 @@
 import { mapState } from 'vuex'
 import api from 'lib/api'
 import moment from 'lib/timetravelMoment'
-import {helpers, required} from 'vuelidate/lib/validators'
+import { helpers, required } from 'vuelidate/lib/validators'
 import Prompt from 'components/Prompt'
 
 const day = helpers.regex('day', /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)

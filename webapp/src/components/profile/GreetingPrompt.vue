@@ -39,7 +39,7 @@ prompt.c-profile-greeting-prompt(:allowCancel="false")
 			change-additional-fields(v-model="profile.fields")
 		.actions(v-if="activeStep !== 'connectSocial' && !showConnectGravatar")
 			bunt-button#btn-back(v-if="previousStep", @click="activeStep = previousStep") {{ $t('profile/GreetingPrompt:button-back:label') }}
-			bunt-button#btn-continue(v-if="nextStep", :class="{invalid: $v.$invalid && $v.$dirty}", :disabled="blockSave || $v.$invalid && $v.$dirty", :loading="processingStep", :key="activeStep", @click="toNextStep") {{ $t('profile/GreetingPrompt:button-continue:label') }}
+			bunt-button#btn-continue(v-if="nextStep", :class="{ invalid: $v.$invalid && $v.$dirty }", :disabled="blockSave || $v.$invalid && $v.$dirty", :loading="processingStep", :key="activeStep", @click="toNextStep") {{ $t('profile/GreetingPrompt:button-continue:label') }}
 			bunt-button#btn-finish(v-else, :loading="saving", :disabled="blockSave", @click="update") {{ $t('profile/GreetingPrompt:button-finish:label') }}
 </template>
 <script>
@@ -143,7 +143,7 @@ export default {
 				await this.$refs.step.update()
 			}
 			this.profile.greeted = true // override even if explicitly set to false by server
-			await this.$store.dispatch('updateUser', {profile: this.profile})
+			await this.$store.dispatch('updateUser', { profile: this.profile })
 			localStorage.userLanguage = this.interfaceLanguage
 			await this.$store.dispatch('updateUserLocale', this.interfaceLanguage)
 			// TODO error handling

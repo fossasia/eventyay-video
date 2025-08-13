@@ -52,7 +52,7 @@
 						avatar(:user="user", :size="36")
 						span.display-name {{ user ? user.profile.display_name : '' }}
 			//- h3 Discuss
-			//- chat(mode="compact", :module="{channel_id: poster.channel}")
+			//- chat(mode="compact", :module="{ channel_id: poster.channel }")
 	bunt-progress-circular(v-else, size="huge", :page="true")
 	chat-user-card(v-if="selectedUser", ref="avatarCard", :user="selectedUser", @close="selectedUser = null")
 </template>
@@ -120,7 +120,7 @@ export default {
 		}
 	},
 	async created() {
-		this.poster = await api.call('poster.get', {poster: this.posterId})
+		this.poster = await api.call('poster.get', { poster: this.posterId })
 		this.renderPdf()
 	},
 	methods: {
@@ -132,8 +132,8 @@ export default {
 				const canvasRect = canvas.getBoundingClientRect()
 				const pdf = await pdfjs.getDocument(this.poster.poster_url).promise
 				const page = await pdf.getPage(1)
-				const unscaledViewport = page.getViewport({scale: 1})
-				const viewport = page.getViewport({scale: canvasRect.width / unscaledViewport.width})
+				const unscaledViewport = page.getViewport({ scale: 1 })
+				const viewport = page.getViewport({ scale: canvasRect.width / unscaledViewport.width })
 				canvas.height = viewport.height
 				canvas.width = viewport.width
 				await page.render({
@@ -148,11 +148,11 @@ export default {
 		async like() {
 			// TODO error handling
 			if (this.poster.has_voted) {
-				await api.call('poster.unvote', {poster: this.poster.id})
+				await api.call('poster.unvote', { poster: this.poster.id })
 				this.poster.votes--
 				this.poster.has_voted = false
 			} else {
-				await api.call('poster.vote', {poster: this.poster.id})
+				await api.call('poster.vote', { poster: this.poster.id })
 				this.poster.votes++
 				this.poster.has_voted = true
 			}

@@ -1,6 +1,6 @@
 <template lang="pug">
 .c-color-picker
-	.color(:style="{'--color': value}")
+	.color(:style="{ '--color': value }")
 	bunt-input(v-bind="$attrs", :value="value", @input="$emit('input', $event)")
 
 	input.color-picker(type="color", :value="value", @change="$emit('input', $event.target.value)")

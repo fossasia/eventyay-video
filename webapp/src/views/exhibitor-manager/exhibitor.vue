@@ -3,12 +3,12 @@
 	.error(v-if="error") {{ $t('Exhibitors:exhibitor-not-found:text') }}
 	template(v-else-if="exhibitor")
 		.header
-			bunt-icon-button(@click="$router.push({name: 'exhibitors'})") arrow_left
+			bunt-icon-button(@click="$router.push({ name: 'exhibitors' })") arrow_left
 			h2 {{ exhibitor.name }}
 			.actions
 				.button-group
-					bunt-button(:class="{enabled: !showPreview}", @click="showPreview = false") edit
-					bunt-button(:class="{enabled: showPreview}", @click="showPreview = true") preview
+					bunt-button(:class="{ enabled: !showPreview }", @click="showPreview = false") edit
+					bunt-button(:class="{ enabled: showPreview }", @click="showPreview = true") preview
 				bunt-button.btn-save(@click="save", :loading="saving") {{ $t('Exhibitors:save:label') }}
 		exhibitor-preview(v-show="showPreview", :exhibitorProp="exhibitor")
 		.main-form(v-show="!showPreview", v-scrollbar.y="")
@@ -16,7 +16,7 @@
 			bunt-input(v-model="exhibitor.tagline", :label="$t('Exhibitors:tagline:label')", name="tagline", :validation="$v.exhibitor.tagline")
 			bunt-input(v-model="exhibitor.short_text", :label="$t('Exhibitors:short-text:label')", name="shortText", :validation="$v.exhibitor.shortText")
 			bunt-input-outline-container(v-if="exhibitor.text_legacy", :label="$t('Exhibitors:text:label')")
-				textarea(slot-scope="{focus, blur}", @focus="focus", @blur="blur", v-model="exhibitor.text_legacy")
+				textarea(slot-scope="{ focus, blur }", @focus="focus", @blur="blur", v-model="exhibitor.text_legacy")
 			rich-text-editor(v-else, v-model="exhibitor.text_content")
 			upload-url-input(v-model="exhibitor.logo", :label="$t('Exhibitors:logo:label')", name="logo", :validation="$v.exhibitor.logo")
 			upload-url-input(v-model="exhibitor.banner_list", :label="$t('Exhibitors:banner-list:label')", name="bannerList", :validation="$v.exhibitor.banner_list")
@@ -141,7 +141,7 @@ import UploadUrlInput from 'components/UploadUrlInput'
 import RichTextEditor from 'components/RichTextEditor'
 import ExhibitorPreview from 'views/exhibitors/item'
 
-const absrelurl = (message) => withParams({message: message}, value => helpers.regex('absrelurl', /^(https?:\/\/|mailto:|\/)[^ ]+$/)(value))
+const absrelurl = (message) => withParams({ message: message }, value => helpers.regex('absrelurl', /^(https?:\/\/|mailto:|\/)[^ ]+$/)(value))
 
 export default {
 	components: { Avatar, ExhibitorPreview, Prompt, UploadUrlInput, UserSelect, RichTextEditor },
@@ -165,7 +165,7 @@ export default {
 	computed: {
 		...mapGetters(['hasPermission']),
 		all_rooms_or_none() {
-			const r = [{name: '', id: ''}]
+			const r = [{ name: '', id: '' }]
 			r.push(...this.$store.state.rooms)
 			return r
 		},
@@ -267,7 +267,7 @@ export default {
 	async created() {
 		try {
 			if (this.exhibitorId !== '') {
-				this.exhibitor = (await api.call('exhibition.get', {exhibitor: this.exhibitorId})).exhibitor
+				this.exhibitor = (await api.call('exhibition.get', { exhibitor: this.exhibitorId })).exhibitor
 				this.$set(this.exhibitor, 'downloadLinks', this.exhibitor.links.filter(l => l.category === 'download').sort((a, b) => a.sorting_priority - b.sorting_priority))
 				this.$set(this.exhibitor, 'profileLinks', this.exhibitor.links.filter(l => l.category === 'profile').sort((a, b) => a.sorting_priority - b.sorting_priority))
 			} else {
@@ -302,7 +302,7 @@ export default {
 			this.$delete(this.exhibitor.social_media_links, link)
 		},
 		add_social_media_link() {
-			this.exhibitor.social_media_links.push({display_text: '', url: ''})
+			this.exhibitor.social_media_links.push({ display_text: '', url: '' })
 		},
 		set_social_media_link_text(index, displayText) {
 			this.exhibitor.social_media_links[index].display_text = displayText
@@ -319,9 +319,9 @@ export default {
 		},
 		add_link(category) {
 			if (category === 'profile') {
-				this.exhibitor.profileLinks.push({display_text: '', url: '', category: category, sorting_priority: 0})
+				this.exhibitor.profileLinks.push({ display_text: '', url: '', category: category, sorting_priority: 0 })
 			} else if (category === 'download') {
-				this.exhibitor.downloadLinks.push({display_text: '', url: '', category: category, sorting_priority: 0})
+				this.exhibitor.downloadLinks.push({ display_text: '', url: '', category: category, sorting_priority: 0 })
 			}
 		},
 		up_link(index, category) {
@@ -407,8 +407,8 @@ export default {
 			this.deleting = true
 			this.deleteError = null
 			try {
-				await api.call('exhibition.delete', {exhibitor: this.exhibitorId})
-				this.$router.replace({name: 'exhibitors'})
+				await api.call('exhibition.delete', { exhibitor: this.exhibitorId })
+				this.$router.replace({ name: 'exhibitors' })
 			} catch (error) {
 				this.deleteError = this.$t(`error:${error.code}`)
 			}

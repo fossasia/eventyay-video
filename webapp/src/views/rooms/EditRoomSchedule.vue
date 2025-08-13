@@ -5,7 +5,7 @@
 		h2 Change session for room {{ room.name }}
 		.content
 			.sessions(v-scrollbar.y="")
-				.session(v-for="session, index of sessions", :ref="session === currentSession ? 'currentSession': null", :class="{current: session === currentSession, selected: session === selectedSession}", @click="selectedSession = session")
+				.session(v-for="session, index of sessions", :ref="session === currentSession ? 'currentSession': null", :class="{ current: session === currentSession, selected: session === selectedSession }", @click="selectedSession = session")
 					img.preview(:src="`https://picsum.photos/64?v=${index}`")
 					.info
 						.title {{ $localize(session.title) }}

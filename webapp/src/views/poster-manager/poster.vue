@@ -3,7 +3,7 @@
 	.error(v-if="error") {{ $t('poster-manager/poster:poster-not-found:text') }}
 	template(v-else-if="poster")
 		.ui-page-header
-			bunt-icon-button(@click="$router.push({name: 'posters'})") arrow_left
+			bunt-icon-button(@click="$router.push({ name: 'posters' })") arrow_left
 			h1 {{ create ? $t('poster-manager/poster:new-poster:title') : poster.title }}
 			.actions
 				bunt-button.btn-delete-poster(v-if="!create", @click="showDeletePrompt = true") delete
@@ -61,7 +61,7 @@
 								bunt-icon-button(@click="poster.links.splice(index, 1)") delete-outline
 						//- 	bunt-icon-button(@click="up_link(index, link.category)") arrow-up-bold-outline
 						//- 	bunt-icon-button(@click="down_link(index, link.category)") arrow-down-bold-outline
-					bunt-button(@click="poster.links.push({display_text: '', url: ''})") {{ $t('poster-manager/poster:btn-add-file') }}
+					bunt-button(@click="poster.links.push({ display_text: '', url: '' })") {{ $t('poster-manager/poster:btn-add-file') }}
 		.ui-form-actions
 			bunt-button.btn-save(@click="save", :loading="saving", :error-message="error") {{ create ? $t('poster-manager/poster:btn-create') : $t('poster-manager/poster:btn-save') }}
 			//- .errors {{ validationErrors.join(', ') }}
@@ -89,7 +89,7 @@
 import * as pdfjs from 'pdfjs-dist/webpack'
 import Quill from 'quill'
 import { mapGetters } from 'vuex'
-import { required} from 'buntpapier/src/vuelidate/validators'
+import { required } from 'buntpapier/src/vuelidate/validators'
 import api from 'lib/api'
 import router from 'router'
 import Avatar from 'components/Avatar'
@@ -133,7 +133,7 @@ export default {
 			return this.room?.modules.find(module => module.type === 'poster.native')
 		},
 		presentationRoomOptions() {
-			return [{name: '', id: ''}, ...this.$store.state.rooms]
+			return [{ name: '', id: '' }, ...this.$store.state.rooms]
 		},
 	},
 	validations() {
@@ -166,7 +166,7 @@ export default {
 				links: []
 			}
 		} else {
-			this.poster = await api.call('poster.get', {poster: this.posterId})
+			this.poster = await api.call('poster.get', { poster: this.posterId })
 			this.poster.abstract = new Delta(this.poster.abstract)
 			this.tags = this.poster.tags.join(',')
 		}
@@ -175,8 +175,8 @@ export default {
 		async generatePosterPreview() {
 			const pdf = await pdfjs.getDocument(this.poster.poster_url).promise
 			const page = await pdf.getPage(1)
-			const unscaledViewport = page.getViewport({scale: 1})
-			const viewport = page.getViewport({scale: 360 / unscaledViewport.height})
+			const unscaledViewport = page.getViewport({ scale: 1 })
+			const viewport = page.getViewport({ scale: 360 / unscaledViewport.height })
 			const canvas = document.createElement('canvas')
 			canvas.height = viewport.height
 			canvas.width = viewport.width
@@ -185,8 +185,8 @@ export default {
 				viewport
 			}).promise
 			const blob = await new Promise(canvas.toBlob.bind(canvas))
-			const {url} = await api.uploadFilePromise(blob, 'poster_preview.png')
-			// TODO handle error (const {url, error} = …)
+			const { url } = await api.uploadFilePromise(blob, 'poster_preview.png')
+			// TODO handle error (const { url, error } = …)
 			this.poster.poster_preview = url
 		},
 		addAuthor() {
@@ -231,8 +231,8 @@ export default {
 			this.deleting = true
 			this.deleteError = null
 			try {
-				await api.call('poster.delete', {poster: this.poster.id})
-				this.$router.replace({name: 'posters'})
+				await api.call('poster.delete', { poster: this.poster.id })
+				this.$router.replace({ name: 'posters' })
 			} catch (error) {
 				this.deleteError = this.$t(`error:${error.code}`)
 			}

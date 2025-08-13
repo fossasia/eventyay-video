@@ -20,7 +20,7 @@ export default {
 		this.$store.commit('reportMediaSourcePlaceholderRect', null)
 	},
 	methods: {
-		onResize([{contentRect}]) {
+		onResize([{ contentRect }]) {
 			this.$store.commit('reportMediaSourcePlaceholderRect', contentRect)
 		}
 	}

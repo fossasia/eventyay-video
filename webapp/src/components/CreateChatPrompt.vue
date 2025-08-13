@@ -10,11 +10,11 @@ prompt.c-create-chat-prompt(@close="$emit('close')")
 					.label {{ option.label }}
 			bunt-input(name="name", :label="$t('CreateChatPrompt:name:label')", :icon="selectedType.icon", :placeholder="$t('CreateChatPrompt:name:placeholder')", v-model="name")
 			bunt-input-outline-container(:label="$t('CreateChatPrompt:description:label')")
-				textarea(v-model="description", slot-scope="{focus, blur}", @focus="focus", @blur="blur")
+				textarea(v-model="description", slot-scope="{ focus, blur }", @focus="focus", @blur="blur")
 			bunt-button(type="submit", :loading="loading") {{ $t('CreateChatPrompt:submit:label') }}
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import Prompt from 'components/Prompt'
 
 export default {

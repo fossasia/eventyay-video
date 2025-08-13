@@ -20,7 +20,7 @@
 				.actions
 					bunt-icon-button(@click="showUrlPopup('question')") presentation
 					menu-dropdown(v-if="hasPermission('room:question.moderate')", v-model="showingQuestionsMenu", strategy="fixed")
-						template(v-slot:button="{toggle}")
+						template(v-slot:button="{ toggle }")
 							bunt-icon-button(@click="toggle") dots-vertical
 						template(v-slot:menu)
 							.archive-all(@click="$store.dispatch('question/archiveAll')") {{ $t('Questions:moderator-actions:archive-all:label') }}
@@ -33,7 +33,7 @@
 		panel.no-modules(v-if="Object.keys(modules).length === 1")
 			p No modules to manage in this room
 	.ui-background-blocker(v-if="showingPresentationUrlFor", @click="showingPresentationUrlFor = null")
-	.url-popup(v-if="showingPresentationUrlFor", ref="urlPopup", :class="{'url-copied': copiedUrl}")
+	.url-popup(v-if="showingPresentationUrlFor", ref="urlPopup", :class="{ 'url-copied': copiedUrl }")
 		.copy-success(v-if="copiedUrl") Copied!
 		template(v-else)
 			.copy-url
@@ -49,18 +49,18 @@
 				h1 {{ editedPoll.id ? 'Edit Poll' : 'Create a Poll' }}
 				.form-content
 					bunt-input-outline-container(name="poll-question", label="Question")
-						textarea(slot-scope="{focus, blur}", @focus="focus", @blur="blur", v-model="editedPoll.content")
+						textarea(slot-scope="{ focus, blur }", @focus="focus", @blur="blur", v-model="editedPoll.content")
 					.option(v-for="(option, index) of editedPoll.options")
 						bunt-input(:name="`poll-option-${index}`", :label="`Option ${index + 1}`", v-model="option.content")
 						bunt-icon-button.btn-delete-poll-option(@click="editedPoll.options.splice(index, 1)") delete-outline
-					bunt-button#btn-add-poll-option(@click="editedPoll.options.push({content: ''})") Add Option
+					bunt-button#btn-add-poll-option(@click="editedPoll.options.push({ content: '' })") Add Option
 				bunt-button#btn-submit-poll(@click="submitPoll") {{ editedPoll.id ? 'Save Poll' : 'Create Poll' }}
 </template>
 <script>
 // TODO
 // - handle video better (pause, completely cancel? preserve bandwidth?)
 
-import {mapGetters, mapState} from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { createPopper } from '@popperjs/core'
 import DashboardLayout from 'components/dashboard-layout'
 import Panel from 'components/dashboard-layout/Panel'
@@ -140,7 +140,7 @@ export default {
 		},
 		getPresentationUrl(type) {
 			console.log(type)
-			return window.location.origin + this.$router.resolve({name: `standalone:${type}`}).href + '#token=' + this.token
+			return window.location.origin + this.$router.resolve({ name: `standalone:${type}` }).href + '#token=' + this.token
 		},
 		copyUrl() {
 			this.$refs.urlInput.$refs.input.select()

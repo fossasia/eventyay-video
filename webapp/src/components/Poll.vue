@@ -1,16 +1,16 @@
 <template lang="pug">
-.c-poll(:class="[poll.state, {'has-voted': poll.answers, pinned: poll.is_pinned, managing: isManaging}]", :style="{'--total-votes': totalVotes}")
+.c-poll(:class="[poll.state, { 'has-voted': poll.answers, pinned: poll.is_pinned, managing: isManaging }]", :style="{ '--total-votes': totalVotes }")
 	.question {{ poll.content }}
 	template(v-if="!isManaging && !poll.answers && poll.state === 'open'")
-		bunt-button.btn-option(v-for="option of poll.options", @click="$store.dispatch('poll/vote', {poll, option})") {{ option.content }}
+		bunt-button.btn-option(v-for="option of poll.options", @click="$store.dispatch('poll/vote', { poll, option })") {{ option.content }}
 	template(v-else)
-		.option(v-for="option of poll.options", :class="{'most-votes': optionsWithMostVotes.includes(option.id)}")
+		.option(v-for="option of poll.options", :class="{ 'most-votes': optionsWithMostVotes.includes(option.id) }")
 			.content {{ option.content }}
-			.votes(:style="{'--votes': poll.results[option.id]}") {{ totalVotes ? (poll.results[option.id] / totalVotes * 100).toFixed() : 0 }}%
+			.votes(:style="{ '--votes': poll.results[option.id] }") {{ totalVotes ? (poll.results[option.id] / totalVotes * 100).toFixed() : 0 }}%
 	.actions(v-if="isManaging && hasPermission('room:poll.manage')")
 		bunt-icon-button(@click="$emit('edit')") pencil
 		menu-dropdown(v-model="showModerationMenu", strategy="fixed")
-			template(v-slot:button="{toggle}")
+			template(v-slot:button="{ toggle }")
 				bunt-icon-button(@click="toggle") dots-vertical
 			template(v-slot:menu)
 				.open-poll(v-if="['draft', 'closed'].includes(poll.state)", @click="doAction('open')") {{ $t('Poll:moderation-menu:open-poll:label') }}

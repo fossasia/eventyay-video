@@ -1,6 +1,6 @@
 <template lang="pug">
 .c-upload-button
-	label(:for="id", :class="buttonClass", v-tooltip="tooltipOptions || {text: _tooltip, placement: tooltipPlacement, fixed: tooltipFixed}")
+	label(:for="id", :class="buttonClass", v-tooltip="tooltipOptions || { text: _tooltip, placement: tooltipPlacement, fixed: tooltipFixed }")
 		i.bunt-icon.mdi(v-if="iconClass", :class="iconClass")
 		.bunt-button-content
 			.bunt-button-text

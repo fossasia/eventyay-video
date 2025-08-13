@@ -106,7 +106,7 @@ export default {
 	},
 	async created() {
 		if (this.exhibitor) return
-		this.exhibitorApi = (await api.call('exhibition.get', {exhibitor: this.exhibitorId})).exhibitor
+		this.exhibitorApi = (await api.call('exhibition.get', { exhibitor: this.exhibitorId })).exhibitor
 	},
 	methods: {
 		prettifyUrl(link) {

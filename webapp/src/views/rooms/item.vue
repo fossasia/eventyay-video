@@ -1,5 +1,5 @@
 <template lang="pug">
-.c-room(v-if="room", :class="{'standalone-chat': modules['chat.native'] && room.modules.length === 1}")
+.c-room(v-if="room", :class="{ 'standalone-chat': modules['chat.native'] && room.modules.length === 1 }")
 	.stage(v-if="modules['livestream.native'] || modules['livestream.youtube'] || modules['livestream.iframe'] || modules['call.janus']")
 		media-source-placeholder
 		reactions-overlay(v-if="modules['livestream.native'] || modules['livestream.youtube'] || modules['livestream.iframe'] || modules['call.janus']")
@@ -117,7 +117,7 @@ export default {
 				this.languages = this.modules['livestream.youtube'].config.languageUrls
 			}
 			if (!this.languages.find(lang => lang.language === 'Original')) {
-				this.languages.unshift({language: 'Original', url: ''})
+				this.languages.unshift({ language: 'Original', url: '' })
 			}
 		}
 	}
