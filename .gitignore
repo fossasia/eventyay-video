@@ -13,6 +13,8 @@ htmlcov/
 *~
 .ropeproject
 __pycache__/
+.cache
+.npm
 .idea
 .secret
 atlassian-ide-plugin.xml
@@ -23,4 +25,4 @@ data/media
 static.dist/
 node_modules
 docker-compose.override.yml
-
+.bash_history

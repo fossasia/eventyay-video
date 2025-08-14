@@ -61,7 +61,7 @@ RUN cd /venueless/webapp && \
 
 COPY server /venueless/server
 WORKDIR /venueless/server
-RUN python manage.py collectstatic
+RUN python manage.py collectstatic --no-input
 
 ARG COMMIT=""
 LABEL commit=${COMMIT}
