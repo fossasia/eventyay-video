@@ -9,7 +9,8 @@
 				bunt-button#btn-progress-state(v-if="announcement.state !== 'archived'", :loading="settingState", @click="progressState") {{ announcement.state === 'draft' ? 'activate' : 'archive' }}
 	scrollbars(y)
 		bunt-input-outline-container(label="Text", name="text")
-			textarea.text(slot-scope="{focus, blur}", @focus="focus", @blur="blur", v-model="announcement.text", :disabled="announcement.state !== 'draft'")
+			template(#default="{focus, blur}")
+				textarea.text(@focus="focus", @blur="blur", v-model="announcement.text", :disabled="announcement.state !== 'draft'")
 		bunt-input.floating-label(name="show-until", label="Show Until", type="datetime-local", v-model="plainShowUntil", :disabled="announcement.state !== 'draft'")
 		.button-group
 			bunt-button(:class="{selected: !announcement.show_until}", @click="clearShowUntil", :disabled="announcement.state !== 'draft'") forever
@@ -31,6 +32,7 @@ export default {
 		announcements: Array,
 		announcementId: String
 	},
+	emits: ['update:announcements'],
 	data() {
 		return {
 			announcement: null,
@@ -73,7 +75,7 @@ export default {
 		document.addEventListener('keydown', this.onGlobalKeyDown)
 		document.addEventListener('keyup', this.onGlobalKeyUp)
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		document.removeEventListener('keydown', this.onGlobalKeyDown)
 		document.removeEventListener('keyup', this.onGlobalKeyUp)
 	},
@@ -99,13 +101,13 @@ export default {
 		async save() {
 			this.saving = true
 			if (this.announcement.id) {
-				const { announcement } = await api.call('announcement.update', this.announcement)
-				const existingAnnouncement = this.announcements.find(a => a.id === announcement.id)
-				Object.assign(existingAnnouncement, announcement)
+					const { announcement } = await api.call('announcement.update', this.announcement)
+					const updated = this.announcements.map(a => a.id === announcement.id ? {...a, ...announcement} : a)
+					this.$emit('update:announcements', updated)
 			} else {
 				const { announcement } = await api.call('announcement.create', this.announcement)
-				// TODO not really best practice
-				this.announcements.push(announcement)
+				// emit updated list instead of mutating prop
+				this.$emit('update:announcements', [...this.announcements, announcement])
 				this.$router.push({ name: 'admin:announcements:item', params: {announcementId: announcement.id}})
 				this.announcement = Object.assign({}, announcement)
 				this.announcement.show_until = this.announcement.show_until ? moment(this.announcement.show_until) : null
@@ -120,8 +122,8 @@ export default {
 			})
 			this.announcement = announcement
 			this.announcement.show_until = this.announcement.show_until ? moment(this.announcement.show_until) : null
-			const existingAnnouncement = this.announcements.find(a => a.id === announcement.id)
-			Object.assign(existingAnnouncement, announcement)
+			const updated = this.announcements.map(a => a.id === announcement.id ? {...a, ...announcement} : a)
+			this.$emit('update:announcements', updated)
 			this.settingState = false
 		}
 	}

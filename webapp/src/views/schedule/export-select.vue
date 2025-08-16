@@ -54,6 +54,7 @@ export default {
 			required: true
 		}
 	},
+  emits: ['input', 'update:modelValue'],
 	data() {
 		return {
 			isOpen: false,
@@ -65,7 +66,7 @@ export default {
 	mounted() {
 		document.addEventListener('click', this.outsideClick)
 	},
-	beforeDestroy() {
+  beforeUnmount() {
 		document.removeEventListener('click', this.outsideClick)
 	},
 	created() {
@@ -160,7 +161,7 @@ export default {
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
 
