@@ -52,7 +52,8 @@ services:
         ports:
             - "8880:8880"
         volumes:
-            - ./webapp:/app:ro
+            - ./webapp:/app
+            - /app/node_modules
         command: ["npm", "start", "--", "--host", "0.0.0.0"]
     redis:
         image: "redis:latest"
