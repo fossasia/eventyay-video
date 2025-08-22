@@ -53,8 +53,8 @@ COPY webapp/src/ /venueless/webapp/src/
 COPY webapp/public/ /venueless/webapp/public/
 
 RUN cd /venueless/webapp && \
-    npm ci --legacy-peer-deps && \
-    NODE_OPTIONS=--openssl-legacy-provider npm run build && \
+    npm ci && \
+    npm run build && \
 	mkdir -p data && \
 	cd .. && \
     chown -R venueless:venueless /venueless /data
