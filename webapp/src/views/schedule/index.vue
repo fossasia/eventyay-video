@@ -60,7 +60,7 @@
 	bunt-progress-circular(v-else, size="huge", :page="true")
 </template>
 <script>
-import _ from 'lodash'
+// import _ from 'lodash'
 import { mapState, mapGetters } from 'vuex'
 import LinearSchedule from 'views/schedule/schedule-components/LinearSchedule'
 import GridSchedule from 'views/schedule/schedule-components/GridSchedule'
@@ -193,7 +193,7 @@ export default {
 			return sessions
 		},
 		rooms() {
-		  const occupiedRoomIds = this.sessions.map(s => s.room.id)
+			const occupiedRoomIds = this.sessions.map(s => s.room.id)
 			return this.schedule.rooms.filter(r => occupiedRoomIds.includes(r.id))
 		},
 		filter() {
