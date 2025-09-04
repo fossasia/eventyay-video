@@ -49,6 +49,7 @@ RUN chmod +x /usr/local/bin/venueless
 COPY webapp/.* /venueless/webapp/
 COPY webapp/*.js /venueless/webapp/
 COPY webapp/*.json /venueless/webapp/
+COPY webapp/index.html /venueless/webapp/
 COPY webapp/src/ /venueless/webapp/src/
 COPY webapp/public/ /venueless/webapp/public/
 
