@@ -191,7 +191,7 @@ export default {
 				this.$refs.primaryMediaSource.isPlaying() &&
 				// don't background bbb room when switching to new bbb room
 				!(newRoom?.modules.some(isExclusive) && oldRoom?.modules.some(isExclusive)) &&
-				!newRoomHasMedia 
+				!newRoomHasMedia
 			) {
 				this.backgroundRoom = oldRoom
 			} else if (newRoomHasMedia) {
