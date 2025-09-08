@@ -10,7 +10,7 @@ django-cors-headers==4.7.*
 django-decorator-include==3.3
 django-extensions==4.1
 django-formset-js-improved
-django-multifactor==0.8.2
+django-multifactor==0.8.4
 djangorestframework==3.16.*
 emoji==2.14.*
 icalendar==6.3.*
