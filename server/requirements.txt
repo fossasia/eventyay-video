@@ -36,7 +36,7 @@ websockets==15.*
 # deploy
 psycopg2==2.9.10
 gunicorn==23.0.0
-uvicorn[standard]==0.34.2
+uvicorn[standard]==0.36.0
 
 # dev
 daphne==4.2.*
