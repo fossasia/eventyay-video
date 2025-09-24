@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.forms.models import model_to_dict
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
@@ -308,7 +308,17 @@ class ExportView(APIView):
         export_type = request.GET.get("export_type", "json")
         world = get_object_or_404(World, id=kwargs["world_id"])
         talk_config = world.config.get("pretalx")
-        user = User.objects.filter(token_id=request.user)
+        
+        # Extract user ID from token properly
+        user = None
+        try:
+            user_code = ExportView.get_uid_from_token(request, kwargs["world_id"])
+            if user_code:
+                user = User.objects.filter(token_id=user_code).first()
+        except Exception:
+            # If token extraction fails, continue without user context
+            pass
+            
         talk_base_url = (
             talk_config.get("domain")
             + "/"
@@ -317,8 +327,9 @@ class ExportView(APIView):
         )
         export_endpoint = "schedule." + export_type
         talk_url = talk_base_url + export_endpoint
+        
         if "my" in export_type and user:
-            user_state = user.first().client_state
+            user_state = user.client_state
             if (
                 user_state
                 and user_state.get("schedule")
@@ -328,9 +339,41 @@ class ExportView(APIView):
                 talk_list_str = ",".join(talk_list)
                 export_endpoint = "schedule-my." + export_type.replace("my", "")
                 talk_url = talk_base_url + export_endpoint + "?talks=" + talk_list_str
+        
         header = {"Content-Type": "application/json"}
         response = requests.get(talk_url, headers=header)
-        return Response(response.content.decode("utf-8"))
+        
+        # Return appropriate content type and response
+        content_type_map = {
+            'json': 'application/json',
+            'myjson': 'application/json',
+            'ics': 'text/calendar',
+            'myics': 'text/calendar', 
+            'xml': 'application/xml',
+            'myxml': 'application/xml',
+            'xcal': 'application/xcal+xml',
+            'myxcal': 'application/xcal+xml'
+        }
+        
+        response_content_type = content_type_map.get(export_type, 'text/plain')
+        
+        return HttpResponse(response.content, content_type=response_content_type)
+
+    @staticmethod
+    def get_uid_from_token(request, world_id):
+        world = get_object_or_404(World, id=world_id)
+        auth_header = get_authorization_header(request).split()
+        if auth_header and auth_header[0].lower() == b"bearer":
+            if len(auth_header) == 1:
+                raise exceptions.AuthenticationFailed(
+                    "Invalid token header. No credentials provided."
+                )
+            elif len(auth_header) > 2:
+                raise exceptions.AuthenticationFailed(
+                    "Invalid token header. Token string should not contain spaces."
+                )
+        token_decode = world.decode_token(token=auth_header[1])
+        return token_decode.get("uid")
 
 
 def get_domain(path):
