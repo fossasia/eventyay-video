@@ -34,7 +34,7 @@ tqdm==4.67.*
 websockets==15.*
 
 # deploy
-psycopg2==2.9.10
+psycopg2==2.9.11
 gunicorn==23.0.0
 uvicorn[standard]==0.34.2
 
