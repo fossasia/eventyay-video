@@ -4,7 +4,7 @@ scrollbars.c-exhibitor(y)
 		.content
 			img.banner(:src="exhibitor.banner_detail", v-if="exhibitor.banner_detail && !bannerIsVideo && !bannerIsFrame")
 			.iframe-banner(v-else-if="bannerIsFrame")
-				iframe(:src="bannerVideoSource", allowfullscreen, allow="fullscreen")
+				iframe(:src="bannerVideoSource", allowfullscreen, allow="fullscreen", :referrerpolicy="referrerPolicy")
 			.video-banner(v-else-if="bannerIsVideo")
 				video(:src="exhibitor.banner_detail", autoplay, controls, loop)
 			markdown-content.text(v-if="exhibitor.text_legacy", :markdown="exhibitor.text_legacy")
@@ -44,7 +44,7 @@ scrollbars.c-exhibitor(y)
 // TODO
 // - user action for staff list?
 import { mapState, mapGetters } from 'vuex'
-import api from 'lib/api'
+import api, { REFERRER_POLICY } from 'lib/api'
 import Avatar from 'components/Avatar'
 import ContactExhibitorPrompt from 'components/ContactExhibitorPrompt'
 import ChatUserCard from 'components/ChatUserCard'
@@ -64,7 +64,8 @@ export default {
 			exhibitorApi: null,
 			selectedUser: null,
 			showContactPrompt: false,
-			getIconByFileEnding
+			getIconByFileEnding,
+			referrerPolicy: REFERRER_POLICY
 		}
 	},
 	computed: {

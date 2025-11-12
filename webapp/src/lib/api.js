@@ -3,6 +3,8 @@ import config from 'config'
 import store from 'store'
 import WebSocketClient from './WebSocketClient'
 
+export const REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
 const api = Object.create(WebSocketClient.prototype)
 api.connect = function({token, clientId, inviteToken}) {
 	if (api._socket) {
