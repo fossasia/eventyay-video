@@ -1,22 +1,45 @@
 <template lang="pug">
 transition(name="sidebar")
-	.c-rooms-sidebar(v-show="show && !snapBack", :style="style", role="navigation", @pointerdown="onPointerdown", @pointermove="onPointermove", @pointerup="onPointerup", @pointercancel="onPointercancel")
-		router-link.logo(:to="{name: 'home'}", v-if="$mq.above['m']", :class="{'fit-to-width': theme.logo.fitToWidth}")
-			img(:src="theme.logo.url", :alt="world.title")
-		bunt-icon-button#btn-close-sidebar(v-else, @click="$emit('close')") menu
+	.c-rooms-sidebar(v-show="show && !snapBack", :class="{collapsed}", :style="style", role="navigation", @pointerdown="onPointerdown", @pointermove="onPointermove", @pointerup="onPointerup", @pointercancel="onPointercancel")
+		.sidebar-header
+			router-link.logo(:to="{name: 'home'}", v-if="$mq.above['m'] && !collapsed", :class="{'fit-to-width': theme.logo.fitToWidth}")
+				img(:src="theme.logo.url", :alt="world.title")
+			bunt-icon-button#btn-close-sidebar(v-else-if="$mq.below['l']", @click="$emit('close')") menu
+			span.toggle-btn-wrapper
+				bunt-icon-button#btn-toggle-sidebar(
+					v-if="$mq.above['l']"
+					@click="$emit('toggle-collapsed')"
+					@mouseenter="showToggleTooltip = true"
+					@mouseleave="showToggleTooltip = false"
+					@focus="showToggleTooltip = true"
+					@blur="showToggleTooltip = true"
+				) {{ collapsed ? 'menu' : 'chevron-left' }}
+				teleport(to="body")
+					div.sidebar-toggle-tooltip(v-if="showToggleTooltip", :style="toggleTooltipStyle")
+						| {{ collapsed ? 'Expand sidebar' : 'Collapse sidebar' }}
 		scrollbars(y)
 			.global-links(role="group", aria-label="pages")
-				router-link.room(v-if="roomsByType.page.includes(rooms[0])", :to="{name: 'home'}", v-html="$emojify(rooms[0].name)")
-				router-link.room(:to="{name: 'schedule'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ $t('RoomsSidebar:schedule:label') }}
-				router-link.room(:to="{name: 'schedule:sessions'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ $t('RoomsSidebar:session:label') }}
-				router-link.room(:to="{name: 'schedule:speakers'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)") {{ $t('RoomsSidebar:speaker:label') }}
-				router-link.room(v-for="page of roomsByType.page", v-if="page !== rooms[0]", :to="{name: 'room', params: {roomId: page.id}}", v-html="$emojify(page.name)")
+				router-link.room(v-if="roomsByType.page.includes(rooms[0])", :to="{name: 'home'}")
+					span.sidebar-icon.mdi.mdi-home
+					span(v-if="!collapsed", v-html="$emojify(rooms[0].name)")
+				router-link.room(:to="{name: 'schedule'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)")
+					span.sidebar-icon.mdi.mdi-calendar
+					span(v-if="!collapsed") {{ $t('RoomsSidebar:schedule:label') }}
+				router-link.room(:to="{name: 'schedule:sessions'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)")
+					span.sidebar-icon.mdi.mdi-calendar-multiple
+					span(v-if="!collapsed") {{ $t('RoomsSidebar:session:label') }}
+				router-link.room(:to="{name: 'schedule:speakers'}", v-if="!!world.pretalx && (world.pretalx.url || world.pretalx.domain)")
+					span.sidebar-icon.mdi.mdi-account-multiple
+					span(v-if="!collapsed") {{ $t('RoomsSidebar:speaker:label') }}
+				router-link.room(v-for="page of roomsByType.page", v-if="page !== rooms[0]", :to="{name: 'room', params: {roomId: page.id}}")
+					span.sidebar-icon.mdi.mdi-file-document
+					span(v-if="!collapsed", v-html="$emojify(page.name)")
 			.group-title#stages-title(v-if="roomsByType.stage.length || hasPermission('world:rooms.create.stage')")
-				span {{ $t('RoomsSidebar:stages-headline:text') }}
-				bunt-icon-button(v-if="hasPermission('world:rooms.create.stage')", @click="showStageCreationPrompt = true") plus
+				span {{ !collapsed ? $t('RoomsSidebar:stages-headline:text') : '' }}
+				bunt-icon-button(v-if="hasPermission('world:rooms.create.stage') && !collapsed", @click="showStageCreationPrompt = true") plus
 			.stages(role="group", aria-describedby="stages-title")
 				router-link.stage(v-for="stage, index of roomsByType.stage", :to="stage.room === rooms[0] ? {name: 'home'} : {name: 'room', params: {roomId: stage.room.id}}", :class="{active: stage.room.id === $route.params.roomId, session: stage.session, live: stage.session && stage.room.schedule_data, 'has-image': stage.image, 'starts-with-emoji': startsWithEmoji(stage.room.name)}")
-					template(v-if="stage.session")
+					template(v-if="stage.session && !collapsed")
 						img.preview(v-if="stage.image", :src="stage.image")
 						.info
 							.title {{ $localize(stage.session.title) }}
@@ -27,60 +50,77 @@ transition(name="sidebar")
 									.notifications(v-if="stage.notifications") {{ stage.notifications }}
 					template(v-else)
 						.room-icon(aria-hidden="true")
-						.name(v-html="$emojify(stage.room.name)")
-						.buffer
-						template(v-if="stage.room.users")
+						.name(v-if="!collapsed", v-html="$emojify(stage.room.name)")
+						.buffer(v-if="!collapsed")
+						template(v-if="stage.room.users && !collapsed")
 							.room-attendee
 								i.mdi.mdi-account-group.icon-viewer
 								.name(v-html="stage.room.users")
 						.notifications(v-if="stage.notifications") {{ stage.notifications }}
 			.group-title#chats-title(v-if="roomsByType.videoChat.length || roomsByType.textChat.length || hasPermission('world:rooms.create.chat') || hasPermission('world:rooms.create.bbb')")
-				span {{ $t('RoomsSidebar:channels-headline:text') }}
-				.buffer
-				bunt-icon-button(v-if="hasPermission('world:rooms.create.chat') || hasPermission('world:rooms.create.bbb')", tooltip="Create Channel", :tooltip-fixed="true", @click="showChatCreationPrompt = true") plus
-				bunt-icon-button(v-if="worldHasTextChannels", tooltip="Browse all channels", :tooltip-fixed="true", @click="showChannelBrowser = true") compass-outline
+				span {{ !collapsed ? $t('RoomsSidebar:channels-headline:text') : '' }}
+				.buffer(v-if="!collapsed")
+				bunt-icon-button(v-if="hasPermission('world:rooms.create.chat') || hasPermission('world:rooms.create.bbb')", tooltip="Create Channel", :tooltip-fixed="true", @click="showChatCreationPrompt = true", v-show="!collapsed") plus
+				bunt-icon-button(v-if="worldHasTextChannels", tooltip="Browse all channels", :tooltip-fixed="true", @click="showChannelBrowser = true", v-show="!collapsed") compass-outline
 			.chats(role="group", aria-describedby="chats-title")
 				router-link.video-chat(v-for="chat of roomsByType.videoChat", :to="chat === rooms[0] ? {name: 'home'} : {name: 'room', params: {roomId: chat.id}}", :class="{active: chat.id === $route.params.roomId, 'starts-with-emoji': startsWithEmoji(chat.name)}")
 					.room-icon(aria-hidden="true")
-					.name(v-html="$emojify(chat.name)")
+					.name(v-if="!collapsed", v-html="$emojify(chat.name)")
 					i.bunt-icon.activity-icon.mdi(v-if="chat.users === 'many' || chat.users === 'few'", :class="{'mdi-account-group': (chat.users === 'many'), 'mdi-account-multiple': (chat.users === 'few')}", v-tooltip.bottom.fixed="{text: $t('RoomsSidebar:users-tooltip:' + chat.users)}", :aria-label="$t('RoomsSidebar:users-tooltip:' + chat.users)")
 				router-link.text-chat(v-for="chat of roomsByType.textChat", :to="chat.room === rooms[0] ? {name: 'home'} : {name: 'room', params: {roomId: chat.room.id}}", :class="{unread: hasUnreadMessages(chat.room.modules[0].channel_id), 'starts-with-emoji': startsWithEmoji(chat.room.name)}")
 					.room-icon(aria-hidden="true")
-					.name(v-html="$emojify(chat.room.name)")
+					.name(v-if="!collapsed", v-html="$emojify(chat.room.name)")
 					.notifications(v-if="chat.notifications") {{ chat.notifications }}
-					bunt-icon-button(@click.prevent.stop="$store.dispatch('chat/leaveChannel', {channelId: chat.room.modules[0].channel_id})") close
-				bunt-button#btn-browse-channels-trailing(v-if="worldHasTextChannels", @click="showChannelBrowser = true") {{ $t('RoomsSidebar:browse-channels-button:label') }}
+					bunt-icon-button(@click.prevent.stop="$store.dispatch('chat/leaveChannel', {channelId: chat.room.modules[0].channel_id})", v-show="!collapsed") close
+				bunt-button#btn-browse-channels-trailing(v-if="worldHasTextChannels && !collapsed", @click="showChannelBrowser = true") {{ $t('RoomsSidebar:browse-channels-button:label') }}
 			.group-title#dm-title(v-if="directMessageChannels.length || hasPermission('world:chat.direct')")
-				span {{ $t('RoomsSidebar:direct-messages-headline:text') }}
-				bunt-icon-button(v-if="hasPermission('world:chat.direct')", tooltip="open a direct message", :tooltip-fixed="true", @click="showDMCreationPrompt = true") plus
+				span {{ !collapsed ? $t('RoomsSidebar:direct-messages-headline:text') : '' }}
+				bunt-icon-button(v-if="hasPermission('world:chat.direct')", tooltip="open a direct message", :tooltip-fixed="true", @click="showDMCreationPrompt = true", v-show="!collapsed") plus
 			.direct-messages(role="group", aria-describedby="dm-title")
 				router-link.direct-message(v-for="channel of directMessageChannels", :to="{name: 'channel', params: {channelId: channel.id}}", :class="{unread: hasUnreadMessages(channel.id)}")
 					i.bunt-icon.mdi(v-if="call && call.channel === channel.id", aria-hidden="true").mdi-phone
-					.name {{ getDMChannelName(channel) }}
+					.name(v-if="!collapsed") {{ getDMChannelName(channel) }}
 					.notifications(v-if="channel.notifications") {{ channel.notifications }}
-					bunt-icon-button(tooltip="remove", :tooltip-fixed="true", @click.prevent.stop="$store.dispatch('chat/leaveChannel', {channelId: channel.id})") close
+					bunt-icon-button(tooltip="remove", :tooltip-fixed="true", @click.prevent.stop="$store.dispatch('chat/leaveChannel', {channelId: channel.id})", v-show="!collapsed") close
+			.section-spacer(v-if="worldHasExhibition || worldHasPosters || hasPermission('world:users.list') || hasPermission('world:update') || hasPermission('world:announce') || hasPermission('room:update')")
 			.buffer
 			template(v-if="worldHasExhibition && (staffedExhibitions.length > 0 || hasPermission('world:rooms.create.exhibition'))")
-				.group-title {{ $t('RoomsSidebar:exhibitions-headline:text') }}
-				.admin
-					router-link(:to="{name: 'exhibitors'}") {{ $t('RoomsSidebar:exhibitions-manage:label') }}
-					router-link(:to="{name: 'contactRequests'}") {{ $t('RoomsSidebar:exhibitions-requests:label') }}
+				.group-title {{ !collapsed ? $t('RoomsSidebar:exhibitions-headline:text') : '' }}
+				.admin(v-if="!collapsed")
+					router-link(:to="{name: 'exhibitors'}")
+						span.sidebar-icon.mdi.mdi-store
+						span {{ $t('RoomsSidebar:exhibitions-manage:label') }}
+					router-link(:to="{name: 'contactRequests'}")
+						span.sidebar-icon.mdi.mdi-message-text
+						span {{ $t('RoomsSidebar:exhibitions-requests:label') }}
 			template(v-if="worldHasPosters && hasPermission('world:rooms.create.poster')")
-				.group-title {{ $t('RoomsSidebar:posters-headline:text') }}
-				.admin
-					router-link(:to="{name: 'posters'}") {{ $t('RoomsSidebar:posters-manage:label') }}
+				.group-title {{ !collapsed ? $t('RoomsSidebar:posters-headline:text') : '' }}
+				.admin(v-if="!collapsed")
+					router-link(:to="{name: 'posters'}")
+						span.sidebar-icon.mdi.mdi-file-document-multiple
+						span {{ $t('RoomsSidebar:posters-manage:label') }}
 			template(v-if="hasPermission('world:users.list') || hasPermission('world:update') || hasPermission('world:announce') || hasPermission('room:update')")
-				.group-title {{ $t('RoomsSidebar:admin-headline:text') }}
-				.admin
-					router-link.room(:to="{name: 'admin:announcements'}", v-if="hasPermission('world:announce')") {{ $t('RoomsSidebar:admin-announcements:label') }}
-					router-link.room(:to="{name: 'admin:users'}", v-if="hasPermission('world:users.list')") {{ $t('RoomsSidebar:admin-users:label') }}
-					router-link.room(:to="{name: 'admin:rooms:index'}", v-if="hasPermission('room:update')") {{ $t('RoomsSidebar:admin-rooms:label') }}
-					router-link.room(:to="{name: 'admin:kiosks:index'}", v-if="hasPermission('world:users.manage')") {{ $t('RoomsSidebar:admin-kiosks:label') }}
-					router-link.room(:to="{name: 'admin:config'}", v-if="hasPermission('world:update')") {{ $t('RoomsSidebar:admin-config:label') }}
+				.group-title {{ !collapsed ? $t('RoomsSidebar:admin-headline:text') : '' }}
+				.admin(v-if="!collapsed")
+					router-link.room(:to="{name: 'admin:announcements'}", v-if="hasPermission('world:announce')")
+						span.sidebar-icon.mdi.mdi-bullhorn
+						span {{ $t('RoomsSidebar:admin-announcements:label') }}
+					router-link.room(:to="{name: 'admin:users'}", v-if="hasPermission('world:users.list')")
+						span.sidebar-icon.mdi.mdi-account-group
+						span {{ $t('RoomsSidebar:admin-users:label') }}
+					router-link.room(:to="{name: 'admin:rooms:index'}", v-if="hasPermission('room:update')")
+						span.sidebar-icon.mdi.mdi-door-open
+						span {{ $t('RoomsSidebar:admin-rooms:label') }}
+					router-link.room(:to="{name: 'admin:kiosks:index'}", v-if="hasPermission('world:users.manage')")
+						span.sidebar-icon.mdi.mdi-monitor
+						span {{ $t('RoomsSidebar:admin-kiosks:label') }}
+					router-link.room(:to="{name: 'admin:config'}", v-if="hasPermission('world:update')")
+						span.sidebar-icon.mdi.mdi-cog
+						span {{ $t('RoomsSidebar:admin-config:label') }}
 		router-link.profile(:to="{name: 'preferences'}")
 			avatar(:user="user", :size="36")
-			.display-name {{ user.profile.display_name }}
-			.mdi.mdi-cog
+			.display-name(v-if="!collapsed") {{ user.profile.display_name }}
+			.mdi.mdi-cog(v-if="!collapsed")
 		transition(name="prompt")
 			channel-browser(v-if="showChannelBrowser", @close="showChannelBrowser = false", @createChannel="showChannelBrowser = false, showChatCreationPrompt = true")
 			create-stage-prompt(v-else-if="showStageCreationPrompt", @close="showStageCreationPrompt = false")
@@ -100,7 +140,11 @@ import CreateDmPrompt from 'components/CreateDmPrompt'
 export default {
 	components: { Avatar, ChannelBrowser, CreateStagePrompt, CreateChatPrompt, CreateDmPrompt },
 	props: {
-		show: Boolean
+		show: Boolean,
+		collapsed: {
+			type: Boolean,
+			default: false
+		}
 	},
 	data() {
 		return {
@@ -111,7 +155,8 @@ export default {
 			showChannelBrowser: false,
 			showStageCreationPrompt: false,
 			showChatCreationPrompt: false,
-			showDMCreationPrompt: false
+			showDMCreationPrompt: false,
+			showToggleTooltip: false
 		}
 	},
 	computed: {
@@ -125,6 +170,16 @@ export default {
 			if (this.pointerMovementX === 0) return
 			return {
 				transform: `translateX(${this.pointerMovementX}px)`
+			}
+		},
+		toggleTooltipStyle() {
+			// Find the toggle button and position the tooltip above it, centered
+			const btn = document.getElementById('btn-toggle-sidebar')
+			if (!btn) return {}
+			const rect = btn.getBoundingClientRect()
+			return {
+				left: rect.left + rect.width / 2 + 'px',
+				top: rect.top - 10 + 'px'
 			}
 		},
 		roomsByType() {
@@ -231,23 +286,149 @@ export default {
 	flex-direction: column
 	min-height: 0
 	max-height: var(--vh100)
-	.logo
-		font-size: 18px
-		text-align: center
-		margin: 0 16px
-		height: 56px
-		img
-			height: 100%
-			max-width: 100%
-			object-fit: contain
-		&.fit-to-width
-			height: auto
-			margin: 0
-			img
-				height: auto
-	#btn-close-sidebar
-		margin: 8px
-		icon-button-style(color: var(--clr-sidebar-text-primary), style: clear)
+	transition: width 0.3s ease
+	overflow: visible // Ensure tooltips can overflow the sidebar
+	z-index: 1100 // Raise z-index so tooltips appear above other UI
+	
+	&.collapsed
+		overflow: visible // Allow tooltips to overflow in collapsed state
+		z-index: 1200 // Ensure collapsed sidebar is above other UI for tooltips
+		
+		width: 80px
+		overflow: hidden
+		
+		.sidebar-header
+			justify-content: center
+			
+		.global-links
+			> *
+				justify-content: center
+				padding: 0 8px
+				text-align: center
+				font-size: 0
+				position: relative
+				margin-bottom: 8px
+				background-color: transparent !important
+				
+				&:last-child
+					margin-bottom: 0
+				
+				.sidebar-icon
+					display: inline-flex
+					align-items: center
+					justify-content: center
+					width: 40px
+					height: 40px
+					font-size: 22px
+					color: white
+					background-color: var(--clr-primary)
+					border-radius: 8px
+					margin: 4px 0
+					transition: all 0.2s ease
+					
+				&.router-link-exact-active .sidebar-icon
+					background-color: var(--clr-primary)
+					box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)
+					
+				&:hover .sidebar-icon
+					background-color: var(--clr-primary)
+					box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25)
+					transform: scale(1.02)
+			
+		.stages, .chats, .direct-messages, .admin
+			> *
+				justify-content: center
+				padding: 0 8px
+				text-align: center
+				margin-bottom: 8px
+				background-color: transparent !important
+				
+				&:last-child
+					margin-bottom: 0
+				
+				.room-icon, .icon-viewer, .sidebar-icon
+					margin: 0
+					width: 40px
+					height: 40px
+					background-color: var(--clr-primary)
+					border-radius: 8px
+					display: flex
+					align-items: center
+					justify-content: center
+					margin: 4px 0
+					transition: all 0.2s ease
+					
+					&::before
+						font-size: 22px
+						line-height: 40px
+						color: white
+						
+				&.router-link-exact-active, &.active
+					.room-icon, .icon-viewer, .sidebar-icon
+						background-color: var(--clr-primary)
+						box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3)
+						transform: scale(1.05)
+						
+				&:hover
+					.room-icon, .icon-viewer, .sidebar-icon
+						background-color: var(--clr-primary)
+						box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25)
+						transform: scale(1.02)
+						
+				.notifications
+					position: absolute
+					top: 2px
+					right: 2px
+					margin: 0
+					
+				&.stage.session
+					height: 36px
+					padding: 0 8px
+					
+					img.preview
+						display: none
+						
+		.group-title
+			display: none
+			
+		// Add spacing between sections in collapsed state
+		.stages
+			margin-bottom: 12px
+		.chats
+			margin-bottom: 12px
+		.direct-messages
+			margin-bottom: 12px
+		.admin
+			margin-bottom: 12px
+		.section-spacer
+			height: 64px
+			flex: none
+		.profile
+			justify-content: center
+			padding: 8px
+	
+	.sidebar-header
+		display: flex
+		align-items: center
+		padding: 8px
+		position: relative 
+		
+		#btn-toggle-sidebar
+			icon-button-style(color: white, style: clear)
+			margin-left: auto
+			background-color: var(--clr-primary)
+			border-radius: 8px
+			width: 40px
+			height: 40px
+			transition: all 0.2s ease
+			position: relative
+			z-index: 1200 
+			
+			&:hover
+				background-color: var(--clr-primary)
+				box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25)
+				transform: scale(1.02)
+				
 	> .c-scrollbars
 		flex: auto
 		.scroll-content
@@ -283,6 +464,18 @@ export default {
 		display: flex
 		justify-content: space-between
 		align-items: center
+		
+		// Add extra spacing for sections that need visual separation
+		&#stages-title
+			margin-top: 16px
+		&#chats-title
+			margin-top: 16px
+		&#dm-title
+			margin-top: 16px
+		
+		// Add spacing for exhibition and admin sections
+		&:not(#stages-title):not(#chats-title):not(#dm-title)
+			margin-top: 32px
 		.bunt-icon-button
 			margin: -4px 0
 			icon-button-style(color: var(--clr-sidebar-text-primary), style: clear)
@@ -331,26 +524,6 @@ export default {
 
 			&.starts-with-emoji
 				padding: 0 18px
-				// .room-icon
-				// 	position: absolute
-				// 	width: 18px
-				// 	height: @width
-				// 	left: 18px
-				// 	background-color: var(--clr-sidebar)
-				// 	border-radius: 50%
-				// 	&::before
-				// 		display: block
-				// 		height: 18px
-				// 		width: 18px
-				// 		line-height: @height
-				// 		font-size: 14px
-				// 		margin: 0 auto
-				// .room-icon
-				// 	width: 10px
-				// .name
-				// 	background-color: var(--clr-sidebar)
-				// 	padding-left: 3px
-				// 	border-radius: 18px
 				.room-icon
 					display: none
 			&.unread
@@ -407,7 +580,6 @@ export default {
 					height: 36px
 					width: @height
 					border-radius: 50%
-					margin-right: 4px
 				.info
 					flex: auto
 					display: flex
@@ -489,9 +661,13 @@ export default {
 				color: var(--clr-sidebar-text-primary)
 	.buffer
 		flex: auto
+	.section-spacer
+		height: 32px
+		flex: none
 	> .profile
 		display: flex
-		padding: 8px
+		padding: 16px 8px  
+		margin-top: 16px   
 		align-items: center
 		cursor: pointer
 		color: var(--clr-sidebar-text-primary)
@@ -516,14 +692,73 @@ export default {
 		position: fixed
 		left: 0
 		top: 0
-		z-index: 901
+		z-index: 1000
 		width: var(--sidebar-width)
 		height: var(--vh100)
 		touch-action: pan-y
 		> .c-scrollbars .scroll-content
 			touch-action: pan-y
 		&.sidebar-enter-active, &.sidebar-leave-active
-			transition: transform .2s
+			transition: transform .3s ease  
 		&.sidebar-enter, &.sidebar-leave-to
 			transform: translateX(calc(-1 * var(--sidebar-width)))
+			
+		&.collapsed
+			width: 80px
+			transform: none
+			
+			&.sidebar-enter, &.sidebar-leave-to
+				transform: translateX(-80px)
+
+.c-rooms-sidebar.collapsed
+	.global-links > *::before,
+	.stages > * .room-icon::before,
+	.chats > * .room-icon::before,
+	.direct-messages > * .room-icon::before,
+	.admin > * .room-icon::before
+		font-size: 26px !important
+		line-height: 40px !important
+		width: 40px !important
+		height: 40px !important
+	.global-links > *,
+	.stages > *,
+	.chats > *,
+	.direct-messages > *,
+	.admin > *
+		margin-bottom: 12px !important 
+		&:last-child
+			margin-bottom: 0 !important
+		// Remove selection background in collapsed state
+		&.router-link-active, &.active, &.router-link-exact-active
+			background-color: transparent !important
+		// Increase icon container size
+		&::before, .room-icon, .icon-viewer
+			width: 40px !important
+			height: 40px !important
+			min-width: 40px !important
+			min-height: 40px !important
+	.section-spacer
+		height: 64px !important
+	// Make all icons black when active in collapsed state
+	.global-links > *.router-link-exact-active .sidebar-icon,
+	.stages > *.router-link-exact-active .room-icon,
+	.stages > *.active .room-icon,
+	.chats > *.router-link-exact-active .room-icon,
+	.chats > *.active .room-icon,
+	.direct-messages > *.router-link-exact-active .room-icon,
+	.direct-messages > *.active .room-icon,
+	.admin > *.router-link-exact-active .room-icon,
+	.admin > *.active .room-icon
+		color: #000 !important
+	// For Material Design Icons using ::before
+	.global-links > *.router-link-exact-active .sidebar-icon::before,
+	.stages > *.router-link-exact-active .room-icon::before,
+	.stages > *.active .room-icon::before,
+	.chats > *.router-link-exact-active .room-icon::before,
+	.chats > *.active .room-icon::before,
+	.direct-messages > *.router-link-exact-active .room-icon::before,
+	.direct-messages > *.active .room-icon::before,
+	.admin > *.router-link-exact-active .room-icon::before,
+	.admin > *.active .room-icon::before
+		color: #000 !important
 </style>
