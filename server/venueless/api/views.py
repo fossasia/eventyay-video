@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.forms.models import model_to_dict
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
@@ -308,7 +308,18 @@ class ExportView(APIView):
         export_type = request.GET.get("export_type", "json")
         world = get_object_or_404(World, id=kwargs["world_id"])
         talk_config = world.config.get("pretalx")
-        user = User.objects.filter(token_id=request.user)
+        
+        # Extract user ID from token properly
+        user = None
+        try:
+            user_code = ExportView.get_uid_from_token(request, kwargs["world_id"])
+            if user_code:
+                user = User.objects.filter(token_id=user_code).first()
+        except (exceptions.AuthenticationFailed, ValueError, KeyError):
+            # If token extraction fails (invalid token, missing header, decode error), 
+            # continue without user context
+            pass
+            
         talk_base_url = (
             talk_config.get("domain")
             + "/"
@@ -317,8 +328,9 @@ class ExportView(APIView):
         )
         export_endpoint = "schedule." + export_type
         talk_url = talk_base_url + export_endpoint
+        
         if "my" in export_type and user:
-            user_state = user.first().client_state
+            user_state = user.client_state
             if (
                 user_state
                 and user_state.get("schedule")
@@ -328,9 +340,92 @@ class ExportView(APIView):
                 talk_list_str = ",".join(talk_list)
                 export_endpoint = "schedule-my." + export_type.replace("my", "")
                 talk_url = talk_base_url + export_endpoint + "?talks=" + talk_list_str
+        
         header = {"Content-Type": "application/json"}
-        response = requests.get(talk_url, headers=header)
-        return Response(response.content.decode("utf-8"))
+        
+        try:
+            response = requests.get(talk_url, headers=header, timeout=30)
+            response.raise_for_status()  # Raises HTTPError for bad status codes
+        except requests.exceptions.RequestException as e:
+            # Handle network errors, timeouts, and HTTP errors
+            return HttpResponse(
+                f"Export service unavailable: {str(e)}", 
+                status=503, 
+                content_type="text/plain"
+            )
+        
+        # Return appropriate content type and response
+        content_type_map = {
+            'json': 'application/json',
+            'myjson': 'application/json',
+            'ics': 'text/calendar',
+            'myics': 'text/calendar', 
+            'xml': 'application/xml',
+            'myxml': 'application/xml',
+            'xcal': 'application/xcal+xml',
+            'myxcal': 'application/xcal+xml'
+        }
+        
+        # Validate export type
+        if export_type not in content_type_map:
+            return HttpResponse(
+                f"Unsupported export type: {export_type}. Supported types: {', '.join(content_type_map.keys())}",
+                status=400,
+                content_type="text/plain"
+            )
+        
+        response_content_type = content_type_map[export_type]
+        return HttpResponse(response.content, content_type=response_content_type)
+
+    @staticmethod
+    def get_uid_from_token(request, world_id):
+        """Extract user ID from JWT token with proper validation"""
+        try:
+            world = get_object_or_404(World, id=world_id)
+            
+            # Get and validate authorization header
+            auth_header = get_authorization_header(request)
+            if not auth_header:
+                raise exceptions.AuthenticationFailed("Authorization header missing")
+            
+            auth_parts = auth_header.split()
+            
+            # Check for proper Bearer token format
+            if not auth_parts or auth_parts[0].lower() != b"bearer":
+                raise exceptions.AuthenticationFailed("Authorization header must start with 'Bearer'")
+            
+            if len(auth_parts) == 1:
+                raise exceptions.AuthenticationFailed("Invalid token header. No credentials provided.")
+            elif len(auth_parts) > 2:
+                raise exceptions.AuthenticationFailed("Invalid token header. Token string should not contain spaces.")
+            
+            # Extract token
+            token = auth_parts[1]
+            if not token:
+                raise exceptions.AuthenticationFailed("Token not provided")
+            
+            # Decode token with error handling
+            try:
+                token_decode = world.decode_token(token=token)
+            except Exception as e:
+                raise exceptions.AuthenticationFailed(f"Token decoding failed: {str(e)}")
+            
+            # Validate token data
+            if not token_decode or not isinstance(token_decode, dict):
+                raise exceptions.AuthenticationFailed("Invalid token data format")
+            
+            uid = token_decode.get("uid")
+            if uid is None:
+                raise exceptions.AuthenticationFailed("Token missing required user ID")
+            
+            return uid
+            
+        except exceptions.AuthenticationFailed:
+            # Re-raise authentication errors as-is
+            raise
+        except Exception as e:
+            # Handle any unexpected errors during token processing
+            raise exceptions.AuthenticationFailed(f"Token validation error: {str(e)}")
 
 
 def get_domain(path):
