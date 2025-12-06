@@ -2,8 +2,7 @@ name: Deploy Sphinx Documentation to GitHub Pages
 
 on:
   push:
-    branches:
-      - development  # Adjust this to your default branch
+    branches: [ development, main ]
 
 jobs:
   deploy:
@@ -24,7 +23,10 @@ jobs:
 
       - name: Build documentation
         run: make html
-        working-directory: docs  # Adjust to your Sphinx docs directory
+        working-directory: docs
+      
+      - name: Copy CNAME to deploy directory
+        run: cp docs/CNAME docs/_build/html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
