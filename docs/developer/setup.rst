@@ -4,7 +4,7 @@ Development setup
 Installation
 ------------
 
-A venueless installation currently contains four components:
+A eventyay-videos installation currently contains four components:
 
 * A frontend web application with our user interface
 
@@ -53,22 +53,22 @@ Any pull requests you send us will automatically be checked against these rules.
 To check locally, it is convenient to have a local Python environment (such as a virtual environemnt) in which you
 can install the dependencies of the server component::
 
-	(venueless) $ cd server
-	(venueless) $ pip install -r requirements.txt
+	(eventyay-video) $ cd server
+	(eventyay-video) $ pip install -r requirements.txt
 
 To auto-format the code according to the code style and to check for linter issues, you can run the following
 commands::
 
-	(venueless) $ black venueless tests
-	(venueless) $ isort -rc venueless tests
-	(venueless) $ flake8 venueless tests
+	(eventyay-video) $ black eventyay-video tests
+	(eventyay-video) $ isort -rc eventyay-video tests
+	(eventyay-video) $ flake8 eventyay-video tests
 
 To automatically check before commits, add a script like the following to ``.git/hooks/pre-commit`` and apply ``chmod +x .git/hooks/pre-commit``::
 
 	#!/bin/bash
-	source ~/.virtualenvs/venueless/bin/activate
+	source ~/.virtualenvs/eventyay-video/bin/activate
 	cd server
-	for file in $(git diff --cached --name-only | grep -E '\.py$' | grep -Ev "venueless/celery_app\.py|venueless/settings\.py")
+	for file in $(git diff --cached --name-only | grep -E '\.py$' | grep -Ev "eventyay-video/celery_app\.py|eventyay-video/settings\.py")
 	do
 	  echo Scanning $file
 	  git show ":$file" | black -q --check - || { echo "Black failed."; exit 1; } # we only want to lint the staged changes, not any un-staged changes
@@ -99,7 +99,7 @@ If you prefer to run the components independently, you can do so as well. Here i
 
     createdb eventyay-video
 
-- Create a config file named *venueless.cfg* in the *server* directory with the following content:
+- Create a config file named *eventyay_video.cfg* in the *server* directory with the following content:
 
   ..  code-block:: ini
 

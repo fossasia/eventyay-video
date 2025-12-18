@@ -186,8 +186,8 @@ Users can connect a social media account if the feature is active for the world.
 
 To start, send::
 
-    => ["user.social.connect", 123, {"network": "twitter", "return_url": "https://blafasel.venueless.events/preferences"}]
-    <- ["success", 123, {"url": "https://foo.venueless.events/social/twitter/start?token=…"}]
+    => ["user.social.connect", 123, {"network": "twitter", "return_url": "https://blafasel.eventyay-video.events/preferences"}]
+    <- ["success", 123, {"url": "https://foo.eventyay-video.events/social/twitter/start?token=…"}]
 
 Then, redirect the user to the given URL. After the authentication was successful (or failed), the user will be returned
 to the given URL. The return URL must be absolute

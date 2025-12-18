@@ -25,6 +25,10 @@ jobs:
       - name: Build documentation
         run: make html
         working-directory: docs  # Adjust to your Sphinx docs directory
+      
+      - name: Copy CNAME if it exists
+        run: |
+          if [ -f CNAME ]; then cp CNAME docs/_build/html/; fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
