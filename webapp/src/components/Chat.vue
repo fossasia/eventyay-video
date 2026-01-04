@@ -107,7 +107,6 @@ export default {
 		},
 		async filteredTimeline() {
 			await this.$nextTick()
-			// TODO scroll to bottom when resizing
 			// restore scrollPosition after load
 			this.refreshScrollbar()
 			this.syncedScroll = true
@@ -117,7 +116,11 @@ export default {
 	created() {
 		this.$store.dispatch('chat/subscribe', {channel: this.module.channel_id, config: this.module.config})
 	},
+	mounted() {
+		window.addEventListener('resize', this.onResize)
+	},
 	beforeDestroy() {
+		window.removeEventListener('resize', this.onResize)
 		this.$store.dispatch('chat/unsubscribe')
 	},
 	methods: {
